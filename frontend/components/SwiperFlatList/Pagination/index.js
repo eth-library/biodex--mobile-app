@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, TouchableOpacity, View, ViewPropTypes, Text, Dimensions } from 'react-native';
 
 import { colors, vertical, horizontal } from '../themes';
-import Colors from '../../../constants/Colors';
-import Fonts from '../../../constants/Fonts';
+import Theme from '../../../theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,8 +14,8 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   text: {
-    color: Colors.grey,
-    fontFamily: Fonts.primary,
+    color: Theme.colors.grey,
+    fontFamily: Theme.fonts.primary,
     marginBottom: vertical.xxSmall
   },
   pagination: {

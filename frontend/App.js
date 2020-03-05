@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
+import { NavigationContainer } from '@react-navigation/native';
+import 'react-native-gesture-handler';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 
-import Guide from './screens/guide';
+import Theme from './theme';
 import store from './store';
+import AuthStackNavigator from './navigation/index';
 
 const App = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -13,9 +16,11 @@ const App = () => {
   }
 
   return (
-    <Provider store={store}>
-      <Guide />
-    </Provider>
+    <NavigationContainer theme={Theme}>
+      <Provider store={store}>
+        <AuthStackNavigator />
+      </Provider>
+    </NavigationContainer>
   );
 };
 

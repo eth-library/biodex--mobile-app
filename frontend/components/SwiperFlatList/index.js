@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FlatList } from 'react-native';
 
 import Pagination from './Pagination';
-import Colors from '../../constants/Colors';
+import Theme from '../../theme';
 
 const MILLISECONDS = 1000;
 const FIRST_INDEX = 0;
@@ -212,8 +212,8 @@ const SwiperFlatList = React.forwardRef(
       size,
       paginationIndex: paginationIndex,
       scrollToIndex: _scrollToIndex,
-      paginationActiveColor: Colors.grey,
-      paginationDefaultColor: Colors.lightGrey,
+      paginationActiveColor: Theme.colors.grey,
+      paginationDefaultColor: Theme.colors.lightGrey,
       paginationStyle,
       paginationStyleItem,
     };

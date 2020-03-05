@@ -3,9 +3,7 @@ import { View, Image, Text, StyleSheet, Dimensions } from 'react-native';
 
 import Logo from '../../assets/logo.png';
 import Butterflies from '../../assets/butterflies.jpg';
-import Colors from '../../constants/Colors';
-import Fonts from '../../constants/Fonts';
-import Space from '../../constants/Space';
+import Theme from '../../theme';
 
 function HomeScreen({ style }) {
   return (
@@ -36,16 +34,16 @@ const styles = StyleSheet.create({
     width: 100,
     height: 50,
     resizeMode: 'center',
-    marginTop: Space.vertical.medium
+    marginTop: Theme.space.vertical.medium
   },
   titleContainer: {
     justifyContent: 'center',
     alignItems: 'center'
   },
   title: {
-    fontFamily: Fonts.primaryBold,
-    fontSize: Fonts.sizeL,
-    color: Colors.black
+    fontFamily: Theme.fonts.primaryBold,
+    fontSize: Theme.fonts.sizeL,
+    color: Theme.colors.black
   },
   img: {
     width: 200,

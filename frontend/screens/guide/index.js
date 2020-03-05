@@ -6,7 +6,7 @@ import HomeScreen from './HomeScreen';
 import ImageCaptureScreen from './ImageCaptureScreen';
 import ButterflySelectionScreen from './ButterflySelectionScreen';
 import StartScreen from './StartScreen';
-import Colors from '../../constants/Colors';
+import Theme from '../../theme';
 
 const Guide = () => {
   return (
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     width: width,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.background
+    backgroundColor: Theme.colors.background
   },
   text: {
     fontSize: 20,
