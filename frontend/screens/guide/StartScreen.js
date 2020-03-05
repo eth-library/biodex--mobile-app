@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-function ButterflySelectionScreen({ style }) {
+function StartScreen({ style }) {
   return (
     <View style={{ ...style }}>
-      <Text>ButterflySelection Screen</Text>
+      <Text>You are ready to go!</Text>
     </View>
   );
 };
 
-export default ButterflySelectionScreen;
+export default StartScreen;
