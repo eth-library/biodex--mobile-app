@@ -4,10 +4,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import 'react-native-gesture-handler';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
+import { enableScreens } from 'react-native-screens';
 
 import Theme from './theme';
 import store from './store';
 import AuthStackNavigator from './navigation/index';
+
+enableScreens();
 
 const App = () => {
   const [fontLoaded, setFontLoaded] = useState(false);

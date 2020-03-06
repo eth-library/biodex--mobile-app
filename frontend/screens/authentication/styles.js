@@ -2,7 +2,7 @@ import Theme from '../../theme';
 
 export const authStyles = {
   fullScreenContainer: {
-    backgroundColor: 'green',
+    backgroundColor: Theme.colors.background,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     flex: 1
@@ -11,7 +11,7 @@ export const authStyles = {
     height: '70%',
     width: '80%',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     paddingVertical: 20
   },
   formTitle: {
@@ -28,25 +28,15 @@ export const authStyles = {
     color: Theme.colors.link,
     width: '100%',
     textAlign: 'center',
-    marginBottom: Theme.space.vertical.xxSmall
-  },
-  textInput: {
-    height: 40,
-    width: '100%',
-    paddingRight: 10,
-    paddingLeft: 10,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: Theme.colors.grey,
-    borderRadius: Theme.borders.radius,
-    marginBottom: Theme.space.vertical.xSmall
+    marginBottom: Theme.space.vertical.small
   },
   center: {
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   terms: {
     fontSize: Theme.fonts.sizeTC,
-    color: Theme.colors.black
+    color: Theme.colors.black,
+    marginTop: Theme.space.vertical.xxSmall
   }
 };

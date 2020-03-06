@@ -1,19 +1,45 @@
-import React, { useState } from 'react';
-import { View, Image, TextInput, Text, StyleSheet, Switch, Platform } from 'react-native';
+import React, { useState, useReducer, useCallback } from 'react';
+import { View, Image, Text, StyleSheet, Switch, Platform, Alert } from 'react-native';
 
-import SafeAreaView from '../../components/UI/SafeAreaView';
-import Theme from '../../theme';
-import { authStyles } from './styles';
-import Logo from '../../assets/logo.png';
-import Button from '../../components/UI/Button';
+import formReducer from './formReducer';
+import SafeAreaView from '../../../components/UI/SafeAreaView';
+import Theme from '../../../theme';
+import { authStyles } from '../styles';
+import Logo from '../../../assets/logo.png';
+import Button from '../../../components/UI/Button';
+import Input from '../../../components/UI/Input/index.js';
 
 const Login = props => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    values: {
+      email: '',
+      password: ''
+    },
+    validities: {
+      email: false,
+      password: false
+    },
+    isValid: false
+  });
 
-  const onSubmitHandler = () => {
-    console.log('submit', email, password);
-  };
+  const submitHandler = useCallback(() => {
+    if (!formState.isValid) {
+      Alert.alert('Wrong input!', 'Please check the errors in the form.', [{ text: 'OK' }]);
+      return;
+    }
+  }, [formState]);
+
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: 'FORM_INPUT_UPDATE',
+        input: inputIdentifier,
+        value: inputValue,
+        isValid: inputValidity
+      });
+    },
+    [dispatchFormState]
+  );
 
   return (
     <SafeAreaView>
@@ -25,19 +51,27 @@ const Login = props => {
         </View>
         <View style={authStyles.form}>
           <Text style={authStyles.formTitle}>Login</Text>
-          <TextInput
+          <Input
+            id='email'
             placeholder={'Email'}
-            value={email}
-            onChangeText={setEmail}
-            style={authStyles.textInput}
-          ></TextInput>
-          <TextInput
+            value={formState.values.email}
+            onInputChange={inputChangeHandler}
+            keyboardType='email-address'
+            autoCapitalize='none'
+            returnKeyType='next'
+            required
+            email
+          />
+          <Input
+            id='password'
             placeholder={'Password'}
-            value={password}
-            onChangeText={setPassword}
+            value={formState.values.password}
+            onInputChange={inputChangeHandler}
             secureTextEntry
-            style={authStyles.textInput}
-          ></TextInput>
+            required
+            autoCapitalize='none'
+            returnKeyType='send'
+          />
           <View style={styles.stayLoggedInContainer}>
             <View style={styles.switchContainer}>
               <Switch />
@@ -47,7 +81,8 @@ const Login = props => {
           <Button
             title={'LOGIN'}
             color={Platform.OS === 'ios' ? Theme.colors.white : Theme.colors.primary}
-            onPress={onSubmitHandler}
+            onPress={submitHandler}
+            style={{ marginBottom: Theme.space.vertical.xSmall }}
           />
           <View style={authStyles.center}>
             <Text style={authStyles.text}>Don't have an account?</Text>

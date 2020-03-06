@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Theme.fonts.primary,
     fontSize: Theme.fonts.sizeL,
-    color: Theme.colors.grey
+    color: Theme.colors.black
   },
   form: {
     flex: 1
@@ -176,7 +176,6 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     borderRadius: Theme.borders.radius,
-    paddingVertical: Theme.space.xxSmall,
     fontFamily: Theme.fonts.fontFamily,
     fontSize: Theme.fonts.sizeM,
     justifyContent: 'center'

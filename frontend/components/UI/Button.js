@@ -5,7 +5,7 @@ import Theme from '../../theme';
 
 const CustomButton = props => {
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, ...props.style}}>
       <Button {...props} />
     </View>
   );
