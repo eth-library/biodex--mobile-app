@@ -23,7 +23,7 @@ const Guide = () => {
 
 export default Guide;
 
-const { width } = Dimensions.get('screen');
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
