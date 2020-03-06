@@ -1,25 +1,18 @@
-import { Dimensions, StatusBar, Platform } from 'react-native';
-
 import Theme from '../../theme';
-
-console.log('height', StatusBar.currentHeight)
 
 export const authStyles = {
   fullScreenContainer: {
-    backgroundColor: Theme.colors.background,
+    backgroundColor: 'green',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    width: Dimensions.get('window').width,
-    // On android if the status bar is small (24), Dimensions.get('window).height returns the height including that bar. If the status bar has a notch, it is calculated properly
-    height: Platform.OS === 'android' && StatusBar.currentHeight === 24 ? Dimensions.get('window').height - 24 : Dimensions.get('window').height,
-    // On android the content starts to be displayed inside the status bar, needs to be moved down
-    top: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    flex: 1
   },
   form: {
     height: '70%',
     width: '80%',
     alignItems: 'center',
     justifyContent: 'space-around',
+    paddingVertical: 20
   },
   formTitle: {
     fontFamily: Theme.fonts.primary,

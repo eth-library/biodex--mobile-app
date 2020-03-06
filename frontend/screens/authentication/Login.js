@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Image, TextInput, Text, StyleSheet, Switch, Platform } from 'react-native';
 
+import SafeAreaView from '../../components/UI/SafeAreaView';
 import Theme from '../../theme';
 import { authStyles } from './styles';
 import Logo from '../../assets/logo.png';
@@ -15,54 +16,56 @@ const Login = props => {
   };
 
   return (
-    <View style={authStyles.fullScreenContainer}>
-      <Image style={styles.logo} source={Logo} />
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>ETH Entomological Collection</Text>
-        <Text style={styles.title}>Lepi Classification App</Text>
-      </View>
-      <View style={authStyles.form}>
-        <Text style={authStyles.formTitle}>Login</Text>
-        <TextInput
-          placeholder={'Email'}
-          value={email}
-          onChangeText={setEmail}
-          style={authStyles.textInput}
-        ></TextInput>
-        <TextInput
-          placeholder={'Password'}
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          style={authStyles.textInput}
-        ></TextInput>
-        <View style={styles.stayLoggedInContainer}>
-          <View style={styles.switchContainer}>
-            <Switch />
-          </View>
-          <Text>Stay Logged In</Text>
+    <SafeAreaView>
+      <View style={authStyles.fullScreenContainer}>
+        <Image style={styles.logo} source={Logo} />
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>ETH Entomological Collection</Text>
+          <Text style={styles.title}>Lepi Classification App</Text>
         </View>
-        <Button
-          title={'LOGIN'}
-          color={Platform.OS === 'ios' ? Theme.colors.white : Theme.colors.primary}
-          onPress={onSubmitHandler}
-        />
-        <View style={authStyles.center}>
-          <Text style={authStyles.text}>Don't have an account?</Text>
-          <Text style={authStyles.link} onPress={() => props.navigation.navigate('Registration')}>
-            Sign up here
+        <View style={authStyles.form}>
+          <Text style={authStyles.formTitle}>Login</Text>
+          <TextInput
+            placeholder={'Email'}
+            value={email}
+            onChangeText={setEmail}
+            style={authStyles.textInput}
+          ></TextInput>
+          <TextInput
+            placeholder={'Password'}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            style={authStyles.textInput}
+          ></TextInput>
+          <View style={styles.stayLoggedInContainer}>
+            <View style={styles.switchContainer}>
+              <Switch />
+            </View>
+            <Text>Stay Logged In</Text>
+          </View>
+          <Button
+            title={'LOGIN'}
+            color={Platform.OS === 'ios' ? Theme.colors.white : Theme.colors.primary}
+            onPress={onSubmitHandler}
+          />
+          <View style={authStyles.center}>
+            <Text style={authStyles.text}>Don't have an account?</Text>
+            <Text style={authStyles.link} onPress={() => props.navigation.navigate('Registration')}>
+              Sign up here
+            </Text>
+          </View>
+          <Text style={authStyles.link}>Reset Password</Text>
+          <Text style={authStyles.terms}>
+            By using this App, You, the user of the App, confirm your acceptance of the App terms of
+            use ('App Terms'). If you do not agree to these App Terms, you must immediately
+            uninstall the App and discontinue its use. These App Terms should be read alongside our{' '}
+            <Text style={styles.link}>Privacy Policy</Text> and{' '}
+            <Text style={styles.link}>Cookie Policy</Text>.
           </Text>
         </View>
-        <Text style={authStyles.link}>Reset Password</Text>
-        <Text style={authStyles.terms}>
-          By using this App, You, the user of the App, confirm your acceptance of the App terms of
-          use ('App Terms'). If you do not agree to these App Terms, you must immediately uninstall
-          the App and discontinue its use. These App Terms should be read alongside our{' '}
-          <Text style={styles.link}>Privacy Policy</Text> and{' '}
-          <Text style={styles.link}>Cookie Policy</Text>.
-        </Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -71,12 +74,12 @@ const styles = StyleSheet.create({
     width: 100,
     height: 20,
     resizeMode: 'center',
-    marginTop: Theme.space.vertical.medium,
+    marginTop: Theme.space.vertical.medium
   },
   titleContainer: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 55,
+    height: 55
   },
   title: {
     fontFamily: Theme.fonts.primaryBold,
