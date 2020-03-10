@@ -1,37 +1,73 @@
-import React, { useState, Fragment } from 'react';
+import React, { useReducer, useState, useCallback, Fragment } from 'react';
 import {
   KeyboardAvoidingView,
   Text,
-  TextInput,
   View,
   Platform,
   Picker,
   StyleSheet,
+  Alert,
   TouchableOpacity
 } from 'react-native';
+import { ScreenOrientation } from 'expo';
 
-import SafeAreaView from '../../components/UI/SafeAreaView';
-import Button from '../../components/UI/Button';
-import { authStyles } from './styles';
-import Theme from '../../theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Button from '../../../components/UI/Button';
+import Input from '../../../components/UI/Input';
+import { authStyles } from '../styles';
+import Theme from '../../../theme';
+import formReducer from '../formReducer';
 
 const Registration = props => {
-  const [email, setEmail] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [code, setCode] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordRepeat, setPasswordRepeat] = useState('');
-  const [language, setLanguage] = useState('userType');
+  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    values: {
+      fullName: '',
+      email: '',
+      userType: 'userType',
+      code: '',
+      password: '',
+      passwordRepeat: ''
+    },
+    validities: {
+      fullName: false,
+      email: false,
+      userType: false,
+      code: false,
+      password: false,
+      passwordRepeat: false,
+      showIosPicker: false
+    },
+    isValid: false,
+    submitted: false
+  });
   const [showIosPicker, setShowIosPicker] = useState(false);
 
-  const onSubmitHandler = () => {
-    console.log('submitted', email, fullName, code, password, passwordRepeat);
-  };
+  const submitHandler = useCallback(() => {
+    dispatchFormState({ type: 'SUBMITTED' });
+    if (!formState.isValid) {
+      Alert.alert('Wrong input!', 'Please check the errors in the form.', [{ text: 'OK' }]);
+      return;
+    }
+    console.log('SUBMIT');
+  }, [formState]);
+
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: 'FORM_INPUT_UPDATE',
+        name: inputIdentifier,
+        value: inputValue,
+        isValid: inputValidity
+      });
+    },
+    [dispatchFormState]
+  );
 
   return (
     <Fragment>
       {!showIosPicker && (
-        <SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
           <KeyboardAvoidingView
             style={authStyles.fullScreenContainer}
             behavior='padding'
@@ -42,38 +78,49 @@ const Registration = props => {
               <Text style={styles.title}>Create an account</Text>
             </View>
             <View style={{ ...authStyles.form, ...styles.form }}>
-              <TextInput
+              <Input
+                name='fullName'
                 placeholder={'Full Name'}
-                value={fullName}
-                onChangeText={setFullName}
-                style={authStyles.textInput}
+                value={formState.values.fullName}
+                onInputChange={inputChangeHandler}
+                returnKeyType='next'
+                required
+                submitted={formState.submitted}
               />
-              <TextInput
+              <Input
+                name='email'
                 placeholder={'Email'}
-                value={email}
-                onChangeText={setEmail}
-                style={authStyles.textInput}
+                value={formState.values.email}
+                onInputChange={inputChangeHandler}
                 keyboardType='email-address'
+                returnKeyType='next'
+                required
+                submitted={formState.submitted}
               />
-              <TextInput
+              <Input
+                name='code'
                 placeholder={'Validation code'}
-                value={code}
-                onChangeText={setCode}
-                style={authStyles.textInput}
+                value={formState.values.code}
+                onInputChange={inputChangeHandler}
                 keyboardType='number-pad'
+                returnKeyType='next'
+                required
+                submitted={formState.submitted}
               />
               {Platform.OS === 'android' && (
                 <View style={styles.pickerContainer}>
                   <Picker
-                    selectedValue={language}
+                    selectedValue={formState.values.userType}
                     style={styles.picker}
                     itemStyle={styles.pickerItems} // works only for IOS
-                    onValueChange={(itemValue, itemIndex) => setLanguage(itemValue)}
+                    onValueChange={(itemValue, itemIndex) =>
+                      inputChangeHandler('userType', itemValue, itemValue !== 'userType')
+                    }
                     mode='dropdown'
                   >
                     <Picker.Item label='User Type' value='userType'></Picker.Item>
-                    <Picker.Item label='Java' value='java' />
-                    <Picker.Item label='JavaScript' value='js' />
+                    <Picker.Item label='Student' value='student' />
+                    <Picker.Item label='Expert' value='expert' />
                   </Picker>
                 </View>
               )}
@@ -82,35 +129,46 @@ const Registration = props => {
                   style={{ width: '100%' }}
                   onPress={() => setShowIosPicker(!showIosPicker)}
                 >
-                  <TextInput
+                  <Input
                     editable={false}
                     pointerEvents='none'
-                    style={authStyles.textInput}
-                    placeholder='User Type'
-                    autoCapitalize='none'
+                    placeholder={formState.values.userType}
                     placeholderTextColor={Theme.colors.grey}
-                    value={language}
+                    value={formState.values.userType}
+                    onInputChange={() => {}}
                   />
                 </TouchableOpacity>
               )}
-              <TextInput
+              <Input
+                name='password'
                 placeholder={'Password'}
-                value={password}
-                onChangeText={setPassword}
+                value={formState.values.password}
+                onInputChange={inputChangeHandler}
                 secureTextEntry
-                style={authStyles.textInput}
+                returnKeyType='next'
+                required
+                passwordCheck
+                submitted={formState.submitted}
               />
-              <TextInput
+              <Input
+                name='passwordRepeat'
                 placeholder={'Repeat Password'}
-                value={passwordRepeat}
-                onChangeText={setPasswordRepeat}
+                value={formState.values.passwordRepeat}
+                onInputChange={inputChangeHandler}
                 secureTextEntry
-                style={authStyles.textInput}
+                returnKeyType='next'
+                required
+                errorText={
+                  formState.values.passwordRepeat === formState.values.password
+                    ? false
+                    : 'Passwords do not match'
+                }
+                submitted={formState.submitted}
               />
               <Button
                 title={'Create your Account'}
                 color={Platform.OS === 'ios' ? Theme.colors.white : Theme.colors.primary}
-                onPress={onSubmitHandler}
+                onPress={submitHandler}
               />
               <View style={authStyles.center}>
                 <Text style={authStyles.text}>Already have an account?</Text>
@@ -127,21 +185,21 @@ const Registration = props => {
               </Text>
             </View>
           </KeyboardAvoidingView>
-          </SafeAreaView>
+        </SafeAreaView>
       )}
       {Platform.OS === 'ios' && showIosPicker && (
         <Picker
-          selectedValue={language}
+          selectedValue={formState.values.userType}
           style={styles.picker}
           itemStyle={styles.pickerItems}
           onValueChange={(itemValue, itemIndex) => {
             setShowIosPicker(false);
-            setLanguage(itemValue);
+            inputChangeHandler('userType', itemValue, itemValue !== 'userType');
           }}
         >
           <Picker.Item label='User Type' value='userType'></Picker.Item>
-          <Picker.Item label='Java' value='java' />
-          <Picker.Item label='JavaScript' value='js' />
+          <Picker.Item label='Student' value='student' />
+          <Picker.Item label='Expert' value='expert' />
         </Picker>
       )}
     </Fragment>
@@ -152,7 +210,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     height: '10%',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   title: {
     fontFamily: Theme.fonts.primary,

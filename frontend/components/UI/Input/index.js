@@ -12,27 +12,42 @@ const Input = props => {
     touched: false
   });
 
-  const defaultErrorMessage = props.required ? 'This field is required' : 'Invalid input'
+  const defaultErrorMessage = props.required ? 'This field is required' : 'Invalid input';
 
-  const { onInputChange, id } = props;
+  const { onInputChange, name, submitted } = props;
+
+  useEffect(() => {
+    if (submitted) {
+      onInputChange(name, inputState.value, inputState.isValid);
+    }
+  }, [submitted]);
 
   useEffect(() => {
     if (inputState.touched) {
-      onInputChange(id, inputState.value, inputState.isValid);
+      onInputChange(name, inputState.value, inputState.isValid);
     }
-  }, [inputState, onInputChange, id]);
+  }, [inputState, onInputChange, name]);
 
   const textChangeHandler = text => {
-    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let isValid = true;
-    let errorText = 'what'
+    let errorText = null;
+    // check for required fields
     if (props.required && text.trim().length === 0) {
       isValid = false;
-      errorText = 'This field is required'
+      errorText = 'This field is required';
     }
+    // check for valid email format
+    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (props.email && !emailRegex.test(text.toLowerCase())) {
+      console.log(emailRegex.test(text.toLowerCase()));
       isValid = false;
-      errorText = 'Please enter a valid email address'
+      errorText = 'Please enter a valid email address';
+    }
+    // check for password difficulty - minimum eight characters
+    const passwordRegex = /^.{8,}$/;
+    if (props.passwordCheck && !passwordRegex.test(text)) {
+      isValid = false;
+      errorText = 'Password is too short. Min length is 8 characters.';
     }
     dispatch({ type: 'INPUT_CHANGE', value: text, errorText, isValid });
   };
@@ -40,6 +55,11 @@ const Input = props => {
   const lostFocusHandler = () => {
     dispatch({ type: 'INPUT_BLUR' });
   };
+
+  const renderErrorMessage =
+    (!inputState.isValid && inputState.touched) ||
+    (!inputState.isValid && submitted) ||
+    (inputState.isValid && inputState.touched && props.errorText);
 
   return (
     <View style={styles.container}>
@@ -50,9 +70,11 @@ const Input = props => {
         onChangeText={textChangeHandler}
         onBlur={lostFocusHandler}
       />
-      {!inputState.isValid && inputState.touched && (
+      {renderErrorMessage && (
         <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{inputState.errorText || defaultErrorMessage }</Text>
+          <Text style={styles.errorText}>
+            {props.errorText || inputState.errorText || defaultErrorMessage}
+          </Text>
         </View>
       )}
     </View>
@@ -71,7 +93,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     borderColor: Theme.colors.grey,
-    borderRadius: Theme.borders.radius,
+    borderRadius: Theme.borders.radius
   },
   errorContainer: {
     marginVertical: 1

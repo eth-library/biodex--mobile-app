@@ -5,6 +5,7 @@ import 'react-native-gesture-handler';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
 import { enableScreens } from 'react-native-screens';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import Theme from './theme';
 import store from './store';
@@ -21,7 +22,9 @@ const App = () => {
   return (
     <NavigationContainer theme={Theme}>
       <Provider store={store}>
-        <AuthStackNavigator />
+        <SafeAreaProvider>
+          <AuthStackNavigator />
+        </SafeAreaProvider>
       </Provider>
     </NavigationContainer>
   );

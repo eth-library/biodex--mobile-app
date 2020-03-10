@@ -1,5 +1,5 @@
 import React, { useReducer, useCallback } from 'react';
-import { View, Image, Text, StyleSheet, Switch, Platform, Alert } from 'react-native';
+import { View, Image, Text, StyleSheet, Platform, Alert } from 'react-native';
 import { ScreenOrientation } from 'expo';
 
 import formReducer from '../formReducer';
@@ -10,16 +10,14 @@ import Button from '../../../components/UI/Button';
 import Input from '../../../components/UI/Input/index.js';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const Login = props => {
+const ResetPassword = props => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     values: {
-      email: '',
-      password: ''
+      email: ''
     },
     validities: {
-      email: false,
-      password: false
+      email: false
     },
     isValid: false,
     submitted: false
@@ -54,7 +52,7 @@ const Login = props => {
         <Text style={styles.title}>Lepi Classification App</Text>
       </View>
       <View style={authStyles.form}>
-        <Text style={authStyles.formTitle}>Login</Text>
+        <Text style={authStyles.formTitle}>Reset Password</Text>
         <Input
           name='email'
           placeholder={'Email'}
@@ -67,38 +65,25 @@ const Login = props => {
           email
           submitted={formState.submitted}
         />
-        <Input
-          name='password'
-          placeholder={'Password'}
-          value={formState.values.password}
-          onInputChange={inputChangeHandler}
-          secureTextEntry
-          required
-          autoCapitalize='none'
-          returnKeyType='send'
-          submitted={formState.submitted}
-        />
-        <View style={styles.stayLoggedInContainer}>
-          <View style={styles.switchContainer}>
-            <Switch />
-          </View>
-          <Text>Stay Logged In</Text>
-        </View>
         <Button
-          title={'LOGIN'}
+          title={'SEND'}
           color={Platform.OS === 'ios' ? Theme.colors.white : Theme.colors.primary}
           onPress={submitHandler}
           style={{ marginBottom: Theme.space.vertical.xSmall }}
         />
         <View style={authStyles.center}>
-          <Text style={authStyles.text}>Don't have an account?</Text>
-          <Text style={authStyles.link} onPress={() => props.navigation.navigate('Registration')}>
-            Sign up here
+          <Text style={authStyles.text}>Remember your password?</Text>
+          <Text style={authStyles.link} onPress={() => props.navigation.navigate('Login')}>
+            Go back to login
+          </Text>
+          <Text style={authStyles.text}>Already have a token?</Text>
+          <Text
+            style={authStyles.link}
+            onPress={() => props.navigation.navigate('ResetPasswordValidation')}
+          >
+            Go to password reset validation
           </Text>
         </View>
-        <Text style={authStyles.link} onPress={() => props.navigation.navigate('ResetPassword')}>
-          Reset Password
-        </Text>
         <Text style={authStyles.terms}>
           By using this App, You, the user of the App, confirm your acceptance of the App terms of
           use ('App Terms'). If you do not agree to these App Terms, you must immediately uninstall
@@ -128,21 +113,9 @@ const styles = StyleSheet.create({
     fontSize: Theme.fonts.sizeL,
     color: Theme.colors.black
   },
-  stayLoggedInContainer: {
-    flexDirection: 'row',
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: Theme.space.vertical.xSmall
-  },
-  switchContainer: {
-    transform:
-      Platform.OS === 'ios'
-        ? [{ scaleX: 0.5 }, { scaleY: 0.5 }]
-        : [{ scaleX: 0.8 }, { scaleY: 0.8 }]
-  },
   link: {
     color: Theme.colors.link
   }
 });
 
-export default Login;
+export default ResetPassword;
