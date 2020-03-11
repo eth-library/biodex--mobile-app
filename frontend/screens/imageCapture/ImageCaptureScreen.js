@@ -40,6 +40,21 @@ const ImageCaptureScreen = ({ navigation }) => {
     navigation.navigate('ImageConfirm', { imageUri: image.uri });
   };
 
+  const selectGalleryImageHandler = async () => {
+    const hasPermission = await verifyPermissions();
+    if (!hasPermission) {
+      return;
+    }
+
+    const image = await ExpoImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.4
+    });
+
+    navigation.navigate('ImageConfirm', { imageUri: image.uri });
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle='light-content' />
@@ -50,8 +65,18 @@ const ImageCaptureScreen = ({ navigation }) => {
         <Text style={styles.infoText}>keep parts of other specimens out of the frame</Text>
       </View>
       <View style={styles.buttonsContainer}>
-        <Ionicons name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera' } size={40} color={Theme.colors.accent} onPress={takeImageHandler} />
-        <Ionicons name={Platform.OS === 'ios' ? 'ios-images' : 'md-images' } size={40} color={Theme.colors.accent} onPress={() => console.log('open gallery')} />
+        <Ionicons
+          name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'}
+          size={40}
+          color={Theme.colors.accent}
+          onPress={takeImageHandler}
+        />
+        <Ionicons
+          name={Platform.OS === 'ios' ? 'ios-images' : 'md-images'}
+          size={40}
+          color={Theme.colors.accent}
+          onPress={selectGalleryImageHandler}
+        />
       </View>
     </View>
   );
@@ -66,7 +91,7 @@ const styles = StyleSheet.create({
   },
   imagePreview: {
     height: Dimensions.get('window').width * 0.9,
-    width: Dimensions.get('window').width * 0.9,
+    width: Dimensions.get('window').width * 0.9
   },
   infoText: {
     fontFamily: Theme.fonts.primaryBold,
