@@ -9,7 +9,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import Theme from './theme';
 import store from './store';
-import AuthStackNavigator from './navigation/index';
+import DrawerNavigator from './navigation/DrawerNavigator';
 
 enableScreens();
 
@@ -20,13 +20,13 @@ const App = () => {
   }
 
   return (
-    <NavigationContainer theme={Theme}>
-      <Provider store={store}>
+    <Provider store={store}>
+      <NavigationContainer theme={Theme}>
         <SafeAreaProvider>
-          <AuthStackNavigator />
+          <DrawerNavigator />
         </SafeAreaProvider>
-      </Provider>
-    </NavigationContainer>
+      </NavigationContainer>
+    </Provider>
   );
 };
 

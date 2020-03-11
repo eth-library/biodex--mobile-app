@@ -8,7 +8,7 @@ import ResetPasswordValidation from '../screens/authentication/ResetPasswordVali
 
 const Stack = createStackNavigator();
 
-const AuthStackNavigator = props => {
+const AuthStackNavigator = () => {
   return (
     <Stack.Navigator headerMode='none'>
       <Stack.Screen name='Login' component={Login} />
