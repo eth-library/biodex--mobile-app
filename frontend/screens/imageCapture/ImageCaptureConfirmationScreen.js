@@ -1,13 +1,50 @@
-import React from 'react';
-import { View, Button, StatusBar } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, Button, StatusBar, Image, StyleSheet, Dimensions } from 'react-native';
 
-const ImageCaptureConfirmationScreen = ({ navigation }) => {
+import Theme from '../../theme';
+
+const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
+  const imageUri = route.params.imageUri;
+
+  console.log('kk', imageUri)
+  
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={styles.container}>
       <StatusBar barStyle='light-content' />
-      <Button onPress={() => navigation.navigate('ButterflySelection')} title='Go to selection' />
+      <View style={styles.imagePreview}>
+        {!imageUri ? (
+          <Text>No image picked yet</Text>
+        ) : (
+          <Image style={styles.image} source={{ uri: imageUri }} />
+        )}
+      </View>
+      <View style={styles.buttonsContainer}>
+        <Button title={'Retake image'} color={Theme.colors.cancel} onPress={() => navigation.navigate('ImageCapture')} />
+        <Button title={'Upload image'} color={Theme.colors.confirm} onPress={() => navigation.navigate('ButterflySelection')} />
+      </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-around'
+  },
+  imagePreview: {
+    height: Dimensions.get('window').width * 0.9,
+    width: Dimensions.get('window').width * 0.9
+  },
+  image: {
+    height: '100%',
+    width: '100%'
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '70%'
+  }
+});
 
 export default ImageCaptureConfirmationScreen;
