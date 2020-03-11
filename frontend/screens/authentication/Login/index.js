@@ -1,6 +1,7 @@
 import React, { useReducer, useCallback } from 'react';
 import { View, Image, Text, StyleSheet, Switch, Platform, Alert } from 'react-native';
 import { ScreenOrientation } from 'expo';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import formReducer from '../formReducer';
 import Theme from '../../../theme';
@@ -8,7 +9,6 @@ import { authStyles } from '../styles';
 import Logo from '../../../assets/logo.png';
 import Button from '../../../components/UI/Button';
 import Input from '../../../components/UI/Input/index.js';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Login = props => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
