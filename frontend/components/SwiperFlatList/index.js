@@ -53,7 +53,7 @@ const SwiperFlatList = React.forwardRef(
     }
     const size = _data.length;
     // Items to render in the initial batch.
-    const _initialNumToRender = renderAll ? size : 1;
+    const _initialNumToRender = renderAll ? size : 0;
     const [paginationIndex, setPaginationIndex] = React.useState(index);
     const [prevIndex, setPrevIndex] = React.useState(index);
     const [paginationIndexes, setPaginationIndexes] = React.useState({ index, prevIndex: index });
