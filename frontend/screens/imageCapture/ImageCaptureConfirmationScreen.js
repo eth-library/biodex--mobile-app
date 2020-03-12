@@ -5,22 +5,16 @@ import Theme from '../../theme';
 
 const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
   const imageUri = route.params.imageUri;
-
-  console.log('kk', imageUri)
   
   return (
     <View style={styles.container}>
       <StatusBar barStyle='light-content' />
       <View style={styles.imagePreview}>
-        {!imageUri ? (
-          <Text>No image picked yet</Text>
-        ) : (
-          <Image style={styles.image} source={{ uri: imageUri }} />
-        )}
+        <Image style={styles.image} source={{ uri: imageUri }} />
       </View>
       <View style={styles.buttonsContainer}>
         <Button title={'Retake image'} color={Theme.colors.cancel} onPress={() => navigation.navigate('ImageCapture')} />
-        <Button title={'Upload image'} color={Theme.colors.confirm} onPress={() => navigation.navigate('ButterflySelection')} />
+        <Button title={'Upload image'} color={Theme.colors.confirm} onPress={() => navigation.navigate('ButterflySelection', { imageUri: imageUri })} />
       </View>
     </View>
   );
