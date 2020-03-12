@@ -1,6 +1,5 @@
 import React, { useReducer, useState, useCallback, Fragment } from 'react';
 import {
-  KeyboardAvoidingView,
   Text,
   View,
   Platform,
@@ -10,6 +9,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { ScreenOrientation } from 'expo';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../../../components/UI/Button';
@@ -46,7 +46,7 @@ const Registration = props => {
   const submitHandler = useCallback(() => {
     dispatchFormState({ type: 'SUBMITTED' });
     if (!formState.isValid) {
-      Alert.alert('Wrong input!', 'Please check the errors in the form.', [{ text: 'OK' }]);
+      Alert.alert('Invalid input', 'Please check the errors in the form', [{ text: 'OK' }]);
       return;
     }
     console.log('SUBMIT');
@@ -68,11 +68,11 @@ const Registration = props => {
     <Fragment>
       {!showIosPicker && (
         <SafeAreaView style={{ flex: 1 }}>
-          <KeyboardAvoidingView
-            style={authStyles.fullScreenContainer}
-            behavior='padding'
-            enabled
-            keyboardVerticalOffset={20}
+          <KeyboardAwareScrollView
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            contentContainerStyle={authStyles.fullScreenContainer}
+            scrollEnabled
+            enableOnAndroid={true}
           >
             <View style={styles.titleContainer}>
               <Text style={styles.title}>Create an account</Text>
@@ -184,7 +184,7 @@ const Registration = props => {
                 <Text style={authStyles.termLink}>Cookie Policy</Text>.
               </Text>
             </View>
-          </KeyboardAvoidingView>
+          </KeyboardAwareScrollView>
         </SafeAreaView>
       )}
       {Platform.OS === 'ios' && showIosPicker && (

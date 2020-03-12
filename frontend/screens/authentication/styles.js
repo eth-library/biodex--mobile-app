@@ -2,10 +2,9 @@ import Theme from '../../theme';
 
 export const authStyles = {
   fullScreenContainer: {
-    backgroundColor: Theme.colors.background,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    flex: 1
+    minHeight: '100%'
   },
   form: {
     height: '70%',
