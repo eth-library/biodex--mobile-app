@@ -27,7 +27,7 @@ const ImageCaptureStackNavigator = props => {
             <Item
               title='search'
               iconName={Platform.OS === 'ios' ? 'ios-menu' : 'md-menu'}
-              onPress={() => console.log(props.navigation.openDrawer())}
+              onPress={() => props.navigation.openDrawer()}
             />
           </HeaderButtons>
         )

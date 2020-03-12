@@ -16,7 +16,6 @@ const MainNavigator = () => {
   
 
   useEffect(() => {
-    console.log('restore token');
     const restoreToken = async () => {
       let accessToken = null;
       let refreshToken = null;
@@ -47,8 +46,6 @@ const MainNavigator = () => {
 
     restoreToken();
   }, []);
-
-  console.log('xx', auth.isLoading);
 
   if (auth.isLoading) {
     return <LoadingScreen />;
