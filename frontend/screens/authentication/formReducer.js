@@ -20,6 +20,9 @@ const formReducer = (state = {}, action) => {
         values: updatedValues
       };
     }
+    case 'FORM_INPUT_RESET': {
+      return action.payload; // initial state should be passed
+    }
     case 'SUBMITTED': {
       return {
         ...state,
