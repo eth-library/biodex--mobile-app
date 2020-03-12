@@ -9,12 +9,13 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import Theme from './theme';
 import store from './store';
-import DrawerNavigator from './navigation/DrawerNavigator';
+import MainNavigator from './navigation';
 
 enableScreens();
 
 const App = () => {
   const [fontLoaded, setFontLoaded] = useState(false);
+
   if (!fontLoaded) {
     return <AppLoading startAsync={fetchFonts} onFinish={() => setFontLoaded(true)} />;
   }
@@ -23,7 +24,7 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer theme={Theme}>
         <SafeAreaProvider>
-          <DrawerNavigator />
+          <MainNavigator />
         </SafeAreaProvider>
       </NavigationContainer>
     </Provider>
