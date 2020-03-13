@@ -1,5 +1,6 @@
 import React, { useReducer, useCallback } from 'react';
 import { View, Image, Text, StyleSheet, Platform, Alert } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { ScreenOrientation } from 'expo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
@@ -10,6 +11,7 @@ import { authStyles } from '../styles';
 import Logo from '../../../assets/logo.png';
 import Button from '../../../components/UI/Button';
 import Input from '../../../components/UI/Input/index.js';
+import { resetPasswordAsyncAction } from '../../../store/actions/resetPassword';
 
 const ResetPassword = props => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
@@ -23,6 +25,7 @@ const ResetPassword = props => {
     isValid: false,
     submitted: false
   });
+  const dispatch = useDispatch();
 
   const submitHandler = useCallback(() => {
     dispatchFormState({ type: 'SUBMITTED' });
@@ -31,6 +34,7 @@ const ResetPassword = props => {
       return;
     }
     console.log('SUBMIT');
+    dispatch(resetPasswordAsyncAction(formState.values.email));
   }, [formState]);
 
   const inputChangeHandler = useCallback(

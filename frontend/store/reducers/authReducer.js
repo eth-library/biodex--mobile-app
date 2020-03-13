@@ -1,6 +1,6 @@
-import { RESTORE_TOKEN, SIGN_IN, SIGN_OUT } from '../types';
+import { RESTORE_TOKEN, SIGN_IN, SIGN_OUT, STORE_AUTH_ERROR } from '../types';
 
-const initialState = { access: null, refresh: null, isAuthenticated: false, isLoading: true };
+const initialState = { access: null, refresh: null, isAuthenticated: false, isLoading: true, error: null };
 
 export const authReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -17,7 +17,8 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         access: action.payload.access,
         refresh: action.payload.refresh,
-        isAuthenticated: true
+        isAuthenticated: true,
+        error: null
       };
     case SIGN_OUT:
       return {
@@ -25,6 +26,11 @@ export const authReducer = (state = initialState, action) => {
         access: null,
         refresh: null,
         isAuthenticated: false
+      };
+    case STORE_AUTH_ERROR:
+      return {
+        ...state,
+        error: action.payload
       };
     default:
       return state;
