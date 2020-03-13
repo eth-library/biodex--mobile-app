@@ -6,7 +6,7 @@ import Theme from '../../../theme';
 
 const Input = props => {
   const [inputState, dispatch] = useReducer(inputReducer, {
-    value: '',
+    value: props.value,
     errorText: null,
     isValid: false,
     touched: false
