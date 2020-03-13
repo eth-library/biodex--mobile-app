@@ -1,13 +1,5 @@
 import React, { useState, useReducer, useCallback } from 'react';
-import {
-  View,
-  Image,
-  Text,
-  StyleSheet,
-  Switch,
-  Platform,
-  Alert
-} from 'react-native';
+import { View, Image, Text, StyleSheet, Switch, Platform, Alert } from 'react-native';
 import { ScreenOrientation } from 'expo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
@@ -125,7 +117,12 @@ const Login = ({ navigation }) => {
             </View>
             <Text>Stay Logged In</Text>
           </View>
-          <Button title='LOGIN' onPress={submitHandler} isLoading={isLoading} error={error}/>
+          <Button
+            title='LOGIN'
+            onPress={submitHandler}
+            isLoading={isLoading}
+            error={error && error.general}
+          />
           <View style={authStyles.center}>
             <Text style={authStyles.text}>Don't have an account?</Text>
             <Text style={authStyles.link} onPress={() => navigationHandler('Registration')}>

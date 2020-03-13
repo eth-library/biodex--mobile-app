@@ -6,3 +6,4 @@ export const STORE_AUTH_ERROR = 'STORE_AUTH_ERROR';
 
 // Password reset
 export const RESET_PASSWORD = 'RESET_PASSWORD';
+export const STORE_RESET_ERROR = 'STORE_RESET_ERROR';

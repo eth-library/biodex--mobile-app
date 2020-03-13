@@ -2,6 +2,7 @@ import { AsyncStorage } from 'react-native';
 
 import { rootEndpoint } from '../../constants';
 import { SIGN_IN, SIGN_OUT, STORE_AUTH_ERROR } from '../types';
+import formatDjangoErrors from '../helpers/formatDjangoErrors';
 
 // store JWT's after a user has logged in manually
 const storeTokenAction = jwts => {
@@ -37,16 +38,18 @@ export const userLoginAsyncAction = (credentials, stayLoggedIn) => async (dispat
 
   try {
     const response = await fetch(`${rootEndpoint}/auth/token/`, config);
-    console.log('status', JSON.stringify(response));
-    const data = await response.json();
     if (response.status === 200) {
+      const data = await response.json();
       if (stayLoggedIn) await AsyncStorage.setItem('refreshToken', data.refresh);
       dispatch(storeTokenAction({ access: data.access, refresh: data.refresh }));
     }
     if (response.status >= 400) {
-      dispatch(storeErrorAction(data.detail));
+      const errors = await response.json();
+      const cleanedErrors = formatDjangoErrors(errors);
+      console.log('cleaned errors')
+      dispatch(storeErrorAction(cleanedErrors));
     }
   } catch (e) {
-    console.log('ERROR TO HANDLE RIGHT HERE');
+    console.log('ERROR TO HANDLE AUTH ACTIONS');
   }
 };

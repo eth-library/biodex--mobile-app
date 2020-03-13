@@ -1,6 +1,6 @@
-import React, { useReducer, useCallback } from 'react';
+import React, { useState, useReducer, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { View, Image, Text, StyleSheet, Platform, Alert } from 'react-native';
-import { useDispatch } from 'react-redux';
 import { ScreenOrientation } from 'expo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
@@ -25,16 +25,19 @@ const ResetPassword = props => {
     isValid: false,
     submitted: false
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const error = useSelector(state => state.resetPassword.error);
   const dispatch = useDispatch();
-
-  const submitHandler = useCallback(() => {
+  console.log('error in comp', error)
+  const submitHandler = useCallback(async () => {
     dispatchFormState({ type: 'SUBMITTED' });
     if (!formState.isValid) {
       Alert.alert('Invalid input', 'Please check the errors in the form', [{ text: 'OK' }]);
       return;
     }
-    console.log('SUBMIT');
-    dispatch(resetPasswordAsyncAction(formState.values.email));
+    setIsLoading(true);
+    await dispatch(resetPasswordAsyncAction(formState.values.email));
+    setIsLoading(false);
   }, [formState]);
 
   const inputChangeHandler = useCallback(
@@ -76,12 +79,7 @@ const ResetPassword = props => {
             email
             submitted={formState.submitted}
           />
-          <Button
-            title={'SEND'}
-            color={Platform.OS === 'ios' ? Theme.colors.white : Theme.colors.primary}
-            onPress={submitHandler}
-            style={{ marginBottom: Theme.space.vertical.xSmall }}
-          />
+          <Button title='SEND' onPress={submitHandler} isLoading={isLoading} error={error && error.email}/>
           <View style={authStyles.center}>
             <Text style={authStyles.text}>Remember your password?</Text>
             <Text style={authStyles.link} onPress={() => props.navigation.navigate('Login')}>

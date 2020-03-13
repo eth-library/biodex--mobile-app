@@ -1,7 +1,9 @@
-import React, { useReducer, useCallback } from 'react';
+import React, { useState, useReducer, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { View, Image, Text, StyleSheet, Platform, Alert } from 'react-native';
 import { ScreenOrientation } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import formReducer from '../formReducer';
 import Theme from '../../../theme';
@@ -9,7 +11,7 @@ import { authStyles } from '../styles';
 import Logo from '../../../assets/logo.png';
 import Button from '../../../components/UI/Button';
 import Input from '../../../components/UI/Input/index.js';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { resetPasswordValidationAsyncAction } from '../../../store/actions/resetPassword';
 
 const ResetPasswordValidation = props => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
@@ -29,14 +31,19 @@ const ResetPasswordValidation = props => {
     isValid: false,
     submitted: false
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const error = useSelector(state => state.resetPassword.error);
+  const dispatch = useDispatch();
 
-  const submitHandler = useCallback(() => {
+  const submitHandler = useCallback(async () => {
     dispatchFormState({ type: 'SUBMITTED' });
     if (!formState.isValid) {
       Alert.alert('Invalid input', 'Please check the errors in the form', [{ text: 'OK' }]);
       return;
     }
-    console.log('SUBMIT');
+    setIsLoading(true);
+    await dispatch(resetPasswordValidationAsyncAction(formState.values));
+    setIsLoading(false);
   }, [formState]);
 
   const inputChangeHandler = useCallback(
@@ -77,6 +84,7 @@ const ResetPasswordValidation = props => {
             required
             email
             submitted={formState.submitted}
+            errorText={error && error.email}
           />
           <Input
             name='password'
@@ -89,6 +97,7 @@ const ResetPasswordValidation = props => {
             returnKeyType='send'
             passwordCheck
             submitted={formState.submitted}
+            errorText={error && error.password}
           />
           <Input
             name='password_repeat'
@@ -100,7 +109,7 @@ const ResetPasswordValidation = props => {
             autoCapitalize='none'
             returnKeyType='send'
             errorText={
-              formState.values.passwordRepeat === formState.values.password
+              formState.values.password_repeat === formState.values.password
                 ? false
                 : 'Passwords do not match'
             }
@@ -116,12 +125,13 @@ const ResetPasswordValidation = props => {
             autoCapitalize='none'
             returnKeyType='send'
             submitted={formState.submitted}
+            errorText={error && error.code}
           />
           <Button
-            title={'RESET'}
-            color={Platform.OS === 'ios' ? Theme.colors.white : Theme.colors.primary}
+            title='RESET'
             onPress={submitHandler}
-            style={{ marginBottom: Theme.space.vertical.xSmall }}
+            isLoading={isLoading}
+            error={error && error.general}
           />
           <View style={authStyles.center}>
             <Text style={authStyles.text}>Remember your password?</Text>
