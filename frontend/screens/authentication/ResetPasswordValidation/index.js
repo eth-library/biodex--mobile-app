@@ -107,11 +107,11 @@ const ResetPasswordValidation = props => {
             submitted={formState.submitted}
           />
           <Input
-            name='password'
-            placeholder={'Password'}
-            value={formState.values.password}
+            name='code'
+            placeholder={'Code'}
+            value={formState.values.code}
             onInputChange={inputChangeHandler}
-            secureTextEntry
+            keyboardType='numeric'
             required
             autoCapitalize='none'
             returnKeyType='send'

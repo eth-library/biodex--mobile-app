@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, Button, StatusBar, Image, StyleSheet, Dimensions } from 'react-native';
+import { View, Button, StatusBar, Image, StyleSheet, Dimensions } from 'react-native';
 
 import Theme from '../../theme';
 
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '70%'
+    width: '90%',
   }
 });
 

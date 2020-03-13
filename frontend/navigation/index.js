@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
+import { AsyncStorage } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector, useDispatch } from 'react-redux';
 
 import DrawerNavigator from './DrawerNavigator';
 import AuthStackNavigator from './AuthStackNavigator';
 import LoadingScreen from '../components/LoadingScreen';
-import { AsyncStorage } from 'react-native';
 
 const Stack = createStackNavigator();
 
