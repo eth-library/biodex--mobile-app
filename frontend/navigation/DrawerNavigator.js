@@ -1,19 +1,54 @@
 import React from 'react';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { View, Platform } from 'react-native';
+import { useDispatch } from 'react-redux';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem
+} from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
 
 import Theme from '../theme';
 import ImageCaptureStackNavigator from './ImageCaptureStackNavigator';
 import Guide from '../screens/guide';
-import { Platform } from 'react-native';
+import { logoutAsyncAction } from '../store/actions/auth';
 
 const Drawer = createDrawerNavigator();
+
+const CustomDrawerContent = props => {
+  const dispatch = useDispatch();
+
+  return (
+    <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1, marginBottom: 30 }}>
+      <View style={{ height: '100%', justifyContent: 'space-between' }}>
+        <View>
+          <DrawerItemList {...props} style={{ backgroundColor: 'yellow' }} />
+        </View>
+        <View>
+          <DrawerItem
+            label='Logout'
+            icon={() => (
+              <Ionicons
+                name={Platform.OS === 'ios' ? 'ios-log-out' : 'md-log-out'}
+                size={23}
+                color={Theme.colors.primary}
+              />
+            )}
+            onPress={() => dispatch(logoutAsyncAction())}
+          />
+        </View>
+      </View>
+    </DrawerContentScrollView>
+  );
+}
 
 export default function DrawerNavigator() {
   return (
     <Drawer.Navigator
       drawerStyle={{ backgroundColor: Theme.colors.background }}
       initialRouteName='Home'
+      drawerContent={props => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen
         name='Image Capture'
