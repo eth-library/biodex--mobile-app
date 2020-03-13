@@ -1,8 +1,9 @@
-import React, { useReducer, useCallback } from 'react';
+import React, { useState, useReducer, useCallback } from 'react';
 import { View, Image, Text, StyleSheet, Switch, Platform, Alert } from 'react-native';
 import { ScreenOrientation } from 'expo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import { useDispatch } from 'react-redux';
 
 import formReducer from '../formReducer';
 import Theme from '../../../theme';
@@ -10,11 +11,12 @@ import { authStyles } from '../styles';
 import Logo from '../../../assets/logo.png';
 import Button from '../../../components/UI/Button';
 import Input from '../../../components/UI/Input/index.js';
+import { userLoginAsyncAction } from '../../../store/actions/auth';
 
 const initialState = {
   values: {
-    email: '',
-    password: ''
+    email: 'cdelacombaz@bluewin.c',
+    password: 'propulsion12!'
   },
   validities: {
     email: false,
@@ -27,6 +29,8 @@ const initialState = {
 const Login = ({ navigation }) => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   const [formState, dispatchFormState] = useReducer(formReducer, initialState);
+  const [stayLoggedIn, setStayLoggedIn] = useState(false);
+  const dispatch = useDispatch();
 
   const submitHandler = useCallback(() => {
     dispatchFormState({ type: 'SUBMITTED' });
@@ -34,10 +38,11 @@ const Login = ({ navigation }) => {
       Alert.alert('Invalid input', 'Please check the errors in the form', [{ text: 'OK' }]);
       return;
     }
-    console.log('SUBMIT');
+    dispatch(userLoginAsyncAction(formState.values, stayLoggedIn));
   }, [formState]);
 
-  const inputChangeHandler = useCallback((inputIdentifier, inputValue, inputValidity) => {
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
       dispatchFormState({
         type: 'FORM_INPUT_UPDATE',
         name: inputIdentifier,
@@ -48,10 +53,13 @@ const Login = ({ navigation }) => {
     [dispatchFormState]
   );
 
-  const navigationHandler = useCallback((destination) => {
-    dispatchFormState({ type: 'FORM_INPUT_RESET', payload: initialState });
-    navigation.navigate(destination)
-  }, [dispatchFormState, navigation]);
+  const navigationHandler = useCallback(
+    destination => {
+      dispatchFormState({ type: 'FORM_INPUT_RESET', payload: initialState });
+      navigation.navigate(destination);
+    },
+    [dispatchFormState, navigation]
+  );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -93,7 +101,15 @@ const Login = ({ navigation }) => {
           />
           <View style={styles.stayLoggedInContainer}>
             <View style={styles.switchContainer}>
-              <Switch />
+              <Switch
+                value={stayLoggedIn}
+                onValueChange={setStayLoggedIn}
+                thumbColor={
+                  Platform.OS === 'android' && stayLoggedIn
+                    ? Theme.colors.accent
+                    : Theme.colors.white
+                }
+              />
             </View>
             <Text>Stay Logged In</Text>
           </View>

@@ -13,20 +13,12 @@ const MainNavigator = () => {
   const auth = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
-  
-
   useEffect(() => {
     const restoreToken = async () => {
+      const refreshToken = await AsyncStorage.getItem('refreshToken');
       let accessToken = null;
-      let refreshToken = null;
       let isAuthenticated = false;
-  
-      try {
-        refreshToken = await AsyncStorage.getItem('refreshToken');
-      } catch (e) {
-        // restoring token failed
-      };
-  
+
       if (refreshToken) {
         try {
           // fetch new token with jwt refresh url
@@ -36,11 +28,12 @@ const MainNavigator = () => {
           const response = await fetch('https://motion.propulsion-home.ch/backend/api/auth/token/refresh/', config);
           const data = await response.json()
           accessToken = data.access
+          isAuthenticated = true
         } catch (e) {
           // token invalid - remove token
+          console.log('ERROR TO HANDLE RIGHT HERE')
         };
       }
-  
       dispatch({ type: 'RESTORE_TOKEN', payload: { access: accessToken, refresh: refreshToken, isAuthenticated } });
     };
 
@@ -50,7 +43,7 @@ const MainNavigator = () => {
   if (auth.isLoading) {
     return <LoadingScreen />;
   };
-  
+
   return (
     <Stack.Navigator headerMode='none'>
       {auth.isAuthenticated ? (
