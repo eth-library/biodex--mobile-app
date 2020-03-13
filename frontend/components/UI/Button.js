@@ -1,22 +1,40 @@
 import React from 'react';
-import { View, Button, StyleSheet, Platform } from 'react-native';
+import { View, Text, Button, StyleSheet, Platform, ActivityIndicator } from 'react-native';
 
 import Theme from '../../theme';
 
-const CustomButton = props => {
+const CustomButton = ({ isLoading, title, onPress, error }) => {
   return (
-    <View style={{...styles.container, ...props.style}}>
-      <Button {...props} />
+    <View style={styles.container}>
+      {isLoading ? (
+        <ActivityIndicator color={Theme.colors.primary} size='small' />
+      ) : (
+        <View style={styles.buttonContainer}>
+          <Button
+            title={title}
+            color={Theme.colors.primary}
+            onPress={onPress}
+            style={{ width: '80%', backgroundColor: 'green' }}
+          />
+        </View>
+      )}
+      {error && !isLoading && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    height: 45,
     width: '100%',
-    marginBottom: 10,
-    backgroundColor: Platform.OS === 'ios' ? Theme.colors.primary : null
-  }
+    marginBottom: Theme.space.vertical.xSmall,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buttonContainer: {
+    width: '100%'
+  },
+  errorText: { color: 'red', fontFamily: Theme.fonts.primary, fontSize: Theme.fonts.sizeTC }
 });
 
 export default CustomButton;
