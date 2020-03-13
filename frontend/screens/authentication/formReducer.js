@@ -1,4 +1,4 @@
-const formReducer = (state = {}, action) => {
+const formReducer = (state, action) => {
   switch (action.type) {
     case 'FORM_INPUT_UPDATE': {
       const updatedValues = {
