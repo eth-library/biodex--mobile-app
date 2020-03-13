@@ -1,9 +1,17 @@
 import React, { useState, useReducer, useCallback } from 'react';
-import { View, Image, Text, StyleSheet, Switch, Platform, Alert } from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  Switch,
+  Platform,
+  Alert
+} from 'react-native';
 import { ScreenOrientation } from 'expo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import formReducer from '../formReducer';
 import Theme from '../../../theme';
@@ -16,7 +24,7 @@ import { userLoginAsyncAction } from '../../../store/actions/auth';
 const initialState = {
   values: {
     email: 'cdelacombaz@bluewin.c',
-    password: 'propulsion12!'
+    password: ''
   },
   validities: {
     email: false,
@@ -30,15 +38,19 @@ const Login = ({ navigation }) => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   const [formState, dispatchFormState] = useReducer(formReducer, initialState);
   const [stayLoggedIn, setStayLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const error = useSelector(state => state.auth.error);
   const dispatch = useDispatch();
 
-  const submitHandler = useCallback(() => {
+  const submitHandler = useCallback(async () => {
     dispatchFormState({ type: 'SUBMITTED' });
     if (!formState.isValid) {
       Alert.alert('Invalid input', 'Please check the errors in the form', [{ text: 'OK' }]);
       return;
     }
-    dispatch(userLoginAsyncAction(formState.values, stayLoggedIn));
+    setIsLoading(true);
+    await dispatch(userLoginAsyncAction(formState.values, stayLoggedIn));
+    setIsLoading(false);
   }, [formState]);
 
   const inputChangeHandler = useCallback(
@@ -113,12 +125,7 @@ const Login = ({ navigation }) => {
             </View>
             <Text>Stay Logged In</Text>
           </View>
-          <Button
-            title={'LOGIN'}
-            color={Platform.OS === 'ios' ? Theme.colors.white : Theme.colors.primary}
-            onPress={submitHandler}
-            style={{ marginBottom: Theme.space.vertical.xSmall }}
-          />
+          <Button title='LOGIN' onPress={submitHandler} isLoading={isLoading} error={error}/>
           <View style={authStyles.center}>
             <Text style={authStyles.text}>Don't have an account?</Text>
             <Text style={authStyles.link} onPress={() => navigationHandler('Registration')}>
