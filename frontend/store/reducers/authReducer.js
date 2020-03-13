@@ -15,8 +15,8 @@ export const authReducer = (state = initialState, action) => {
     case SIGN_IN:
       return {
         ...state,
-        access: action.access,
-        refresh: action.refresh,
+        access: action.payload.access,
+        refresh: action.payload.refresh,
         isAuthenticated: true
       };
     case SIGN_OUT:
