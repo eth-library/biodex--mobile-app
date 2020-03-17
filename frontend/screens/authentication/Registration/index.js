@@ -12,8 +12,8 @@ import { ScreenOrientation } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Button from '../../../components/UI/Button';
-import Input from '../../../components/UI/Input';
+import Button from '../../../components/Button';
+import Input from '../../../components/Input';
 import { authStyles } from '../styles';
 import Theme from '../../../theme';
 import formReducer from '../formReducer';

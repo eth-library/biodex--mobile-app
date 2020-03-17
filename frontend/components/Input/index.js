@@ -2,7 +2,7 @@ import React, { useReducer, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 import inputReducer from './inputReducer';
-import Theme from '../../../theme';
+import Theme from '../../theme';
 
 const Input = props => {
   const [inputState, dispatch] = useReducer(inputReducer, {

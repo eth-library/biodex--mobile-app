@@ -9,26 +9,37 @@ import {
   ScrollView
 } from 'react-native';
 
-import Butterfly from '../../assets/butterfly.jpg';
 import Theme from '../../theme';
 import ButterflyChoice from '../../components/ButterflyChoice';
 
-const ButterflySelectionScreen = ({ navigation, route }) => {
-  // const imageUri = route.params.imageUri;
+const ButterflySelectionScreen = ({ route }) => {
+  const imageUri = route.params.imageUri;
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle='light-content' />
       <View style={styles.imagePreview}>
-        <ImageBackground source={Butterfly} style={styles.imageContainer} imageStyle={styles.image}>
+        <ImageBackground
+          source={{ uri: imageUri }}
+          style={styles.imageContainer}
+          imageStyle={styles.image}
+        >
           <Text style={styles.imageDescription}>User's image</Text>
         </ImageBackground>
       </View>
       <View style={styles.titles}>
-        <View style={styles.title}><Text style={styles.titleText}>Family</Text></View>
-        <View style={styles.title}><Text style={styles.titleText}>Subfamily</Text></View>
-        <View style={styles.title}><Text style={styles.titleText}>Genus</Text></View>
-        <View style={styles.title}><Text style={styles.titleText}>Epithet</Text></View>
+        <View style={styles.title}>
+          <Text style={styles.titleText}>Family</Text>
+        </View>
+        <View style={styles.title}>
+          <Text style={styles.titleText}>Subfamily</Text>
+        </View>
+        <View style={styles.title}>
+          <Text style={styles.titleText}>Genus</Text>
+        </View>
+        <View style={styles.title}>
+          <Text style={styles.titleText}>Epithet</Text>
+        </View>
       </View>
       <ScrollView style={styles.choicesContainer}>
         <ButterflyChoice />
@@ -44,7 +55,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
-    paddingTop: Theme.space.vertical.xxSmall,
+    paddingTop: Theme.space.vertical.xxSmall
   },
   imagePreview: {
     height: Dimensions.get('window').width * 0.6,
@@ -57,12 +68,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     height: '100%',
-    width: '100%',
+    width: '100%'
   },
   image: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'cover'
   },
   imageDescription: {
     fontFamily: Theme.fonts.primary,
@@ -81,7 +92,7 @@ const styles = StyleSheet.create({
   title: {
     width: '25%',
     alignItems: 'center',
-    marginVertical: Theme.space.vertical.xxSmall,
+    marginVertical: Theme.space.vertical.xxSmall
   },
   titleText: {
     fontFamily: Theme.fonts.primaryBold,

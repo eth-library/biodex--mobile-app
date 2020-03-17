@@ -9,4 +9,5 @@ export default {
   white: '#FFFFFF',
   black: '#0F0F0F',
   background: '#F7F6F6',
+  backgroundAccent: '#D7D3D3'
 };

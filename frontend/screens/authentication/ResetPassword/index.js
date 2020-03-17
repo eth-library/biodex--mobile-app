@@ -9,8 +9,8 @@ import formReducer from '../formReducer';
 import Theme from '../../../theme';
 import { authStyles } from '../styles';
 import Logo from '../../../assets/logo.png';
-import Button from '../../../components/UI/Button';
-import Input from '../../../components/UI/Input/index.js';
+import Button from '../../../components/Button';
+import Input from '../../../components/Input/index.js';
 import { resetPasswordAsyncAction } from '../../../store/actions/resetPassword';
 
 const ResetPassword = props => {

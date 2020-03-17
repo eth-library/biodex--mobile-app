@@ -14,7 +14,7 @@ const CustomButton = ({ isLoading, title, onPress, error }) => {
             title={title}
             color={Theme.colors.primary}
             onPress={onPress}
-            style={{ width: '80%', backgroundColor: 'green' }}
+            style={styles.button}
           />
         </View>
       )}
@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '100%'
+  },
+  button: {
+    width: '80%'
   },
   errorText: { color: 'red', fontFamily: Theme.fonts.primary, fontSize: Theme.fonts.sizeTC }
 });
