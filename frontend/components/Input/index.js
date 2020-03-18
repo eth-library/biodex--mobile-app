@@ -8,8 +8,8 @@ const Input = React.forwardRef((props, ref) => {
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.value,
     errorText: null,
-    isValid: false,
-    touched: false
+    isValid: props.valid || false,
+    touched: props.touched || false
   });
   const defaultErrorMessage = props.required ? 'This field is required' : 'Invalid input';
 

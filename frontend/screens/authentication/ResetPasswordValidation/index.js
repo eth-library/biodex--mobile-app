@@ -17,13 +17,13 @@ const ResetPasswordValidation = ({ navigation }) => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     values: {
-      email: '',
+      email: useSelector(state => state.resetPassword.email),
       password: '',
       password_repeat: '',
       code: ''
     },
     validities: {
-      email: false,
+      email: true,
       password: false,
       password_repeat: false,
       code: false
@@ -89,6 +89,8 @@ const ResetPasswordValidation = ({ navigation }) => {
             onSubmitEditing={() => passwordRef.current.focus()}
             required
             email
+            valid
+            touched
             submitted={formState.submitted}
             errorText={error && error.email}
           />
