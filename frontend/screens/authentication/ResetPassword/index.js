@@ -1,6 +1,6 @@
 import React, { useState, useReducer, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Image, Text, StyleSheet, Platform, Alert } from 'react-native';
+import { View, Image, Text, StyleSheet, Alert, Keyboard } from 'react-native';
 import { ScreenOrientation } from 'expo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
@@ -13,7 +13,7 @@ import Button from '../../../components/Button';
 import Input from '../../../components/Input/index.js';
 import { resetPasswordAsyncAction } from '../../../store/actions/resetPassword';
 
-const ResetPassword = props => {
+const ResetPassword = ({ navigation }) => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     values: {
@@ -36,8 +36,9 @@ const ResetPassword = props => {
       return;
     }
     setIsLoading(true);
-    await dispatch(resetPasswordAsyncAction(formState.values.email));
+    const response = await dispatch(resetPasswordAsyncAction(formState.values.email));
     setIsLoading(false);
+    if (response.status === 200) navigation.navigate('ResetPasswordValidation');
   }, [formState]);
 
   const inputChangeHandler = useCallback(
@@ -74,7 +75,8 @@ const ResetPassword = props => {
             onInputChange={inputChangeHandler}
             keyboardType='email-address'
             autoCapitalize='none'
-            returnKeyType='next'
+            returnKeyType='done'
+            onSubmitEditing={() => Keyboard.dismiss()}
             required
             email
             submitted={formState.submitted}
@@ -82,13 +84,13 @@ const ResetPassword = props => {
           <Button title='SEND' onPress={submitHandler} isLoading={isLoading} error={error && error.email}/>
           <View style={authStyles.center}>
             <Text style={authStyles.text}>Remember your password?</Text>
-            <Text style={authStyles.link} onPress={() => props.navigation.navigate('Login')}>
+            <Text style={authStyles.link} onPress={() => navigation.navigate('Login')}>
               Go back to login
             </Text>
             <Text style={authStyles.text}>Already have a token?</Text>
             <Text
               style={authStyles.link}
-              onPress={() => props.navigation.navigate('ResetPasswordValidation')}
+              onPress={() => navigation.navigate('ResetPasswordValidation')}
             >
               Go to password reset validation
             </Text>

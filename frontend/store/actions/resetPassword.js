@@ -31,6 +31,7 @@ export const resetPasswordAsyncAction = email => async (dispatch, getState) => {
       const cleanedErrors = formatDjangoErrors(errors);
       dispatch(storeErrorAction(cleanedErrors));
     }
+    return response;
   } catch (e) {
     console.log('ERROR TO HANDLE IN resetPasswordAsyncAction: ', e.message);
   }
@@ -43,13 +44,15 @@ export const resetPasswordValidationAsyncAction = data => async (dispatch, getSt
   const config = { headers, method, body };
 
   try {
-    const response = await fetch(`${rootEndpoint}/auth/password-reset/validation`, config);
+    const response = await fetch(`${rootEndpoint}/auth/password-reset/validation/`, config);
     if (response.status === 200) console.log('SUCCESS - REDIRECT TO LOGIN');
     if (response.status >= 400) {
-      const errors = await response.text()
+      const errors = await response.json();
       const cleanedErrors = formatDjangoErrors(errors);
       dispatch(storeErrorAction(cleanedErrors));
     }
+    console.log('reso', response.status)
+    return response;
   } catch (e) {
     console.log('ERROR TO HANDLE IN resetPasswordValidationAsyncAction :', e.message);
   }

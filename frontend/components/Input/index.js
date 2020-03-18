@@ -4,14 +4,13 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 import inputReducer from './inputReducer';
 import Theme from '../../theme';
 
-const Input = props => {
+const Input = React.forwardRef((props, ref) => {
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.value,
     errorText: null,
     isValid: false,
     touched: false
   });
-
   const defaultErrorMessage = props.required ? 'This field is required' : 'Invalid input';
 
   const { onInputChange, name, submitted } = props;
@@ -68,6 +67,7 @@ const Input = props => {
         value={inputState.value}
         onChangeText={textChangeHandler}
         onBlur={lostFocusHandler}
+        ref={ref}
       />
       {renderErrorMessage && (
         <View style={styles.errorContainer}>
@@ -78,7 +78,7 @@ const Input = props => {
       )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

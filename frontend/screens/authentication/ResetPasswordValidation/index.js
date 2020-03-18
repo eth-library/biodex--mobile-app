@@ -1,6 +1,6 @@
 import React, { useState, useReducer, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Image, Text, StyleSheet, Platform, Alert } from 'react-native';
+import { View, Image, Text, StyleSheet, Platform, Alert, Keyboard } from 'react-native';
 import { ScreenOrientation } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -13,7 +13,7 @@ import Button from '../../../components/Button';
 import Input from '../../../components/Input/index.js';
 import { resetPasswordValidationAsyncAction } from '../../../store/actions/resetPassword';
 
-const ResetPasswordValidation = props => {
+const ResetPasswordValidation = ({ navigation }) => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     values: {
@@ -34,6 +34,9 @@ const ResetPasswordValidation = props => {
   const [isLoading, setIsLoading] = useState(false);
   const error = useSelector(state => state.resetPassword.error);
   const dispatch = useDispatch();
+  const passwordRef = React.createRef();
+  const passwordRepeatRef = React.createRef();
+  const codeRef = React.createRef();
 
   const submitHandler = useCallback(async () => {
     dispatchFormState({ type: 'SUBMITTED' });
@@ -42,8 +45,9 @@ const ResetPasswordValidation = props => {
       return;
     }
     setIsLoading(true);
-    await dispatch(resetPasswordValidationAsyncAction(formState.values));
+    const response = await dispatch(resetPasswordValidationAsyncAction(formState.values));
     setIsLoading(false);
+    if (response.status === 200) navigation.navigate('Login');
   }, [formState]);
 
   const inputChangeHandler = useCallback(
@@ -64,6 +68,7 @@ const ResetPasswordValidation = props => {
         resetScrollToCoords={{ x: 0, y: 0 }}
         contentContainerStyle={authStyles.fullScreenContainer}
         scrollEnabled
+        enableAutomaticScroll
         enableOnAndroid={true}
       >
         <Image style={styles.logo} source={Logo} />
@@ -81,6 +86,7 @@ const ResetPasswordValidation = props => {
             keyboardType='email-address'
             autoCapitalize='none'
             returnKeyType='next'
+            onSubmitEditing={() => passwordRef.current.focus()}
             required
             email
             submitted={formState.submitted}
@@ -94,7 +100,9 @@ const ResetPasswordValidation = props => {
             secureTextEntry
             required
             autoCapitalize='none'
-            returnKeyType='send'
+            returnKeyType='next'
+            ref={passwordRef}
+            onSubmitEditing={() => passwordRepeatRef.current.focus()}
             passwordCheck
             submitted={formState.submitted}
             errorText={error && error.password}
@@ -107,7 +115,9 @@ const ResetPasswordValidation = props => {
             secureTextEntry
             required
             autoCapitalize='none'
-            returnKeyType='send'
+            returnKeyType='next'
+            ref={passwordRepeatRef}
+            onSubmitEditing={() => codeRef.current.focus()}
             errorText={
               formState.values.password_repeat === formState.values.password
                 ? false
@@ -123,7 +133,9 @@ const ResetPasswordValidation = props => {
             keyboardType='numeric'
             required
             autoCapitalize='none'
-            returnKeyType='send'
+            returnKeyType='done'
+            ref={codeRef}
+            onSubmitEditing={() => Keyboard.dismiss()}
             submitted={formState.submitted}
             errorText={error && error.code}
           />
@@ -135,7 +147,7 @@ const ResetPasswordValidation = props => {
           />
           <View style={authStyles.center}>
             <Text style={authStyles.text}>Remember your password?</Text>
-            <Text style={authStyles.link} onPress={() => props.navigation.navigate('Login')}>
+            <Text style={authStyles.link} onPress={() => navigation.navigate('Login')}>
               Sign in!
             </Text>
           </View>

@@ -1,5 +1,5 @@
 import React, { useState, useReducer, useCallback } from 'react';
-import { View, Image, Text, StyleSheet, Switch, Platform, Alert } from 'react-native';
+import { View, Image, Text, StyleSheet, Switch, Platform, Alert, Keyboard } from 'react-native';
 import { ScreenOrientation } from 'expo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
@@ -33,6 +33,7 @@ const Login = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const error = useSelector(state => state.auth.error);
   const dispatch = useDispatch();
+  const passwordRef = React.createRef();
 
   const submitHandler = useCallback(async () => {
     dispatchFormState({ type: 'SUBMITTED' });
@@ -88,6 +89,7 @@ const Login = ({ navigation }) => {
             keyboardType='email-address'
             autoCapitalize='none'
             returnKeyType='next'
+            onSubmitEditing={() => passwordRef.current.focus()}
             required
             email
             submitted={formState.submitted}
@@ -100,7 +102,9 @@ const Login = ({ navigation }) => {
             secureTextEntry
             required
             autoCapitalize='none'
-            returnKeyType='send'
+            returnKeyType='done'
+            onSubmitEditing={() => Keyboard.dismiss()}
+            ref={passwordRef}
             submitted={formState.submitted}
           />
           <View style={styles.stayLoggedInContainer}>
