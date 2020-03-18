@@ -28,7 +28,7 @@ const ResetPassword = props => {
   const [isLoading, setIsLoading] = useState(false);
   const error = useSelector(state => state.resetPassword.error);
   const dispatch = useDispatch();
-  console.log('error in comp', error)
+  
   const submitHandler = useCallback(async () => {
     dispatchFormState({ type: 'SUBMITTED' });
     if (!formState.isValid) {

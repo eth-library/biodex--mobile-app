@@ -50,6 +50,6 @@ export const userLoginAsyncAction = (credentials, stayLoggedIn) => async (dispat
       dispatch(storeErrorAction(cleanedErrors));
     }
   } catch (e) {
-    console.log('ERROR TO HANDLE AUTH ACTIONS');
+    console.log('ERROR TO HANDLE IN userLoginAsyncAction: ', e.message);
   }
 };
