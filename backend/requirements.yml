@@ -1,0 +1,22 @@
+name: backend
+
+dependencies:
+  - python=3.7
+  - pip=20.0
+  - psycopg2=2.8
+  - pip:
+    - Django==3.0.2
+    - djangorestframework==3.11.0
+    - djangorestframework_simplejwt==4.4.0
+    - flake8==3.7.9
+    - coreapi==2.3.3
+    - Pillow==7.0.0
+    - django-cors-headers==3.2.1
+    - django-admin-honeypot==1.1.0
+    - django-extensions==2.2.8
+    - celery==4.4.2
+    - redis==3.4.1
+    - flower==0.9.3
+    - django-celery-results==1.2.1
+    - sentry-sdk==0.14.1
+

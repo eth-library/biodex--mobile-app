@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:11
+    ports:
+      - '5432:5432'
+    env_file:
+      - ./envs/dev.env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  backend:
+    image: lepi
+    restart: always
+    env_file:
+      - ./envs/dev.env
+    command: "tail -f /dev/null"
+    ports:
+      - '8000:8000'
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend:/backend
+      - media-files:/media-files
+      - static-files:/static-files
+    tty: true
+
+
+  redis:
+    image: redis:latest
+    restart: always
+    volumes:
+      - redis_data:/data
+
+  celery:
+    image: lepi
+    restart: always
+    env_file:
+      - ./envs/dev.env
+    command: 'celery -A app worker -l info'
+    volumes:
+      - ./backend:/backend
+      - media-files:/media-files
+      - static-files:/static-files
+    depends_on:
+      - postgres
+      - backend
+      - redis
+
+volumes:
+  postgres:
+  redis_data:
+  media-files:
+  static-files:

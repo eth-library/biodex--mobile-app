@@ -1,0 +1,10 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block title %}Django Template Admin{% endblock %}
+
+{% block extrahead %}
+<link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
+{% endblock %}
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Django Template Administration</a></h1>
+{% endblock %}
