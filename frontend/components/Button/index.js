@@ -37,7 +37,12 @@ const styles = StyleSheet.create({
   button: {
     width: '80%'
   },
-  errorText: { color: 'red', fontFamily: Theme.fonts.primary, fontSize: Theme.fonts.sizeTC }
+  errorText: {
+    color: 'red',
+    fontFamily: Theme.fonts.primary,
+    fontSize: Theme.fonts.sizeTC,
+    marginTop: Theme.space.vertical.xxSmall
+  }
 });
 
 export default CustomButton;

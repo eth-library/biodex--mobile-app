@@ -46,7 +46,6 @@ export const userLoginAsyncAction = (credentials, stayLoggedIn) => async (dispat
     if (response.status >= 400) {
       const errors = await response.json();
       const cleanedErrors = formatDjangoErrors(errors);
-      console.log('cleaned errors')
       dispatch(storeErrorAction(cleanedErrors));
     }
   } catch (e) {

@@ -31,7 +31,7 @@ const MainNavigator = () => {
           isAuthenticated = true
         } catch (e) {
           // token invalid - remove token
-          console.log('ERROR TO HANDLE RIGHT HERE')
+          console.log('ERROR TO HANDLE IN MainNavigator!')
         };
       }
       dispatch({ type: 'RESTORE_TOKEN', payload: { access: accessToken, refresh: refreshToken, isAuthenticated } });

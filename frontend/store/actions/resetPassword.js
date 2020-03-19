@@ -45,13 +45,11 @@ export const resetPasswordValidationAsyncAction = data => async (dispatch, getSt
 
   try {
     const response = await fetch(`${rootEndpoint}/auth/password-reset/validation/`, config);
-    if (response.status === 200) console.log('SUCCESS - REDIRECT TO LOGIN');
     if (response.status >= 400) {
       const errors = await response.json();
       const cleanedErrors = formatDjangoErrors(errors);
       dispatch(storeErrorAction(cleanedErrors));
     }
-    console.log('reso', response.status)
     return response;
   } catch (e) {
     console.log('ERROR TO HANDLE IN resetPasswordValidationAsyncAction :', e.message);
