@@ -77,6 +77,7 @@ const Registration = ({ navigation }) => {
           >
             <View style={styles.titleContainer}>
               <Text style={styles.title}>Create an account</Text>
+              <Text style={styles.inviteHint}>You need to get invited to receive a validation code and join Lepi.</Text>
             </View>
             <View style={{ ...authStyles.form, ...styles.form }}>
               <Input
@@ -231,7 +232,15 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Theme.fonts.primary,
     fontSize: Theme.fonts.sizeL,
-    color: Theme.colors.black
+    color: Theme.colors.black,
+    marginBottom: Theme.space.vertical.xxSmall
+  },
+  inviteHint: {
+    textAlign: 'center',
+    fontFamily: Theme.fonts.primary,
+    fontSize: Theme.fonts.sizeXS,
+    color: Theme.colors.black,
+    width: 200
   },
   form: {
     flex: 1

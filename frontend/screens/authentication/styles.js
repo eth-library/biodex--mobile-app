@@ -27,11 +27,11 @@ export const authStyles = {
     color: Theme.colors.link,
     width: '100%',
     textAlign: 'center',
-    marginBottom: Theme.space.vertical.small
+    marginBottom: Theme.space.vertical.xxSmall
   },
   center: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   terms: {
     fontSize: Theme.fonts.sizeTC,
