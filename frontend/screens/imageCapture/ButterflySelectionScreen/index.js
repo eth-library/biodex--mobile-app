@@ -52,6 +52,8 @@ const ButterflySelectionScreen = ({ route }) => {
             <ButterflyChoice style={styles.butterflyChoiceContainer} />
             <ButterflyChoice style={styles.butterflyChoiceContainer} />
             <ButterflyChoice style={styles.butterflyChoiceContainer} />
+            <ButterflyChoice style={styles.butterflyChoiceContainer} />
+            <ButterflyChoice style={styles.butterflyChoiceContainer} />
           </ScrollView>
         </View>
       </View>
