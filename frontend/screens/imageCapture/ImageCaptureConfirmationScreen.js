@@ -16,8 +16,8 @@ const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
     setWidth(Dimensions.get('window').width);
     setHeight(Dimensions.get('window').height);
   };
-  ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
-  useEffect(() => () => ScreenOrientation.removeOrientationChangeListener(screenOrientationHandler), [])
+  const listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
+  useEffect(() => () => ScreenOrientation.removeOrientationChangeListener(listener), []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
   const imageUri = route.params.imageUri;
   

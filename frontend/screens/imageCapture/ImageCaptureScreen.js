@@ -20,8 +20,8 @@ const ImageCaptureScreen = ({ navigation }) => {
     setWidth(Dimensions.get('window').width);
     setHeight(Dimensions.get('window').height);
   };
-  ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
-  useEffect(() => () => ScreenOrientation.removeOrientationChangeListener(screenOrientationHandler), [])
+  const listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
+  useEffect(() => () => ScreenOrientation.removeOrientationChangeListener(listener), []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
   // Android is asking for camera permissions on it's on. For IOS we have to ask for it at runtime.
   // This function will run once and IOS will store the result automatically.

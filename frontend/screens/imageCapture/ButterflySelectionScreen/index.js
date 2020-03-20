@@ -26,11 +26,8 @@ const ButterflySelectionScreen = ({ route }) => {
     setWidth(Dimensions.get('window').width);
     setHeight(Dimensions.get('window').height);
   };
-  ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
-  useEffect(
-    () => () => ScreenOrientation.removeOrientationChangeListener(screenOrientationHandler),
-    []
-  );
+  const listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
+  useEffect(() => () => ScreenOrientation.removeOrientationChangeListener(listener), []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
   const imageUri = route.params.imageUri;
 
@@ -75,7 +72,7 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       width: deviceWidth * 0.6,
       borderWidth: 2,
       borderStyle: 'solid',
-      borderColor: Theme.colors.accent
+      borderColor: Theme.colors.accent,
     },
     imageContainer: {
       justifyContent: 'flex-end',
@@ -118,17 +115,18 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
     },
     imagePreview: {
       width: '40%',
-      borderWidth: 2,
-      borderStyle: 'solid',
-      borderColor: Theme.colors.accent,
+      height: '100%',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     imageContainer: {
       justifyContent: 'flex-end',
       alignItems: 'center',
       height: deviceHeight * 0.7,
-      width: deviceHeight * 0.7
+      width: deviceHeight * 0.7,
+      borderWidth: 2,
+      borderStyle: 'solid',
+      borderColor: Theme.colors.accent,
     },
     image: {
       width: '100%',
