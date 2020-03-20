@@ -44,8 +44,6 @@ class RegistrationView(GenericAPIView):
     Create a non active user with email info only.
     """
     serializer_class = RegistrationSerializer
-    permission_classes = []
-    authentication_classes = []
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

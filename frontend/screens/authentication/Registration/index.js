@@ -1,13 +1,6 @@
 import React, { useReducer, useState, useCallback, Fragment } from 'react';
-import {
-  Text,
-  View,
-  Platform,
-  Picker,
-  StyleSheet,
-  Alert,
-  TouchableOpacity
-} from 'react-native';
+import { Text, View, Platform, Picker, StyleSheet, Alert, TouchableOpacity, Keyboard } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { ScreenOrientation } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 
@@ -17,14 +10,15 @@ import Input from '../../../components/Input';
 import { authStyles } from '../styles';
 import Theme from '../../../theme';
 import formReducer from '../formReducer';
+import { userRegistrationValidationAsyncAction } from '../../../store/actions/registration';
 
-const Registration = props => {
+const Registration = ({ navigation }) => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     values: {
       fullName: '',
       email: '',
-      userType: 'userType',
+      userType: 'Student',
       code: '',
       password: '',
       passwordRepeat: ''
@@ -42,23 +36,30 @@ const Registration = props => {
     submitted: false
   });
   const [showIosPicker, setShowIosPicker] = useState(false);
+  const error = useSelector(state => state.registration.error);
+  const dispatch = useDispatch();
+  const emailRef = React.createRef();
+  const codeRef = React.createRef();
+  const passwordRef = React.createRef();
+  const passwordRepeatRef = React.createRef();
 
-  const submitHandler = useCallback(() => {
+  const submitHandler = useCallback(async () => {
     dispatchFormState({ type: 'SUBMITTED' });
     if (!formState.isValid) {
       Alert.alert('Invalid input', 'Please check the errors in the form', [{ text: 'OK' }]);
       return;
     }
-    console.log('SUBMIT');
+    const response = await dispatch(userRegistrationValidationAsyncAction(formState.values));
+    if (response.status === 200) navigation.navigate('Login');
   }, [formState]);
 
   const inputChangeHandler = useCallback(
-    (inputIdentifier, inputValue, inputValidity) => {
+    (inputIdentifier, inputValue) => {
       dispatchFormState({
         type: 'FORM_INPUT_UPDATE',
         name: inputIdentifier,
         value: inputValue,
-        isValid: inputValidity
+        isValid: true
       });
     },
     [dispatchFormState]
@@ -84,8 +85,10 @@ const Registration = props => {
                 value={formState.values.fullName}
                 onInputChange={inputChangeHandler}
                 returnKeyType='next'
+                onSubmitEditing={() => emailRef.current.focus()}
                 required
                 submitted={formState.submitted}
+                errorText={error && error.full_name}
               />
               <Input
                 name='email'
@@ -93,9 +96,13 @@ const Registration = props => {
                 value={formState.values.email}
                 onInputChange={inputChangeHandler}
                 keyboardType='email-address'
+                ref={emailRef}
                 returnKeyType='next'
+                onSubmitEditing={() => codeRef.current.focus()}
+                autoCapitalize='none'
                 required
                 submitted={formState.submitted}
+                errorText={error && error.email}
               />
               <Input
                 name='code'
@@ -103,9 +110,13 @@ const Registration = props => {
                 value={formState.values.code}
                 onInputChange={inputChangeHandler}
                 keyboardType='number-pad'
+                ref={codeRef}
                 returnKeyType='next'
+                onSubmitEditing={() => setShowIosPicker(!showIosPicker)}
+                autoCapitalize='none'
                 required
                 submitted={formState.submitted}
+                errorText={error && error.code}
               />
               {Platform.OS === 'android' && (
                 <View style={styles.pickerContainer}>
@@ -114,13 +125,12 @@ const Registration = props => {
                     style={styles.picker}
                     itemStyle={styles.pickerItems} // works only for IOS
                     onValueChange={(itemValue, itemIndex) =>
-                      inputChangeHandler('userType', itemValue, itemValue !== 'userType')
+                      inputChangeHandler('userType', itemValue)
                     }
                     mode='dropdown'
                   >
-                    <Picker.Item label='User Type' value='userType'></Picker.Item>
-                    <Picker.Item label='Student' value='student' />
-                    <Picker.Item label='Expert' value='expert' />
+                    <Picker.Item label='Student' value='Student' />
+                    <Picker.Item label='Expert' value='Expert' />
                   </Picker>
                 </View>
               )}
@@ -145,7 +155,10 @@ const Registration = props => {
                 value={formState.values.password}
                 onInputChange={inputChangeHandler}
                 secureTextEntry
+                ref={passwordRef}
                 returnKeyType='next'
+                onSubmitEditing={() => passwordRepeatRef.current.focus()}
+                autoCapitalize='none'
                 required
                 passwordCheck
                 submitted={formState.submitted}
@@ -156,7 +169,10 @@ const Registration = props => {
                 value={formState.values.passwordRepeat}
                 onInputChange={inputChangeHandler}
                 secureTextEntry
-                returnKeyType='next'
+                ref={passwordRepeatRef}
+                returnKeyType='done'
+                onSubmitEditing={() => Keyboard.dismiss()}
+                autoCapitalize='none'
                 required
                 errorText={
                   formState.values.passwordRepeat === formState.values.password
@@ -169,10 +185,11 @@ const Registration = props => {
                 title={'Create your Account'}
                 color={Platform.OS === 'ios' ? Theme.colors.white : Theme.colors.primary}
                 onPress={submitHandler}
+                error={error && error.global}
               />
               <View style={authStyles.center}>
                 <Text style={authStyles.text}>Already have an account?</Text>
-                <Text style={authStyles.link} onPress={() => props.navigation.navigate('Login')}>
+                <Text style={authStyles.link} onPress={() => navigation.navigate('Login')}>
                   Sign in!
                 </Text>
               </View>
@@ -197,9 +214,8 @@ const Registration = props => {
             inputChangeHandler('userType', itemValue, itemValue !== 'userType');
           }}
         >
-          <Picker.Item label='User Type' value='userType'></Picker.Item>
-          <Picker.Item label='Student' value='student' />
-          <Picker.Item label='Expert' value='expert' />
+          <Picker.Item label='Student' value='Student' />
+          <Picker.Item label='Expert' value='Expert' />
         </Picker>
       )}
     </Fragment>

@@ -27,14 +27,6 @@ def email_does_exist(email):
         raise ValidationError(message='User does not exist!')
 
 
-def username_does_not_exist(username):
-    try:
-        User.objects.get(username=username)
-        raise ValidationError(message='This username is taken')
-    except User.DoesNotExist:
-        return username
-
-
 def code_is_valid(code):
     try:
         reg_profile = RegistrationProfile.objects.get(code=code)
@@ -75,9 +67,8 @@ class RegistrationValidationSerializer(serializers.Serializer):
     code = serializers.CharField(label='Validation code', write_only=True, validators=[code_is_valid])
     password = serializers.CharField(label='password', write_only=True)
     password_repeat = serializers.CharField(label='password_repeat', write_only=True)
-    username = serializers.CharField(label='Username', validators=[username_does_not_exist])
-    first_name = serializers.CharField(label='First name', required=False)
-    last_name = serializers.CharField(label='Last name', required=False)
+    full_name = serializers.CharField(label='Full name')
+    user_type = serializers.CharField(label='User type')
 
     def validate(self, data):
         code = data.get('code')
@@ -93,9 +84,8 @@ class RegistrationValidationSerializer(serializers.Serializer):
     def save(self, validated_data):
         email = validated_data.get('email')
         user = User.objects.get(email=email)
-        user.username = validated_data.get('username')
-        user.first_name = validated_data.get('first_name')
-        user.last_name = validated_data.get('last_name')
+        user.full_name = validated_data.get('full_name')
+        user.user_type = validated_data.get('user_type')
         user.is_active = True
         user.set_password(validated_data.get('password'))
         user.registration_profile.code_used = True
