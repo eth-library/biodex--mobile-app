@@ -1,13 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Button, StatusBar, Image, StyleSheet, Dimensions } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScreenOrientation } from 'expo';
 
 import Theme from '../../theme';
 
 const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
+  const [portrait, setPortrait] = useState(
+    Dimensions.get('window').height > Dimensions.get('window').width
+  );
+  const [width, setWidth] = useState(Dimensions.get('window').width);
+  const [height, setHeight] = useState(Dimensions.get('window').height);
+  const screenOrientationHandler = () => {
+    setPortrait(Dimensions.get('window').height > Dimensions.get('window').width);
+    setWidth(Dimensions.get('window').width);
+    setHeight(Dimensions.get('window').height);
+  };
+  ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
+  useEffect(() => () => ScreenOrientation.removeOrientationChangeListener(screenOrientationHandler), [])
+  const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
   const imageUri = route.params.imageUri;
   
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar barStyle='light-content' />
       <View style={styles.imagePreview}>
         <Image style={styles.image} source={{ uri: imageUri }} />
@@ -16,19 +31,19 @@ const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
         <Button title={'Retake image'} color={Theme.colors.cancel} onPress={() => navigation.navigate('ImageCapture')} />
         <Button title={'Upload image'} color={Theme.colors.confirm} onPress={() => navigation.navigate('ButterflySelection', { imageUri: imageUri })} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({
+const portraitStyles = (deviceWidth, deviceHeight) => StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-around'
   },
   imagePreview: {
-    height: Dimensions.get('window').width * 0.9,
-    width: Dimensions.get('window').width * 0.9
+    height: deviceWidth * 0.9,
+    width: deviceWidth * 0.9
   },
   image: {
     height: '100%',
@@ -37,7 +52,28 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '90%',
+    width: deviceWidth * 0.9,
+  }
+});
+
+const landscapeStyles = (deviceWidth, deviceHeight) => StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-around'
+  },
+  imagePreview: {
+    height: deviceHeight * 0.7,
+    width: deviceHeight * 0.7
+  },
+  image: {
+    height: '100%',
+    width: '100%'
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: deviceWidth * 0.5,
   }
 });
 

@@ -8,12 +8,12 @@ import Butterfly from '../../assets/butterfly.jpg';
 import Title from './Title';
 import Description from './Description';
 
-const ButterflyChoice = () => {
+const ButterflyChoice = props => {
   const [showDescription, setShowDescription] = useState(false);
 
   return (
     <View style={styles.container}>
-      <View style={styles.butterflyContainer}>
+      <View style={{...styles.butterflyContainer, ...props.style}}>
         <View style={styles.titles}>
           <Title />
           <Title />
@@ -34,8 +34,8 @@ const ButterflyChoice = () => {
             name={
               Platform.OS === 'ios'
                 ? showDescription
-                  ? 'ios-arrow-dropup'
-                  : 'ios-arrow-dropdown'
+                  ? 'ios-arrow-up'
+                  : 'ios-arrow-down'
                 : showDescription
                 ? 'md-arrow-dropup'
                 : 'md-arrow-dropdown'
@@ -60,15 +60,13 @@ const styles = StyleSheet.create({
   },
   butterflyContainer: {
     width: '100%',
-    height: Dimensions.get('window').height * 0.4,
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: Theme.colors.backgroundAccent,
-    paddingVertical: Theme.space.vertical.xxSmall,
   },
   imageContainer: {
     width: '98%',
-    height: '80%',
+    height: '70%',
     alignItems: 'center',
     justifyContent: 'space-around',
     flexDirection: 'row',
@@ -81,7 +79,6 @@ const styles = StyleSheet.create({
   },
   titles: {
     width: '100%',
-    height: 30,
     flexDirection: 'row',
     justifyContent: 'space-around'
   },
@@ -93,8 +90,8 @@ const styles = StyleSheet.create({
   description: {
     height: 30,
     alignItems: 'center',
+    justifyContent: 'center',
     flexDirection: 'row',
-    justifyContent: 'center'
   },
   text: {
     fontFamily: Theme.fonts.primary,

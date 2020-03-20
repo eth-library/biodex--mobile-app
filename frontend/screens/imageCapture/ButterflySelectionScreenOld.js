@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-
 import Theme from '../../theme';
 import ButterflyChoice from '../../components/ButterflyChoice';
 
@@ -19,8 +18,9 @@ const ButterflySelectionScreen = ({ route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-        <StatusBar barStyle='light-content' />
+      <StatusBar barStyle='light-content' />
       <View style={styles.container}>
+        
         <View style={styles.imagePreview}>
           <ImageBackground
             source={{ uri: imageUri }}
@@ -30,6 +30,7 @@ const ButterflySelectionScreen = ({ route }) => {
             <Text style={styles.imageDescription}>User's image</Text>
           </ImageBackground>
         </View>
+
         <View style={styles.titles}>
           <View style={styles.title}>
             <Text style={styles.titleText}>Family</Text>
@@ -44,6 +45,7 @@ const ButterflySelectionScreen = ({ route }) => {
             <Text style={styles.titleText}>Epithet</Text>
           </View>
         </View>
+
         <ScrollView style={styles.choicesContainer}>
           <ButterflyChoice />
           <ButterflyChoice />

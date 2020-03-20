@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: theme.fonts.primaryBold,
-    fontSize: theme.fonts.sizeXS
+    fontSize: theme.fonts.sizeXXS
   },
   percentage: {
     fontFamily: theme.fonts.primaryBold,
