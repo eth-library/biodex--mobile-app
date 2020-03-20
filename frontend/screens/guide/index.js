@@ -11,7 +11,7 @@ import Theme from '../../theme';
 const Guide = () => {
   return (
     <View style={styles.container}>
-      <SwiperFlatList index={1} showPagination>
+      <SwiperFlatList index={0} showPagination>
         <HomeScreen style={styles.child} />
         <ImageCaptureScreen style={styles.child} />
         <ButterflySelectionScreen style={styles.child} />
