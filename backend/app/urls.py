@@ -9,8 +9,7 @@ api_patterns = [
     path('auth/', include('app.registration.urls')),
     path('notifications/', include('app.notifications.urls')),
 
-    path('docs/', include_docs_urls(title='Django Template', permission_classes=[])),
-
+    path('docs/', include_docs_urls(title='Lepi', permission_classes=[])),
 ]
 
 urlpatterns = [
