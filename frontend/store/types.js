@@ -3,6 +3,8 @@ export const RESTORE_TOKEN = 'RESTORE_TOKEN';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
 export const STORE_AUTH_ERROR = 'STORE_AUTH_ERROR';
+export const SET_IS_FIRST_TIME_USER = 'SET_IS_FIRST_TIME_USER';
+export const SET_NOT_FIRST_TIME_USER = 'SET_NOT_FIRST_TIME_USER';
 
 // Password reset
 export const RESET_PASSWORD = 'RESET_PASSWORD';

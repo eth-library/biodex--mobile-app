@@ -8,14 +8,14 @@ import ButterflySelectionScreen from './ButterflySelectionScreen';
 import StartScreen from './StartScreen';
 import Theme from '../../theme';
 
-const Guide = () => {
+const Guide = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <SwiperFlatList index={0} showPagination>
         <HomeScreen style={styles.child} />
         <ImageCaptureScreen style={styles.child} />
         <ButterflySelectionScreen style={styles.child} />
-        <StartScreen style={styles.child} />
+        <StartScreen style={styles.child} navigation={navigation} />
       </SwiperFlatList>
     </View>
   );
