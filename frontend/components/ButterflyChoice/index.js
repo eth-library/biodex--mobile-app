@@ -1,29 +1,30 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 
 import Theme from '../../theme';
 import Button from '../Button';
-import Butterfly from '../../assets/butterfly.jpg';
 import Title from './Title';
 import Description from './Description';
 
-const ButterflyChoice = props => {
+const ButterflyChoice = ({ style, data }) => {
   const [showDescription, setShowDescription] = useState(false);
+  const dispatch = useDispatch();
 
   return (
     <View style={styles.container}>
-      <View style={{...styles.butterflyContainer, ...props.style}}>
+      <View style={{...styles.butterflyContainer, ...style}}>
         <View style={styles.titles}>
-          <Title />
-          <Title />
-          <Title />
-          <Title />
-        </View>
+          <Title text={data.family} prob={data.family_prob} />
+          <Title text={data.subfamily} prob={data.subfamily_prob} />
+          <Title text={data.species} prob={data.species_prob} />
+          <Title text={data.species} prob={data.species_prob} />
+        </View> 
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={Butterfly} />
+          <Image style={styles.image} source={{ uri: data.example_image_0 }} />
           <View style={styles.buttons}>
-            <Button title='CONFIRM' />
+            <Button title='CONFIRM' onPress={() => console.log(data)} />
           </View>
         </View>
         <TouchableOpacity
@@ -74,13 +75,12 @@ const styles = StyleSheet.create({
   },
   image: {
     resizeMode: 'cover',
-    height: '100%',
-    width: '70%'
+    height: 224,
+    width: 224
   },
   titles: {
     width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-around'
   },
   buttons: {
     justifyContent: 'center',

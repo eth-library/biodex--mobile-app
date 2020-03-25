@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   View,
   ImageBackground,
@@ -15,7 +16,7 @@ import Theme from '../../../theme';
 import ButterflyChoice from '../../../components/ButterflyChoice';
 import Titles from './Titles';
 
-const ButterflySelectionScreen = ({ route }) => {
+const ButterflySelectionScreen = () => {
   const [portrait, setPortrait] = useState(
     Dimensions.get('window').height > Dimensions.get('window').width
   );
@@ -29,7 +30,9 @@ const ButterflySelectionScreen = ({ route }) => {
   const listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
   useEffect(() => () => ScreenOrientation.removeOrientationChangeListener(listener), []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
-  const imageUri = route.params.imageUri;
+  const uploaded_image = useSelector(state => state.images.uploaded_image);
+  const predictions = useSelector(state => state.images.predictions);
+  const dispatch = useDispatch();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -38,7 +41,7 @@ const ButterflySelectionScreen = ({ route }) => {
       <View style={styles.container}>
         <View style={styles.imagePreview}>
           <ImageBackground
-            source={{ uri: imageUri }}
+            source={{ uri: uploaded_image }}
             style={styles.imageContainer}
             imageStyle={styles.image}
           >
@@ -48,12 +51,10 @@ const ButterflySelectionScreen = ({ route }) => {
 
         <View style={styles.choicesContainer}>
           <Titles />
-          <ScrollView style={styles.choices}>
-            <ButterflyChoice style={styles.butterflyChoiceContainer} />
-            <ButterflyChoice style={styles.butterflyChoiceContainer} />
-            <ButterflyChoice style={styles.butterflyChoiceContainer} />
-            <ButterflyChoice style={styles.butterflyChoiceContainer} />
-            <ButterflyChoice style={styles.butterflyChoiceContainer} />
+          <ScrollView >
+            { predictions.map((el, index) => {
+              return <ButterflyChoice style={styles.butterflyChoiceContainer} data={el} key={index} />
+            }) }
           </ScrollView>
         </View>
       </View>
@@ -70,8 +71,8 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       paddingTop: Theme.space.vertical.xxSmall
     },
     imagePreview: {
-      height: deviceWidth * 0.6,
-      width: deviceWidth * 0.6,
+      height: 224,
+      width: 224,
       borderWidth: 2,
       borderStyle: 'solid',
       borderColor: Theme.colors.accent,
@@ -98,11 +99,11 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       justifyContent: 'space-between',
       width: '70%'
     },
-    choices: {
+    choicesContainer: {
       flex: 1
     },
     butterflyChoiceContainer: {
-      height: deviceHeight * 0.4
+      height: deviceHeight * 0.45
     }
   });
 

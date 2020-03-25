@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Button, StatusBar, Image, StyleSheet, Dimensions } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenOrientation } from 'expo';
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
 
 import Theme from '../../theme';
+import { uploadImageAsyncAction, storeLocation } from '../../store/actions/images';
 
 const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
   const [portrait, setPortrait] = useState(
@@ -20,7 +24,22 @@ const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
   useEffect(() => () => ScreenOrientation.removeOrientationChangeListener(listener), []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
   const imageUri = route.params.imageUri;
-  
+  const dispatch = useDispatch();
+
+  getLocationAsync = async () => {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status === 'granted') {
+      const loc = await Location.getCurrentPositionAsync({});
+      dispatch(storeLocation(loc));
+    };
+  };
+
+  const confirmHandler = async () => {
+    await getLocationAsync();
+    const response = await dispatch(uploadImageAsyncAction(imageUri));
+    if (response.status === 200) navigation.navigate('ButterflySelection');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle='light-content' />
@@ -29,7 +48,7 @@ const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
       </View>
       <View style={styles.buttonsContainer}>
         <Button title={'Retake image'} color={Theme.colors.cancel} onPress={() => navigation.navigate('ImageCapture')} />
-        <Button title={'Upload image'} color={Theme.colors.confirm} onPress={() => navigation.navigate('ButterflySelection', { imageUri: imageUri })} />
+        <Button title={'Upload image'} color={Theme.colors.confirm} onPress={confirmHandler} />
       </View>
     </SafeAreaView>
   );
