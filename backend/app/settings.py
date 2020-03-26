@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'app.emails',
     'app.registration',
     'app.notifications',
+    'app.cases',
+    'app.predictions'
 ]
 
 MIDDLEWARE = [

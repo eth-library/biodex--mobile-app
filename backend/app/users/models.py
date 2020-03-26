@@ -23,5 +23,7 @@ class User(AbstractUser):
         default=UserTypes.STUDENT
     )
 
+    # cases defined as foreignKey on Case
+
     def __str__(self):
         return self.email
