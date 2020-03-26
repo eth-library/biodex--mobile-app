@@ -14,7 +14,15 @@ class Case(models.Model):
     )
     uploaded_image = models.ImageField(
         verbose_name='uploaded image',
-        upload_to='uploaded_images/'
+        upload_to='uploaded_images/',
+        blank=True,
+        null=True
+    )
+    confirmed_image = models.ImageField(
+        verbose_name='confirmed image',
+        upload_to='confirmed_images/',
+        blank=True,
+        null=True
     )
     location = models.CharField(
         max_length=50,

@@ -13,8 +13,8 @@ class Prediction(models.Model):
         to=Case
     )
     index = models.IntegerField()
-    image = models.ImageField(
-        upload_to='confirmed_images/'
+    image_id = models.CharField(
+        max_length=100
     )
     family = models.CharField(
         max_length=100
@@ -34,7 +34,9 @@ class Prediction(models.Model):
     species_prob = models.FloatField(
         verbose_name='species probability',
     )
-    confirmed = models.BooleanField()
+    confirmed = models.BooleanField(
+        default=False
+    )
     created = models.DateTimeField(
         auto_now_add=True
     )

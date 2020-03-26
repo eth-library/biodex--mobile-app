@@ -1,10 +1,8 @@
-from rest_framework import status
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.response import Response
 
 from app.cases.models import Case
-from app.cases.serializers import CaseSerializer
-from app.predictions.serializers import PredictionSerializer
+from app.cases.serializers import CaseReadSerializer, CaseCreateSerializer, CaseUpdateSerializer
 
 
 class CaseListView(ListAPIView):
@@ -12,26 +10,41 @@ class CaseListView(ListAPIView):
     List all cases
     """
     queryset = Case.objects.all()
-    serializer_class = CaseSerializer
+    serializer_class = CaseReadSerializer
 
 
 class CaseCreateView(CreateAPIView):
-    serializer_class = CaseSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        case = serializer.save(user=request.user)
-
-        for prediction in request.predictions:
-            serializer = PredictionSerializer(data=prediction)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(case=case)
-
-        headers = self.get_success_headers(serializer.data)
-        return Response(self.get_serializer(case).data, status=status.HTTP_201_CREATED, headers=headers)
+    """
+    Create a new case and it's related prediction instances
+    """
+    serializer_class = CaseCreateSerializer
 
 
 class CaseReadUpdateView(RetrieveUpdateAPIView):
+    """
+    get:
+    Get a specific case by id
+
+    patch:
+    Update a specific case by id. It should only be used to update the case with the confirmed image and set the status of confirmed on the related prediction
+    """
     queryset = Case
-    serializer_class = CaseSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return CaseReadSerializer
+        else:
+            return CaseUpdateSerializer
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+
+        detailed_serializer = CaseReadSerializer(instance)
+        return Response(detailed_serializer.data)

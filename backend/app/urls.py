@@ -8,6 +8,7 @@ api_patterns = [
     path('users/', include('app.users.urls')),
     path('auth/', include('app.registration.urls')),
     path('notifications/', include('app.notifications.urls')),
+    path('cases/', include('app.cases.urls')),
 
     path('docs/', include_docs_urls(title='Lepi', permission_classes=[])),
 ]
