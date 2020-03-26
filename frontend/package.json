@@ -14,8 +14,11 @@
         "@react-navigation/stack": "^5.1.1",
         "expo": "~36.0.0",
         "expo-camera": "~8.0.0",
+        "expo-file-system": "~8.0.0",
+        "expo-image-manipulator": "~8.0.0",
         "expo-image-picker": "~8.0.1",
         "expo-permissions": "~8.0.0",
+        "moment": "^2.24.0",
         "react": "~16.9.0",
         "react-dom": "~16.9.0",
         "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
@@ -31,7 +34,8 @@
         "react-redux": "^7.2.0",
         "redux": "^4.0.5",
         "redux-devtools-extension": "^2.13.8",
-        "redux-thunk": "^2.3.0"
+        "redux-thunk": "^2.3.0",
+        "expo-location": "~8.0.0"
     },
     "devDependencies": {
         "@babel/core": "^7.0.0",
