@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from app.emails.signals import send_email
 from app.notifications.signals import notify_users
@@ -137,3 +138,13 @@ class PasswordResetValidationSerializer(serializers.Serializer):
         post_user_password_reset_validation.send(sender=User, user=user)
         notify_users.send(sender=User, notification_key='user_reset_password', request=self.context['request'], email=user.email)
         return user
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        # The default result (access/refresh tokens)
+        data = super(CustomTokenObtainPairSerializer, self).validate(attrs)
+        # Custom data you want to include
+        data.update({'user': self.user})
+        # and everything else you want to send in the response
+        return data

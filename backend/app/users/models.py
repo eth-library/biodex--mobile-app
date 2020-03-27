@@ -26,4 +26,4 @@ class User(AbstractUser):
     # cases defined as foreignKey on Case
 
     def __str__(self):
-        return self.email
+        return f'User id {self.pk}: {self.email}'

@@ -5,9 +5,11 @@ from .serializers import RegistrationSerializer, RegistrationValidationSerialize
     PasswordResetValidationSerializer
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+import jwt
 
 from app.users.serializers import UserSerializer
+from .. import settings
 
 User = get_user_model()
 
@@ -17,7 +19,6 @@ class TokenUserObtainView(TokenObtainPairView):
     post:
     Create a new session for a user. Sends back tokens and user.
     """
-
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
 
@@ -27,6 +28,31 @@ class TokenUserObtainView(TokenObtainPairView):
             raise InvalidToken(e.args[0])
 
         user = User.objects.get(email=request.data['email'])
+        req = request
+        req.user = user
+        user_serializer = UserSerializer(instance=user, context={'request': req})
+        res = {
+            'user': user_serializer.data,
+            **serializer.validated_data
+        }
+
+        return Response(res, status=status.HTTP_200_OK)
+
+
+class TokenUserRefreshView(TokenRefreshView):
+    """
+    post:
+    Create a new access token for a user. Sends back access token and user.
+    """
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        user_id = jwt.decode(request.data.get('refresh'), settings.SECRET_KEY).get('user_id')
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+
+        user = User.objects.get(id=user_id)
         req = request
         req.user = user
         user_serializer = UserSerializer(instance=user, context={'request': req})
