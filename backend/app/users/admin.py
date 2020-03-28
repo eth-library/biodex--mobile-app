@@ -19,5 +19,5 @@ class UserAdmin(UserAdmin):
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
         ('Groups', {'fields': ('groups',)}),
     )
-    list_display = ('email', 'pk', 'full_name', 'is_staff')
+    list_display = ('pk', 'email', 'full_name', 'is_staff')
     ordering = ('email',)

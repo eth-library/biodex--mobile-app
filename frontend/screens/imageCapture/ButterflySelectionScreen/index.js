@@ -15,6 +15,7 @@ import { ScreenOrientation } from 'expo';
 import Theme from '../../../theme';
 import ButterflyChoice from '../../../components/ButterflyChoice';
 import Titles from './Titles';
+import { confirmPredictionAsyncAction } from '../../../store/actions/images';
 
 const ButterflySelectionScreen = () => {
   const [portrait, setPortrait] = useState(
@@ -30,9 +31,14 @@ const ButterflySelectionScreen = () => {
   const listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
   useEffect(() => () => ScreenOrientation.removeOrientationChangeListener(listener), []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
-  const uploaded_image = useSelector(state => state.images.uploaded_image);
+  const uploadedImage = useSelector(state => state.images.uploadedImage);
   const predictions = useSelector(state => state.images.predictions);
   const dispatch = useDispatch();
+
+  const confirmationHandler = data => {
+    console.log('confirmed!!', data);
+    dispatch(confirmPredictionAsyncAction(data));
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -41,7 +47,7 @@ const ButterflySelectionScreen = () => {
       <View style={styles.container}>
         <View style={styles.imagePreview}>
           <ImageBackground
-            source={{ uri: uploaded_image }}
+            source={{ uri: uploadedImage }}
             style={styles.imageContainer}
             imageStyle={styles.image}
           >
@@ -53,7 +59,7 @@ const ButterflySelectionScreen = () => {
           <Titles />
           <ScrollView >
             { predictions.map((el, index) => {
-              return <ButterflyChoice style={styles.butterflyChoiceContainer} data={el} key={index} />
+              return <ButterflyChoice style={styles.butterflyChoiceContainer} data={el} key={index} confirmationHandler={confirmationHandler} />
             }) }
           </ScrollView>
         </View>

@@ -24,6 +24,7 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         access: action.payload.access,
         refresh: action.payload.refresh,
+        user: action.payload.user,
         isAuthenticated: action.payload.isAuthenticated,
         isLoading: false
       };
@@ -32,6 +33,7 @@ export const authReducer = (state = initialState, action) => {
         ...state,
         access: action.payload.access,
         refresh: action.payload.refresh,
+        user: action.payload.user,
         isAuthenticated: true,
         error: null
       };

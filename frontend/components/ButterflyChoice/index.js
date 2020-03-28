@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 
 import Theme from '../../theme';
@@ -8,9 +7,8 @@ import Button from '../Button';
 import Title from './Title';
 import Description from './Description';
 
-const ButterflyChoice = ({ style, data }) => {
+const ButterflyChoice = ({ style, data, confirmationHandler }) => {
   const [showDescription, setShowDescription] = useState(false);
-  const dispatch = useDispatch();
 
   return (
     <View style={styles.container}>
@@ -22,9 +20,9 @@ const ButterflyChoice = ({ style, data }) => {
           <Title text={data.species} prob={data.species_prob} />
         </View> 
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={{ uri: data.example_image_0 }} />
+          <Image style={styles.image} source={{ uri: data.image }} />
           <View style={styles.buttons}>
-            <Button title='CONFIRM' onPress={() => console.log(data)} />
+            <Button title='CONFIRM' onPress={() => confirmationHandler(data)} />
           </View>
         </View>
         <TouchableOpacity

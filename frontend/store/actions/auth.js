@@ -4,11 +4,11 @@ import { rootEndpoint } from '../../constants';
 import { SIGN_IN, SIGN_OUT, STORE_AUTH_ERROR } from '../types';
 import formatDjangoErrors from '../helpers/formatDjangoErrors';
 
-// store JWT's after a user has logged in manually
-const storeTokenAction = jwts => {
+// store JWT's and user, after a user has logged in manually
+const storeTokenAction = data => {
   return {
     type: SIGN_IN,
-    payload: jwts
+    payload: data
   };
 };
 
@@ -41,7 +41,7 @@ export const userLoginAsyncAction = (credentials, stayLoggedIn) => async (dispat
     if (response.status === 200) {
       const data = await response.json();
       if (stayLoggedIn) await AsyncStorage.setItem('refreshToken', data.refresh);
-      dispatch(storeTokenAction({ access: data.access, refresh: data.refresh }));
+      dispatch(storeTokenAction({ access: data.access, refresh: data.refresh, user: data.user }));
     }
     if (response.status >= 400) {
       const errors = await response.json();

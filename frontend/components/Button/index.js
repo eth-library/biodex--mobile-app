@@ -3,16 +3,16 @@ import { View, Text, Button, StyleSheet, Platform, ActivityIndicator } from 'rea
 
 import Theme from '../../theme';
 
-const CustomButton = ({ isLoading, title, onPress, error }) => {
+const CustomButton = ({ isLoading, title, onPress, error, style, color }) => {
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, ...style}}>
       {isLoading ? (
         <ActivityIndicator color={Theme.colors.primary} size='small' />
       ) : (
         <View style={styles.buttonContainer}>
           <Button
             title={title}
-            color={Theme.colors.primary}
+            color={color || Theme.colors.primary}
             onPress={onPress}
             style={styles.button}
           />

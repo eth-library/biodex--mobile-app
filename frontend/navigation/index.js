@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { AsyncStorage } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import DrawerNavigator from './DrawerNavigator';
 import AuthStackNavigator from './AuthStackNavigator';
 import LoadingScreen from '../components/LoadingScreen';
+import { rootEndpoint } from '../constants';
 
 const Stack = createStackNavigator();
 
@@ -15,26 +16,36 @@ const MainNavigator = () => {
 
   useEffect(() => {
     const restoreToken = async () => {
-      const refreshToken = await AsyncStorage.getItem('refreshToken');
+      let refreshToken = await AsyncStorage.getItem('refreshToken');
       let accessToken = null;
       let isAuthenticated = false;
+      let user = null
 
       if (refreshToken) {
         try {
           // fetch new token with jwt refresh url
           const headers = new Headers({ 'Content-type': 'application/json' });
-          const body = JSON.stringify({ refresh: refreshToken })
-          const config = { method: 'POST', headers, body }
-          const response = await fetch('https://motion.propulsion-home.ch/backend/api/auth/token/refresh/', config);
-          const data = await response.json()
-          accessToken = data.access
-          isAuthenticated = true
+          const body = JSON.stringify({ refresh: refreshToken });
+          const config = { method: 'POST', headers, body };
+          const response = await fetch(`${rootEndpoint}/auth/token/refresh/`, config);
+          if (response.status === 200) {
+            const data = await response.json();
+            accessToken = data.access;
+            user = data.user
+            isAuthenticated = true;
+          }
+          if (response.status !== 200) {
+            await AsyncStorage.removeItem('refreshToken');
+            refreshToken = null;
+          }
         } catch (e) {
-          // token invalid - remove token
-          console.log('ERROR TO HANDLE IN MainNavigator!')
-        };
+          console.log('ERROR TO HANDLE IN MainNavigator!');
+        }
       }
-      dispatch({ type: 'RESTORE_TOKEN', payload: { access: accessToken, refresh: refreshToken, isAuthenticated } });
+      dispatch({
+        type: 'RESTORE_TOKEN',
+        payload: { access: accessToken, refresh: refreshToken, isAuthenticated, user }
+      });
     };
 
     restoreToken();
@@ -42,7 +53,7 @@ const MainNavigator = () => {
 
   if (auth.isLoading) {
     return <LoadingScreen />;
-  };
+  }
 
   return (
     <Stack.Navigator headerMode='none'>
