@@ -42,5 +42,8 @@ class Prediction(models.Model):
         auto_now_add=True
     )
 
+    class Meta:
+        ordering = ['pk']
+
     def __str__(self):
         return f'Prediction id {self.pk} from case {self.case.pk}'

@@ -92,7 +92,7 @@ class CaseUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         confirmed_image = validated_data.get('confirmed_image')
-        prediction_id = self.context['request'].data.get('predictions')
+        prediction_id = self.context['request'].data.get('prediction_id')
 
         if instance.confirmed_image.name is "":
             for attr, value in validated_data.items():
@@ -104,7 +104,7 @@ class CaseUpdateSerializer(serializers.ModelSerializer):
             try:
                 confirmed_prediction = instance.predictions.get(pk=prediction_id)
             except ObjectDoesNotExist:
-                raise NotFound(f"Prediction with image_id '{prediction_id}' not found!")
+                raise NotFound(f"Prediction with id '{prediction_id}' not found!")
             confirmed_prediction.confirmed = True
             confirmed_prediction.save()
         else:
