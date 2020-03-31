@@ -36,7 +36,6 @@ const ButterflySelectionScreen = () => {
   const dispatch = useDispatch();
 
   const confirmationHandler = data => {
-    console.log('confirmed!!', data);
     dispatch(confirmPredictionAsyncAction(data));
   };
 

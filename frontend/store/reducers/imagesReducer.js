@@ -11,7 +11,7 @@ export const imagesReducer = (state = initialState, action) => {
       return {
         ...state,
         predictions: action.payload.predictions,
-        uploadedImage: action.payload.uploadedImage
+        uploadedImage: action.payload.uploaded_image
       };
     case STORE_LOCATION:
       return {

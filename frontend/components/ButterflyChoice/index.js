@@ -20,7 +20,7 @@ const ButterflyChoice = ({ style, data, confirmationHandler }) => {
           <Title text={data.species} prob={data.species_prob} />
         </View> 
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={{ uri: data.image }} />
+          <Image style={styles.image} source={{ uri: data.image_url }} />
           <View style={styles.buttons}>
             <Button title='CONFIRM' onPress={() => confirmationHandler(data)} />
           </View>

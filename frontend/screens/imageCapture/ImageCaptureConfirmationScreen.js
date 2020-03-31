@@ -8,7 +8,7 @@ import * as Location from 'expo-location';
 
 import Theme from '../../theme';
 import Button from '../../components/Button';
-import { uploadImageAsyncAction, storeLocation } from '../../store/actions/images';
+import { getPredictionsAsyncAction, newCaseAsyncAction, storeLocation } from '../../store/actions/images';
 
 const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
   const [portrait, setPortrait] = useState(
@@ -39,9 +39,12 @@ const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
   const confirmHandler = async () => {
     setIsLoading(true);
     await getLocationAsync();
-    const response = await dispatch(uploadImageAsyncAction(imageUri));
+    const response = await dispatch(getPredictionsAsyncAction(imageUri));
+    if (response.status === 200) {
+      const db_response = await dispatch(newCaseAsyncAction(response.data, imageUri))
+      if (db_response.status === 201) navigation.navigate('ButterflySelection');
+    };
     setIsLoading(false);
-    if (response.status === 200) navigation.navigate('ButterflySelection');
   };
 
   return (
