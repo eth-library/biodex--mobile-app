@@ -6,4 +6,4 @@ from app.predictions.models import Prediction
 class PredictionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Prediction
-        exclude = ['case']
+        fields = '__all__'

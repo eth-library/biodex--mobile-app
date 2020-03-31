@@ -4,7 +4,7 @@ import reverse_geocode
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
-from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.exceptions import NotFound, ValidationError, PermissionDenied
 from rest_framework.fields import get_error_detail, set_value, SkipField
 from rest_framework.settings import api_settings
 
@@ -92,17 +92,23 @@ class CaseUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         confirmed_image = validated_data.get('confirmed_image')
+        prediction_id = self.context['request'].data.get('predictions')
 
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
+        if instance.confirmed_image.name is "":
+            for attr, value in validated_data.items():
+                setattr(instance, attr, value)
+        else:
+            raise PermissionDenied(f"Case {instance.pk} has already been confirmed!")
 
         if confirmed_image is not None:
             try:
-                confirmed_prediction = instance.predictions.get(image_id=confirmed_image.name)
+                confirmed_prediction = instance.predictions.get(pk=prediction_id)
             except ObjectDoesNotExist:
-                raise NotFound(f"Prediction with image_id '{confirmed_image.name}' not found!")
+                raise NotFound(f"Prediction with image_id '{prediction_id}' not found!")
             confirmed_prediction.confirmed = True
             confirmed_prediction.save()
+        else:
+            raise ValidationError(f"Confirmed image is required")
 
         instance.save()
         return instance
