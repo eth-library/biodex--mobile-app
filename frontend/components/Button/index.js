@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, Platform, ActivityIndicator } from 'react-native';
+import { View, Text, Button, StyleSheet, ActivityIndicator } from 'react-native';
 
 import Theme from '../../theme';
 
-const CustomButton = ({ isLoading, title, onPress, error, style, color }) => {
+const CustomButton = ({ isLoading, title, onPress, error, style, color, disabled }) => {
   return (
     <View style={{...styles.container, ...style}}>
       {isLoading ? (
@@ -15,6 +15,7 @@ const CustomButton = ({ isLoading, title, onPress, error, style, color }) => {
             color={color || Theme.colors.primary}
             onPress={onPress}
             style={styles.button}
+            disabled={disabled || false}
           />
         </View>
       )}

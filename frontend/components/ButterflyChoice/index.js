@@ -7,22 +7,26 @@ import Button from '../Button';
 import Title from './Title';
 import Description from './Description';
 
-const ButterflyChoice = ({ style, data, confirmationHandler }) => {
+const ButterflyChoice = ({ style, data, confirmationHandler, confirmedCase }) => {
   const [showDescription, setShowDescription] = useState(false);
 
   return (
     <View style={styles.container}>
-      <View style={{...styles.butterflyContainer, ...style}}>
+      <View style={{ ...styles.butterflyContainer, ...style }}>
         <View style={styles.titles}>
           <Title text={data.family} prob={data.family_prob} />
           <Title text={data.subfamily} prob={data.subfamily_prob} />
           <Title text={data.species} prob={data.species_prob} />
           <Title text={data.species} prob={data.species_prob} />
-        </View> 
+        </View>
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={{ uri: data.image_url }} />
           <View style={styles.buttons}>
-            <Button title='CONFIRM' onPress={() => confirmationHandler(data)} />
+            <Button
+              title={data.confirmed ? 'CONFIRMED' : 'CONFIRM'}
+              disabled={confirmedCase}
+              onPress={() => confirmationHandler(data)}
+            />
           </View>
         </View>
         <TouchableOpacity
@@ -55,13 +59,13 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: Theme.space.vertical.xxSmall,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   butterflyContainer: {
     width: '100%',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: Theme.colors.backgroundAccent,
+    backgroundColor: Theme.colors.backgroundAccent
   },
   imageContainer: {
     width: '98%',
@@ -69,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     flexDirection: 'row',
-    padding: Theme.space.vertical.xxSmall,
+    padding: Theme.space.vertical.xxSmall
   },
   image: {
     resizeMode: 'cover',
@@ -78,7 +82,7 @@ const styles = StyleSheet.create({
   },
   titles: {
     width: '100%',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   buttons: {
     justifyContent: 'center',
@@ -89,7 +93,7 @@ const styles = StyleSheet.create({
     height: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   text: {
     fontFamily: Theme.fonts.primary,

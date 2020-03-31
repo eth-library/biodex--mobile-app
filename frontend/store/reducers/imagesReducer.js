@@ -1,7 +1,13 @@
-import { STORE_UPLOAD_AND_PREDICTIONS, STORE_LOCATION } from '../types';
+import {
+  STORE_UPLOAD_AND_PREDICTIONS,
+  STORE_LOCATION,
+  STORE_PREDICTION_CONFIRMATION,
+  CLEAR_IMAGES_STATE
+} from '../types';
 
 const initialState = {
   uploadedImage: '',
+  confirmedImage: null,
   predictions: []
 };
 
@@ -18,6 +24,14 @@ export const imagesReducer = (state = initialState, action) => {
         ...state,
         location: action.payload
       };
+    case STORE_PREDICTION_CONFIRMATION:
+      return {
+        ...state,
+        predictions: action.payload.predictions,
+        confirmedImage: action.payload.confirmed_image
+      };
+    case CLEAR_IMAGES_STATE:
+      return initialState;
     default:
       return state;
   }

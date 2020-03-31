@@ -1,7 +1,12 @@
 import * as ImageManipulator from 'expo-image-manipulator';
 import moment from 'moment';
 
-import { STORE_UPLOAD_AND_PREDICTIONS, STORE_LOCATION } from '../types';
+import {
+  STORE_UPLOAD_AND_PREDICTIONS,
+  STORE_LOCATION,
+  STORE_PREDICTION_CONFIRMATION,
+  CLEAR_IMAGES_STATE
+} from '../types';
 import { rootEndpoint } from '../../constants/index';
 
 export const storeLocation = location => {
@@ -18,7 +23,20 @@ const storePredictionsAction = data => {
   };
 };
 
-// in case the image has to be compressed to <256kb, use FileSystem from expo-file-system to do it
+const storePredictionsConfirmationAction = data => {
+  return {
+    type: STORE_PREDICTION_CONFIRMATION,
+    payload: data
+  };
+};
+
+export const clearImagesState = () => {
+  return {
+    type: CLEAR_IMAGES_STATE
+  };
+};
+
+// in case the image has to be compressed to <256kb, use FileSystem from expo-file-system
 export const getPredictionsAsyncAction = imageUri => async (dispatch, getState) => {
   const img = await ImageManipulator.manipulateAsync(
     imageUri,
@@ -28,7 +46,6 @@ export const getPredictionsAsyncAction = imageUri => async (dispatch, getState) 
 
   const formData = new FormData();
   const datetime = moment().format('DD-MM-YYYY_hh-mm-ss');
-  console.log('URI DS BACKEND', img, img.uri)
   formData.append('image', {
     uri: img.uri,
     type: 'image/jpeg',
@@ -63,7 +80,6 @@ export const getPredictionsAsyncAction = imageUri => async (dispatch, getState) 
 export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState) => {
   const location = getState().images.location;
 
-  console.log('URI FS BACKEND', imageUri)
   const predictions = Object.values(data.predictions).map(el => {
     return {
       index: el.index,
@@ -103,7 +119,6 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
 
   try {
     const response = await fetch(`${rootEndpoint}/cases/create/`, config);
-    console.log('status', response.status)
     if (response.status === 201) {
       res_data = await response.json();
       dispatch(storePredictionsAction(res_data));
@@ -114,18 +129,33 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
   }
 };
 
-export const confirmPredictionAsyncAction = selectedImg => async (dispatch, getState) => {
-  console.log('momou', selectedImg);
-  const state = getState();
-  console.log('state', getState());
-  const uploadedImage = state.images.uploadedImage;
-  const location = state.images.location;
-
-  const data = new FormData();
-  const datetime = moment().format('DD-MM-YYYY_hh-mm-ss');
-  data.append('image', {
-    uri: img.uri,
+export const confirmPredictionAsyncAction = prediction => async (dispatch, getState) => {
+  const formData = new FormData();
+  formData.append('confirmed_image', {
+    uri: prediction.image_url,
     type: 'image/jpeg',
-    name: `uploaded_user_image_${datetime}.jpg`
+    name: prediction.image_url
+      .split('')
+      .splice(-32)
+      .join('')
   });
+  formData.append('prediction_id', prediction.id);
+
+  const headers = new Headers({
+    Authorization: `Bearer ${getState().auth.access}`
+  });
+  const method = 'PATCH';
+  const body = formData;
+  const config = { headers, method, body };
+
+  try {
+    const response = await fetch(`${rootEndpoint}/cases/${prediction.case}/`, config);
+    if (response.status === 200) {
+      data = await response.json();
+      dispatch(storePredictionsConfirmationAction(data));
+    }
+    return response;
+  } catch (e) {
+    console.log('ERROR TO HANDLE IN confirmPredictionAsyncAction: ', JSON.stringify(e), e.message);
+  }
 };
