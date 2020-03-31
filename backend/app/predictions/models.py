@@ -13,6 +13,7 @@ class Prediction(models.Model):
         to=Case
     )
     index = models.IntegerField()
+    image_url = models.URLField()
     image_id = models.CharField(
         max_length=100
     )

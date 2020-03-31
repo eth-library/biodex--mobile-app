@@ -1,7 +1,12 @@
+from collections import Mapping, OrderedDict
+
 import reverse_geocode
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.fields import get_error_detail, set_value, SkipField
+from rest_framework.settings import api_settings
 
 from app.cases.models import Case
 from app.predictions.serializers import PredictionSerializer
@@ -15,10 +20,12 @@ class CaseReadSerializer(serializers.ModelSerializer):
         fields = ['id', 'uploaded_image', 'confirmed_image', 'location', 'longitude', 'latitude', 'created', 'prediction_exec_time', 'prediction_model', 'prediction_status', 'user', 'predictions']
 
 
-class CaseCreateSerializer(CaseReadSerializer):
+class CaseCreateSerializer(serializers.ModelSerializer):
+    predictions = PredictionSerializer(many=True)
+
     class Meta:
         model = Case
-        fields = '__all__'
+        fields = ['id', 'uploaded_image', 'confirmed_image', 'location', 'longitude', 'latitude', 'created', 'prediction_exec_time', 'prediction_model', 'prediction_status', 'user', 'predictions']
 
     def create(self, validated_data):
         coordinates = (validated_data.get('latitude'), validated_data.get('longitude')),
@@ -35,6 +42,47 @@ class CaseCreateSerializer(CaseReadSerializer):
             serializer.save(case=case)
 
         return case
+
+    def to_internal_value(self, data):
+        if not isinstance(data, Mapping):
+            message = self.error_messages['invalid'].format(
+                datatype=type(data).__name__
+            )
+            raise ValidationError({
+                api_settings.NON_FIELD_ERRORS_KEY: [message]
+            }, code='invalid')
+
+        ret = OrderedDict()
+        errors = OrderedDict()
+        fields = self._writable_fields
+
+        for field in fields:
+            if hasattr(field, 'many') and field.many:
+                for el in data[field.field_name]:
+                    if ret.get(field.field_name):
+                        ret[field.field_name].append(el)
+                    else:
+                        ret[field.field_name] = [el]
+            else:
+                validate_method = getattr(self, 'validate_' + field.field_name, None)
+                primitive_value = field.get_value(data)
+                try:
+                    validated_value = field.run_validation(primitive_value)
+                    if validate_method is not None:
+                        validated_value = validate_method(validated_value)
+                except ValidationError as exc:
+                    errors[field.field_name] = exc.detail
+                except DjangoValidationError as exc:
+                    errors[field.field_name] = get_error_detail(exc)
+                except SkipField:
+                    pass
+                else:
+                    set_value(ret, field.source_attrs, validated_value)
+
+        if errors:
+            raise ValidationError(errors)
+
+        return ret
 
 
 class CaseUpdateSerializer(serializers.ModelSerializer):

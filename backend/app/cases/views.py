@@ -1,7 +1,10 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.parsers import JSONParser, FormParser
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
 
 from app.cases.models import Case
+from app.cases.parsers import MultiPartJSONParser
 from app.cases.serializers import CaseReadSerializer, CaseCreateSerializer, CaseUpdateSerializer
 
 
@@ -17,6 +20,7 @@ class CaseCreateView(CreateAPIView):
     """
     Create a new case and it's related prediction instances
     """
+    parser_classes = [MultiPartJSONParser, JSONParser, FormParser]
     serializer_class = CaseCreateSerializer
 
 
