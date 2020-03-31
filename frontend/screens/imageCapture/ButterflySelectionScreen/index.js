@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   View,
   ImageBackground,
@@ -11,11 +11,12 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenOrientation } from 'expo';
+import SnackBar from 'react-native-snackbar-component';
 
 import Theme from '../../../theme';
 import ButterflyChoice from '../../../components/ButterflyChoice';
 import Titles from './Titles';
-import { confirmPredictionAsyncAction } from '../../../store/actions/images';
+import { confirmPredictionAsyncAction, clearImagesState } from '../../../store/actions/images';
 
 const ButterflySelectionScreen = () => {
   const [portrait, setPortrait] = useState(
@@ -23,22 +24,40 @@ const ButterflySelectionScreen = () => {
   );
   const [width, setWidth] = useState(Dimensions.get('window').width);
   const [height, setHeight] = useState(Dimensions.get('window').height);
+  const [showSnackbar, setShowSnackbar] = useState(false);
   const screenOrientationHandler = () => {
     setPortrait(Dimensions.get('window').height > Dimensions.get('window').width);
     setWidth(Dimensions.get('window').width);
     setHeight(Dimensions.get('window').height);
   };
   const listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
-  useEffect(() => () => ScreenOrientation.removeOrientationChangeListener(listener), []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
   const uploadedImage = useSelector(state => state.images.uploadedImage);
   const predictions = useSelector(state => state.images.predictions);
+  const confirmedCase = useSelector(state => Boolean(state.images.confirmedImage));
   const dispatch = useDispatch();
 
-  const confirmationHandler = data => {
-    dispatch(confirmPredictionAsyncAction(data));
+  // Cleanup function
+  useEffect(() => () => {
+    console.log('CLEANUP')
+    ScreenOrientation.removeOrientationChangeListener(listener);
+    dispatch(clearImagesState());
+  }, []);
+
+  const confirmationHandler = async prediction => {
+    const response = await dispatch(confirmPredictionAsyncAction(prediction));
+    if (response.status === 200) {
+      setShowSnackbar(true);
+      setTimeout(() => {
+        setShowSnackbar(false);
+      }, 2000);
+    }
   };
 
+  console.log(
+    'redux',
+    useSelector(state => state)
+  );
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle='light-content' />
@@ -56,13 +75,27 @@ const ButterflySelectionScreen = () => {
 
         <View style={styles.choicesContainer}>
           <Titles />
-          <ScrollView >
-            { predictions.map((el, index) => {
-              return <ButterflyChoice style={styles.butterflyChoiceContainer} data={el} key={index} confirmationHandler={confirmationHandler} />
-            }) }
+          <ScrollView>
+            {predictions.map((el, index) => {
+              return (
+                <ButterflyChoice
+                  style={styles.butterflyChoiceContainer}
+                  data={el}
+                  key={index}
+                  confirmationHandler={confirmationHandler}
+                  confirmedCase={confirmedCase}
+                />
+              );
+            })}
           </ScrollView>
         </View>
       </View>
+      <SnackBar
+        visible={showSnackbar}
+        backgroundColor={Theme.colors.confirm}
+        textMessage='Your confirmation has been registered!'
+        messageColor={Theme.colors.white}
+      />
     </SafeAreaView>
   );
 };
@@ -80,7 +113,7 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       width: 224,
       borderWidth: 2,
       borderStyle: 'solid',
-      borderColor: Theme.colors.accent,
+      borderColor: Theme.colors.accent
     },
     imageContainer: {
       justifyContent: 'flex-end',
@@ -125,7 +158,7 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       width: '40%',
       height: '100%',
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center'
     },
     imageContainer: {
       justifyContent: 'flex-end',
@@ -134,7 +167,7 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       width: deviceHeight * 0.7,
       borderWidth: 2,
       borderStyle: 'solid',
-      borderColor: Theme.colors.accent,
+      borderColor: Theme.colors.accent
     },
     image: {
       width: '100%',

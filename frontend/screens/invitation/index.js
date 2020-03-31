@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, Image, TextInput, StyleSheet, Keyboard, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import SnackBar from 'react-native-snackbar-component';
 
 import Button from '../../components/Button';
 import Logo from '../../assets/logo.png';
@@ -64,7 +65,7 @@ const Invitation = () => {
     setEmail('');
     setTimeout(() => {
       setSuccess(false);
-    }, 2000)
+    }, 2000);
   };
 
   return (
@@ -105,13 +106,14 @@ const Invitation = () => {
             isLoading={isLoading}
             error={error && error.email}
           />
-          {success && (
-            <View>
-              <Text style={styles.successText}>Your invitation has been sent!</Text>
-            </View>
-          )}
         </View>
       </KeyboardAwareScrollView>
+      <SnackBar
+        visible={success}
+        textMessage='Your invitation has been sent!'
+        backgroundColor={Theme.colors.confirm}
+        messageColor={Theme.colors.white}
+      />
     </SafeAreaView>
   );
 };
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
   container: {
     minHeight: '100%',
     justifyContent: 'space-evenly',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   logo: {
     width: 100,
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
     width: '80%',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    paddingVertical: 20,
+    paddingVertical: 20
   },
   input: {
     height: 40,
@@ -173,7 +175,7 @@ const styles = StyleSheet.create({
     fontSize: Theme.fonts.sizeM,
     justifyContent: 'center',
     alignItems: 'center',
-    textAlign: 'center',
+    textAlign: 'center'
   }
 });
 

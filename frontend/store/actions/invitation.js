@@ -16,9 +16,12 @@ const removeErrorAction = () => {
 };
 
 export const sendInvitationAsyncAction = email => async (dispatch, getState) => {
-  const headers = new Headers({ 'Content-Type': 'application/json' });
+  const headers = new Headers({
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${getState().auth.access}`
+  });
   const method = 'POST';
-  const body = JSON.stringify({email});
+  const body = JSON.stringify({ email });
   const config = { headers, method, body };
 
   try {
