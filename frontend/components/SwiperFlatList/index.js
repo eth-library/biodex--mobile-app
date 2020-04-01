@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList } from 'react-native';
 
@@ -18,6 +18,7 @@ const SwiperFlatList = React.forwardRef(
       renderItem,
       renderAll,
       index,
+      navigation,
       // Pagination
       showPagination,
       PaginationComponent,
@@ -38,7 +39,7 @@ const SwiperFlatList = React.forwardRef(
       disableGesture,
       ...props
     },
-    ref,
+    ref
   ) => {
     let _data;
     let _renderItem;
@@ -65,13 +66,13 @@ const SwiperFlatList = React.forwardRef(
       ({ index: _index, prevIndex: _prevIndex }) => {
         onChangeIndex?.({ index: _index, prevIndex: _prevIndex });
       },
-      [onChangeIndex],
+      [onChangeIndex]
     );
 
     const _scrollToIndex = params => {
       if (typeof params !== 'object') {
         console.error(
-          'Expected an object for "scrollToIndex", for example: scrollToIndex({ index: 1, animated: true })',
+          'Expected an object for "scrollToIndex", for example: scrollToIndex({ index: 1, animated: true })'
         );
         // NOTE: remove in future versions.
         return;
@@ -93,7 +94,7 @@ const SwiperFlatList = React.forwardRef(
     React.useEffect(() => {
       const next = {
         index: paginationIndexes.index,
-        prevIndex: paginationIndexes.prevIndex,
+        prevIndex: paginationIndexes.prevIndex
       };
       if (paginationIndex !== next.index) {
         setPaginationIndex(next.index);
@@ -127,7 +128,7 @@ const SwiperFlatList = React.forwardRef(
         setScrollEnabled(true);
         _scrollToIndex({ index: FIRST_INDEX });
         setScrollEnabled(!disableGesture);
-      },
+      }
     }));
 
     React.useEffect(() => {
@@ -179,7 +180,7 @@ const SwiperFlatList = React.forwardRef(
         }
         onViewableItemsChanged?.(params);
       },
-      [],
+      []
     );
 
     const flatListProps = {
@@ -202,9 +203,9 @@ const SwiperFlatList = React.forwardRef(
         // https://facebook.github.io/react-native/docs/flatlist#minimumviewtime
         minimumViewTime: 200,
         itemVisiblePercentThreshold: ITEM_VISIBLE_PERCENT_THRESHOLD,
-        ...viewabilityConfig,
+        ...viewabilityConfig
       },
-      onViewableItemsChanged: _onViewableItemsChanged,
+      onViewableItemsChanged: _onViewableItemsChanged
       // debug: true, // for debug
     };
 
@@ -215,8 +216,19 @@ const SwiperFlatList = React.forwardRef(
       paginationActiveColor: Theme.colors.grey,
       paginationDefaultColor: Theme.colors.lightGrey,
       paginationStyle,
-      paginationStyleItem,
+      paginationStyleItem
     };
+
+    // Cleanup function
+    useEffect(() => {
+      const cleanup = navigation.addListener('blur', () => {
+        console.log('unmount');
+        setScrollEnabled(true);
+        _scrollToIndex({ index: FIRST_INDEX });
+        setScrollEnabled(!disableGesture);
+      });
+      return cleanup;
+    }, [navigation]);
 
     return (
       <React.Fragment>
@@ -224,7 +236,7 @@ const SwiperFlatList = React.forwardRef(
         {showPagination && <PaginationComponent {...paginationProps} />}
       </React.Fragment>
     );
-  },
+  }
 );
 
 SwiperFlatList.propTypes = {
@@ -264,7 +276,7 @@ SwiperFlatList.propTypes = {
   onMomentumScrollEnd: PropTypes.func,
   onViewableItemsChanged: PropTypes.func,
   viewabilityConfig: PropTypes.object,
-  disableGesture: PropTypes.bool,
+  disableGesture: PropTypes.bool
 };
 
 SwiperFlatList.defaultProps = {
@@ -283,7 +295,7 @@ SwiperFlatList.defaultProps = {
   onMomentumScrollEnd: undefined,
   onViewableItemsChanged: undefined,
   viewabilityConfig: {},
-  disableGesture: false,
+  disableGesture: false
 };
 
 export default SwiperFlatList;

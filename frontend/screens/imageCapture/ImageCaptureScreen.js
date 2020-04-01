@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { View, Text, StatusBar, Image, StyleSheet, Dimensions, Platform } from 'react-native';
 import * as ExpoImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -8,8 +8,10 @@ import { ScreenOrientation } from 'expo';
 
 import Theme from '../../theme';
 import butterfly from '../../assets/butterfly.jpg';
+import LoadingScreen from '../../components/LoadingScreen';
 
 const ImageCaptureScreen = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [portrait, setPortrait] = useState(
     Dimensions.get('window').height > Dimensions.get('window').width
   );
@@ -45,14 +47,19 @@ const ImageCaptureScreen = ({ navigation }) => {
     if (!hasPermission) {
       return;
     }
-
+    setIsLoading(true);
     const image = await ExpoImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.4
     });
 
-    navigation.navigate('ImageConfirm', { imageUri: image.uri });
+    if (image.cancelled) {
+      setIsLoading(false);
+    } else {
+      setTimeout(() => setIsLoading(false), 500);
+      navigation.navigate('ImageConfirm', { imageUri: image.uri });
+    }
   };
 
   const selectGalleryImageHandler = async () => {
@@ -61,40 +68,52 @@ const ImageCaptureScreen = ({ navigation }) => {
       return;
     }
 
+    setIsLoading(true);
     const image = await ExpoImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.4
     });
 
-    navigation.navigate('ImageConfirm', { imageUri: image.uri });
+    if (image.cancelled) {
+      setIsLoading(false);
+    } else {
+      setTimeout(() => setIsLoading(false), 500);
+      navigation.navigate('ImageConfirm', { imageUri: image.uri });
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle='light-content' />
-      <Image style={styles.imagePreview} source={butterfly} />
-      <View style={styles.bottomContainer}>
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoText}>tips:</Text>
-          <Text style={styles.infoText}>capture all of the insect inside the square frame</Text>
-          <Text style={styles.infoText}>keep parts of other specimens out of the frame</Text>
-        </View>
-        <View style={styles.buttonsContainer}>
-          <Ionicons
-            name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'}
-            size={40}
-            color={Theme.colors.accent}
-            onPress={takeImageHandler}
-          />
-          <Ionicons
-            name={Platform.OS === 'ios' ? 'ios-images' : 'md-images'}
-            size={40}
-            color={Theme.colors.accent}
-            onPress={selectGalleryImageHandler}
-          />
-        </View>
-      </View>
+      {isLoading ? (
+        <LoadingScreen />
+      ) : (
+        <Fragment>
+          <StatusBar barStyle='light-content' />
+          <Image style={styles.imagePreview} source={butterfly} />
+          <View style={styles.bottomContainer}>
+            <View style={styles.infoContainer}>
+              <Text style={styles.infoText}>tips:</Text>
+              <Text style={styles.infoText}>capture all of the insect inside the square frame</Text>
+              <Text style={styles.infoText}>keep parts of other specimens out of the frame</Text>
+            </View>
+            <View style={styles.buttonsContainer}>
+              <Ionicons
+                name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'}
+                size={40}
+                color={Theme.colors.accent}
+                onPress={takeImageHandler}
+              />
+              <Ionicons
+                name={Platform.OS === 'ios' ? 'ios-images' : 'md-images'}
+                size={40}
+                color={Theme.colors.accent}
+                onPress={selectGalleryImageHandler}
+              />
+            </View>
+          </View>
+        </Fragment>
+      )}
     </SafeAreaView>
   );
 };
@@ -135,7 +154,7 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-around',
-      backgroundColor: Theme.colors.background,
+      backgroundColor: Theme.colors.background
     },
     imagePreview: {
       height: deviceHeight * 0.8,
@@ -147,7 +166,7 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       width: deviceWidth * 0.4
     },
     infoContainer: {
-      height: deviceHeight * 0.3,
+      height: deviceHeight * 0.3
     },
     infoText: {
       fontFamily: Theme.fonts.primaryBold,

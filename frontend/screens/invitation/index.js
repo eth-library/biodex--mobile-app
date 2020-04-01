@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, Image, TextInput, StyleSheet, Keyboard, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,9 +8,9 @@ import SnackBar from 'react-native-snackbar-component';
 import Button from '../../components/Button';
 import Logo from '../../assets/logo.png';
 import Theme from '../../theme';
-import { sendInvitationAsyncAction } from '../../store/actions/invitation';
+import { sendInvitationAsyncAction, removeErrorAction } from '../../store/actions/invitation';
 
-const Invitation = () => {
+const Invitation = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [touched, setTouched] = useState(false);
@@ -19,6 +19,20 @@ const Invitation = () => {
   const [success, setSuccess] = useState(false);
   const error = useSelector(state => state.invitation.error);
   const dispatch = useDispatch();
+
+  // Cleanup function
+  useEffect(() => {
+    const cleanup = navigation.addListener('blur', () => {
+      setEmail('');
+      setIsValid(false);
+      setTouched(false);
+      setIsLoading(false);
+      setLocalError(null);
+      setSuccess(false);
+      dispatch(removeErrorAction());
+    });
+    return cleanup;
+  }, [navigation]);
 
   const checkValidities = text => {
     let validity = true;

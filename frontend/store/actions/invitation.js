@@ -9,7 +9,7 @@ const storeErrorAction = error => {
   };
 };
 
-const removeErrorAction = () => {
+export const removeErrorAction = () => {
   return {
     type: REMOVE_INVITATION_ERROR
   };
