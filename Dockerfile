@@ -15,6 +15,5 @@ RUN echo "source activate backend" >~/.bashrc
 COPY ./scripts /scripts
 RUN chmod +x ./scripts*
 
-
 COPY ./backend /backend
 WORKDIR /backend

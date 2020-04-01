@@ -11,7 +11,7 @@ services:
       - postgres:/var/lib/postgresql/data
 
   backend:
-    image: lepi
+    image: registry.gitlab.propulsion-home.ch/propulsion/projects/clients/lepi:latest
     restart: always
     env_file:
       - ./envs/dev.env

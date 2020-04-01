@@ -7,3 +7,7 @@ media-files
 static-files
 /app/.coverage
 /app/htmlcov
+/prediction_api
+
+*.md
+django-social-media-template.postman_collection.json

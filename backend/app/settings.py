@@ -166,10 +166,16 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=2),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=4)
-}
+if DEBUG:
+    SIMPLE_JWT = {
+        'ACCESS_TOKEN_LIFETIME': timedelta(days=2),
+        'REFRESH_TOKEN_LIFETIME': timedelta(days=4)
+    }
+else:
+    SIMPLE_JWT = {
+        'ACCESS_TOKEN_LIFETIME': timedelta(hours=6),
+        'REFRESH_TOKEN_LIFETIME': timedelta(days=1)
+    }
 
 ############################################################
 # Email settings
