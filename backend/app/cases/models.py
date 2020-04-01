@@ -14,9 +14,7 @@ class Case(models.Model):
     )
     uploaded_image = models.ImageField(
         verbose_name='uploaded image',
-        upload_to='uploaded_images/',
-        blank=True,
-        null=True
+        upload_to='uploaded_images/'
     )
     confirmed_image = models.ImageField(
         verbose_name='confirmed image',

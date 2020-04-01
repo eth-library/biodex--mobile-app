@@ -14,15 +14,15 @@ def populate_db(apps, schema_editor):
     email_types = [
         {
             "key": "registration_email",
-            "subject": "Subject: Thank you for registering!",
-            "title": "Title: Thank you for registering!",
-            "template": "Here is your validation code: {{code}}"
+            "subject": "You have been invited to join Lepi!",
+            "title": "You have been invited to join Lepi!{{ value|linebreaks }}",
+            "template": "{{ value|linebreaks }}Welcome to Lepi{{ value|linebreaks }}If you don't have the app yet, download it via App store and create a new account. You will need following validation code for that: {{code}}"
         },
         {
             "key": "password_reset_email",
-            "subject": "Subject: Password reset",
-            "title": "Title: Password reset",
-            "template": "Here is your password reset code: {{code}}"
+            "subject": "Password reset",
+            "title": "Password reset",
+            "template": "{{ value|linebreaks }}This is the code to reset your password: {{code}}"
         },
     ]
     EmailType = apps.get_model('emails', 'EmailType')
