@@ -1,7 +1,6 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.parsers import JSONParser, FormParser
 from rest_framework.response import Response
-from rest_framework.settings import api_settings
 
 from app.cases.models import Case
 from app.cases.parsers import MultiPartJSONParser

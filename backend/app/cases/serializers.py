@@ -94,7 +94,7 @@ class CaseUpdateSerializer(serializers.ModelSerializer):
         confirmed_image = validated_data.get('confirmed_image')
         prediction_id = self.context['request'].data.get('prediction_id')
 
-        if instance.confirmed_image.name is "":
+        if instance.confirmed_image.name == "":
             for attr, value in validated_data.items():
                 setattr(instance, attr, value)
         else:
