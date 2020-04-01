@@ -35,12 +35,19 @@ class CaseReadUpdateView(RetrieveUpdateAPIView):
     Update a specific case by id. It should only be used to update the case with the confirmed image and set the status of confirmed on the related prediction
     """
     queryset = Case
-    serializer_class = CaseReadSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        if self.request.method == 'GET':
+            serializer_class = CaseReadSerializer
+        else:
+            serializer_class = CaseUpdateSerializer
+        kwargs['context'] = self.get_serializer_context()
+        return serializer_class(*args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = CaseUpdateSerializer(instance, data=request.data, partial=partial)
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
