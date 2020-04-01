@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:12
+    env_file:
+      - ./envs/prod.env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+  backend:
+    image: registry.gitlab.propulsion-home.ch/propulsion/projects/clients/lepi:master
+    env_file:
+      - ./envs/prod.env
+    command: "sh /scripts/run.sh"
+    depends_on:
+      - postgres
+    volumes:
+      - media-files:/media-files
+      - static-files:/static-files
+
+  redis:
+    image: redis:latest
+    restart: always
+    volumes:
+      - redis_data:/data
+
+  celery:
+    image: registry.gitlab.propulsion-home.ch/propulsion/projects/clients/lepi:master
+    restart: always
+    env_file:
+      - ./envs/prod.env
+    command: 'celery -A app worker -l info'
+    volumes:
+      - media-files:/media-files
+      - static-files:/static-files
+    depends_on:
+      - postgres
+      - backend
+      - redis
+
+  nginx:
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - static-files:/static-files
+      - media-files:/media-files
+      - /etc/letsencrypt:/etc/letsencrypt
+
+volumes:
+  postgres:
+  static-files:
+  media-files:
+  redis_data:
