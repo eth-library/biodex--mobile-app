@@ -15,8 +15,8 @@ def populate_db(apps, schema_editor):
         {
             "key": "registration_email",
             "subject": "You have been invited to join Lepi!",
-            "title": "You have been invited to join Lepi!{{ value|linebreaks }}",
-            "template": "{{ value|linebreaks }}Welcome to Lepi{{ value|linebreaks }}If you don't have the app yet, download it via App store and create a new account. You will need following validation code for that: {{code}}"
+            "title": "You have been invited to join Lepi!",
+            "template": "{{ value|linebreaks }}Welcome to Lepi{{ value|linebreaks }}If you don't have the app yet, download it via App store and create a new account. You will need following validation code to register: {{code}}"
         },
         {
             "key": "password_reset_email",
