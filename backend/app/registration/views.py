@@ -110,8 +110,8 @@ class PasswordResetView(GenericAPIView):
 
 class PasswordResetValidationView(GenericAPIView):
     """
-    post:
-    Update passwords.
+    patch:
+    Update password.
     """
     permission_classes = []
     serializer_class = PasswordResetValidationSerializer

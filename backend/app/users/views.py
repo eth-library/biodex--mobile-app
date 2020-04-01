@@ -28,7 +28,10 @@ class RetrieveUpdateDestroyLoggedInUser(RetrieveUpdateDestroyAPIView):
     get:
     Retrieve logged-in User.
 
-    update:
+    put:
+    Update User.
+
+    patch:
     Update User.
 
     delete:

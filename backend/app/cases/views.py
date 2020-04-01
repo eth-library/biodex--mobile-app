@@ -28,6 +28,9 @@ class CaseReadUpdateView(RetrieveUpdateAPIView):
     get:
     Get a specific case by id
 
+    put:
+    Update a specific case by id. It should only be used to update the case with the confirmed image and set the status of confirmed on the related prediction
+
     patch:
     Update a specific case by id. It should only be used to update the case with the confirmed image and set the status of confirmed on the related prediction
     """

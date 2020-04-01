@@ -22,6 +22,8 @@ class RetrieveUpdateDestroyNotificationType(RetrieveUpdateDestroyAPIView):
     """
     get:
     Retrieve a notification type
+    put:
+    Update a new notification type
     patch:
     Update a new notification type
     delete:
