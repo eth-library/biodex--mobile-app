@@ -39,7 +39,7 @@ const MainNavigator = () => {
             refreshToken = null;
           }
         } catch (e) {
-          console.log('ERROR TO HANDLE IN MainNavigator!');
+          console.log('ERROR TO HANDLE IN MainNavigator!', e.message);
         }
       }
       dispatch({

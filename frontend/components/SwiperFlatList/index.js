@@ -222,7 +222,6 @@ const SwiperFlatList = React.forwardRef(
     // Cleanup function
     useEffect(() => {
       const cleanup = navigation.addListener('blur', () => {
-        console.log('unmount');
         setScrollEnabled(true);
         _scrollToIndex({ index: FIRST_INDEX });
         setScrollEnabled(!disableGesture);

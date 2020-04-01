@@ -39,7 +39,6 @@ const ButterflySelectionScreen = () => {
 
   // Cleanup function
   useEffect(() => () => {
-    console.log('CLEANUP')
     ScreenOrientation.removeOrientationChangeListener(listener);
     dispatch(clearImagesState());
   }, []);
@@ -54,10 +53,6 @@ const ButterflySelectionScreen = () => {
     }
   };
 
-  console.log(
-    'redux',
-    useSelector(state => state)
-  );
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle='light-content' />
