@@ -23,7 +23,20 @@ const ImageCaptureScreen = ({ navigation }) => {
     setHeight(Dimensions.get('window').height);
   };
   const listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
-  useEffect(() => () => ScreenOrientation.removeOrientationChangeListener(listener), []);
+  // Cleanup function on navigation
+  useEffect(() => {
+    const cleanup = navigation.addListener('blur', () => {
+      ScreenOrientation.removeOrientationChangeListener(listener);
+    });
+    return cleanup;
+  }, [navigation]);
+  // Cleanup function on unmount
+  useEffect(() => {
+    const cleanup = navigation.addListener('blur', () => {
+      ScreenOrientation.removeOrientationChangeListener(listener);
+    });
+    return cleanup;
+  }, []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
   // Android is asking for camera permissions on it's on. For IOS we have to ask for it at runtime.
   // This function will run once and IOS will store the result automatically.
@@ -157,8 +170,8 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       backgroundColor: Theme.colors.background
     },
     imagePreview: {
-      height: deviceHeight * 0.8,
-      width: deviceHeight * 0.8
+      height: deviceHeight * 0.7,
+      width: deviceHeight * 0.7
     },
     bottomContainer: {
       alignItems: 'center',

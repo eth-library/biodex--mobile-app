@@ -26,27 +26,53 @@ const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
     setHeight(Dimensions.get('window').height);
   };
   const listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
-  useEffect(() => () => ScreenOrientation.removeOrientationChangeListener(listener), []);
+  // Cleanup function on navigation
+  useEffect(() => {
+    const cleanup = navigation.addListener('blur', () => {
+      ScreenOrientation.removeOrientationChangeListener(listener);
+    });
+    return cleanup;
+  }, [navigation]);
+  // Cleanup function on unmount
+  useEffect(() => {
+    const cleanup = navigation.addListener('blur', () => {
+      ScreenOrientation.removeOrientationChangeListener(listener);
+    });
+    return cleanup;
+  }, []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
   const imageUri = route.params.imageUri;
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
-  getLocationAsync = async () => {
-    const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status === 'granted') {
-      const loc = await Location.getCurrentPositionAsync({});
-      dispatch(storeLocation(loc));
-    }
+  const getLocationAsync = () => {
+    Permissions.askAsync(Permissions.LOCATION)
+      .then(res => {
+        if (res.status === 'granted') {
+          Location.getLastKnownPositionAsync().then(position => {
+            dispatch(storeLocation(position));
+          });
+        }
+      })
+      .catch(e => console.log('ERROR IN getLocationAsync', e.message));
   };
 
   const confirmHandler = async () => {
     setIsLoading(true);
     await getLocationAsync();
-    const response = await dispatch(getPredictionsAsyncAction(imageUri));
-    if (response.status === 200) {
-      const db_response = await dispatch(newCaseAsyncAction(response.data, imageUri));
-      if (db_response.status === 201) navigation.navigate('ButterflySelection');
+    try {
+      const response = await dispatch(getPredictionsAsyncAction(imageUri));
+      if (response.status === 200) {
+        try {
+          const db_response = await dispatch(newCaseAsyncAction(response.data, imageUri));
+          if (db_response.status === 201) navigation.navigate('ButterflySelection');
+        } catch (e) {
+          setIsLoading(false);
+          console.log('ERROR IN ImageCaptureConfirmationScreen', e.message);
+        }
+      }
+    } catch (e) {
+      console.log('ERROR IN ImageCaptureConfirmationScreen - second', e.message);
     }
     setIsLoading(false);
   };
@@ -63,7 +89,7 @@ const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
           color={Theme.colors.cancel}
           onPress={() => navigation.navigate('ImageCapture')}
           isLoading={isLoading}
-          style={{ width: '40%' }}
+          style={styles.button}
           color={Theme.colors.primary}
         />
         <Button
@@ -71,7 +97,7 @@ const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
           color={Theme.colors.confirm}
           onPress={confirmHandler}
           isLoading={isLoading}
-          style={{ width: '40%' }}
+          style={styles.button}
           color={Theme.colors.accent}
         />
       </View>
@@ -88,11 +114,16 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
     },
     imagePreview: {
       height: deviceWidth * 0.9,
-      width: deviceWidth * 0.9
+      width: deviceWidth * 0.9,
+      borderWidth: 1,
+      borderStyle: 'solid'
     },
     image: {
       height: '100%',
       width: '100%'
+    },
+    button: {
+      width: '40%'
     },
     buttonsContainer: {
       flexDirection: 'row',
@@ -116,10 +147,15 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       height: '100%',
       width: '100%'
     },
+    button: {
+      width: '20%'
+    },
     buttonsContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: deviceWidth * 0.5
+      width: deviceWidth * 0.9,
+      position: 'absolute',
+      bottom: 30
     }
   });
 
