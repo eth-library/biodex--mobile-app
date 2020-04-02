@@ -8,7 +8,8 @@ import {
 const initialState = {
   uploadedImage: '',
   confirmedImage: null,
-  predictions: []
+  predictions: [],
+  location: null
 };
 
 export const imagesReducer = (state = initialState, action) => {

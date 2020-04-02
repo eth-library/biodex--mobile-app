@@ -70,7 +70,8 @@ export const getPredictionsAsyncAction = imageUri => async (dispatch, getState) 
       return { status: response.status, data };
     }
     if (response.status >= 400) {
-      console.log('ERROR TO HANDLE IN getPredictionsAsyncAction');
+      console.log('ERROR TO HANDLE IN getPredictionsAsyncAction', JSON.stringify(response), response.status);
+      return response
     }
   } catch (e) {
     console.log('ERROR TO HANDLE IN getPredictionsAsyncAction: ', e.message);
@@ -98,8 +99,10 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
   });
   const formData = new FormData();
   const datetime = moment().format('DD-MM-YYYY_hh-mm-ss');
-  formData.append('longitude', location.coords.longitude);
-  formData.append('latitude', location.coords.latitude);
+  if (location) {
+    formData.append('longitude', location.coords.longitude);
+    formData.append('latitude', location.coords.latitude);
+  }
   formData.append('predictions', JSON.stringify(predictions));
   formData.append('prediction_exec_time', data.exec_time);
   formData.append('prediction_model', data.model);
@@ -120,7 +123,7 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
   try {
     const response = await fetch(`${rootEndpoint}/cases/create/`, config);
     if (response.status === 201) {
-      res_data = await response.json();
+      const res_data = await response.json();
       dispatch(storePredictionsAction(res_data));
     }
     return response;
@@ -151,7 +154,7 @@ export const confirmPredictionAsyncAction = prediction => async (dispatch, getSt
   try {
     const response = await fetch(`${rootEndpoint}/cases/${prediction.case}/`, config);
     if (response.status === 200) {
-      data = await response.json();
+      const data = await response.json();
       dispatch(storePredictionsConfirmationAction(data));
     }
     return response;
