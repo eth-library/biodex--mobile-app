@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import Theme from '../../../theme';
+import Theme from '../../../../../theme';
 
 const Description = () => {
   return (

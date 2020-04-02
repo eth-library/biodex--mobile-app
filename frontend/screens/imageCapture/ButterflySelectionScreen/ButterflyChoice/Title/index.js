@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import theme from '../../../theme';
+import Theme from '../../../../../theme';
 
 const Title = ({ text, prob }) => {
   return (
@@ -19,13 +19,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   name: {
-    fontFamily: theme.fonts.primaryBold,
-    fontSize: theme.fonts.sizeXXS,
+    fontFamily: Theme.fonts.primaryBold,
+    fontSize: Theme.fonts.sizeXXS,
     textAlign: 'center',
   },
   percentage: {
-    fontFamily: theme.fonts.primaryBold,
-    fontSize: theme.fonts.sizeXS
+    fontFamily: Theme.fonts.primaryBold,
+    fontSize: Theme.fonts.sizeXS
   }
 });
 

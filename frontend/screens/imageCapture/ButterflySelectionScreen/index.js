@@ -14,11 +14,11 @@ import { ScreenOrientation } from 'expo';
 import SnackBar from 'react-native-snackbar-component';
 
 import Theme from '../../../theme';
-import ButterflyChoice from '../../../components/ButterflyChoice';
+import ButterflyChoice from './ButterflyChoice';
 import Titles from './Titles';
 import { confirmPredictionAsyncAction, clearImagesState } from '../../../store/actions/images';
 
-const ButterflySelectionScreen = () => {
+const ButterflySelectionScreen = ({ navigation }) => {
   const [portrait, setPortrait] = useState(
     Dimensions.get('window').height > Dimensions.get('window').width
   );
@@ -38,18 +38,25 @@ const ButterflySelectionScreen = () => {
   const dispatch = useDispatch();
 
   // Cleanup function
-  useEffect(() => () => {
-    ScreenOrientation.removeOrientationChangeListener(listener);
-    dispatch(clearImagesState());
-  }, []);
+  useEffect(() => {
+    const cleanup = navigation.addListener('blur', () => {
+      ScreenOrientation.removeOrientationChangeListener(listener);
+      dispatch(clearImagesState());
+    });
+    return cleanup;
+  }, [navigation]);
 
   const confirmationHandler = async prediction => {
-    const response = await dispatch(confirmPredictionAsyncAction(prediction));
-    if (response.status === 200) {
-      setShowSnackbar(true);
-      setTimeout(() => {
-        setShowSnackbar(false);
-      }, 2000);
+    try {
+      const response = await dispatch(confirmPredictionAsyncAction(prediction));
+      if (response.status === 200) {
+        setShowSnackbar(true);
+        setTimeout(() => {
+          setShowSnackbar(false);
+        }, 2000);
+      }
+    } catch (e) {
+      console.log('ERROR IN confirmationHandler', e.message);
     }
   };
 
@@ -79,6 +86,7 @@ const ButterflySelectionScreen = () => {
                   key={index}
                   confirmationHandler={confirmationHandler}
                   confirmedCase={confirmedCase}
+                  navigation={navigation}
                 />
               );
             })}
@@ -147,7 +155,8 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       height: '100%',
       alignItems: 'center',
       flexDirection: 'row',
-      justifyContent: 'space-around'
+      justifyContent: 'space-around',
+      paddingHorizontal: Theme.space.horizontal.xxSmall
     },
     imagePreview: {
       width: '40%',
