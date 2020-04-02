@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
+import { ScreenOrientation } from 'expo';
 
 import SwiperFlatList from '../../components/SwiperFlatList';
 import HomeScreen from './HomeScreen';
@@ -9,6 +10,8 @@ import StartScreen from './StartScreen';
 import Theme from '../../theme';
 
 const Guide = ({ navigation }) => {
+  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+
   return (
     <View style={styles.container}>
       <SwiperFlatList index={0} showPagination navigation={navigation} >
