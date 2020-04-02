@@ -15,7 +15,7 @@ import { userLoginAsyncAction } from '../../../store/actions/auth';
 
 const initialState = {
   values: {
-    email: 'cdelacombaz@bluewin.c',
+    email: '',
     password: ''
   },
   validities: {

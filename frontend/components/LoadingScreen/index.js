@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: Theme.fonts.primary,
-    fontSize: Theme.fonts.sizeXS,
+    fontSize: Theme.fonts.sizeS,
     marginTop: 10,
     color: Theme.colors.primary
   }
