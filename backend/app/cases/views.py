@@ -1,4 +1,4 @@
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView
 from rest_framework.parsers import JSONParser, FormParser
 from rest_framework.response import Response
 
@@ -23,11 +23,8 @@ class CaseCreateView(CreateAPIView):
     serializer_class = CaseCreateSerializer
 
 
-class CaseReadUpdateView(RetrieveUpdateAPIView):
+class CaseUpdateView(UpdateAPIView):
     """
-    get:
-    Get a specific case by id
-
     put:
     Update a specific case by id. It should only be used to update the case with the confirmed image and set the status of confirmed on the related prediction
 
@@ -35,14 +32,7 @@ class CaseReadUpdateView(RetrieveUpdateAPIView):
     Update a specific case by id. It should only be used to update the case with the confirmed image and set the status of confirmed on the related prediction
     """
     queryset = Case
-
-    def get_serializer(self, *args, **kwargs):
-        if self.request.method == 'GET':
-            serializer_class = CaseReadSerializer
-        else:
-            serializer_class = CaseUpdateSerializer
-        kwargs['context'] = self.get_serializer_context()
-        return serializer_class(*args, **kwargs)
+    serializer_class = CaseUpdateSerializer
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -56,3 +46,12 @@ class CaseReadUpdateView(RetrieveUpdateAPIView):
 
         detailed_serializer = CaseReadSerializer(instance)
         return Response(detailed_serializer.data)
+
+
+class CaseReadView(RetrieveAPIView):
+    """
+    get:
+    Get a specific case by id.
+    """
+    queryset = Case
+    serializer_class = CaseReadSerializer

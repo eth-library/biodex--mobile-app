@@ -152,7 +152,7 @@ export const confirmPredictionAsyncAction = prediction => async (dispatch, getSt
   const config = { headers, method, body };
 
   try {
-    const response = await fetch(`${rootEndpoint}/cases/${prediction.case}/`, config);
+    const response = await fetch(`${rootEndpoint}/cases/confirm/${prediction.case}/`, config);
     if (response.status === 200) {
       const data = await response.json();
       dispatch(storePredictionsConfirmationAction(data));
