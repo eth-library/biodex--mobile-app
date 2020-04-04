@@ -53,7 +53,7 @@ const ImageCaptureStackNavigator = props => {
               <Item
                 title='search'
                 iconName={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
-                onPress={() => props.navigation.navigate('ImageCapture')}
+                onPress={() => props.navigation.popToTop()}
               />
             </HeaderButtons>
           )

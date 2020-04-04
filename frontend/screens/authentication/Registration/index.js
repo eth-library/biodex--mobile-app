@@ -36,6 +36,7 @@ const Registration = ({ navigation }) => {
     submitted: false
   });
   const [showIosPicker, setShowIosPicker] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const error = useSelector(state => state.registration.error);
   const dispatch = useDispatch();
   const emailRef = React.createRef();
@@ -49,7 +50,9 @@ const Registration = ({ navigation }) => {
       Alert.alert('Invalid input', 'Please check the errors in the form', [{ text: 'OK' }]);
       return;
     }
+    setIsLoading(true);
     const response = await dispatch(userRegistrationValidationAsyncAction(formState.values));
+    setIsLoading(false);
     if (response.status === 200) navigation.navigate('Login');
   }, [formState]);
 
@@ -184,7 +187,7 @@ const Registration = ({ navigation }) => {
               />
               <Button
                 title={'Create your Account'}
-                color={Platform.OS === 'ios' ? Theme.colors.white : Theme.colors.primary}
+                isLoading={isLoading}
                 onPress={submitHandler}
                 error={error && error.global}
               />
