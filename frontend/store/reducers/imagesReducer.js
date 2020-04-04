@@ -1,4 +1,5 @@
 import {
+  STORE_SELECTED_IMAGE,
   STORE_UPLOAD_AND_PREDICTIONS,
   STORE_LOCATION,
   STORE_PREDICTION_CONFIRMATION,
@@ -6,7 +7,8 @@ import {
 } from '../types';
 
 const initialState = {
-  uploadedImage: '',
+  selectedImage: null,
+  uploadedImage: null,
   confirmedImage: null,
   predictions: [],
   location: null
@@ -14,6 +16,11 @@ const initialState = {
 
 export const imagesReducer = (state = initialState, action) => {
   switch (action.type) {
+    case STORE_SELECTED_IMAGE:
+      return {
+        ...state,
+        selectedImage: action.payload
+      };
     case STORE_UPLOAD_AND_PREDICTIONS:
       return {
         ...state,
@@ -32,7 +39,13 @@ export const imagesReducer = (state = initialState, action) => {
         confirmedImage: action.payload.confirmed_image
       };
     case CLEAR_IMAGES_STATE:
-      return initialState;
+      return {
+        ...state,
+        uploadedImage: null,
+        confirmedImage: null,
+        predictions: [],
+        location: null
+      };
     default:
       return state;
   }
