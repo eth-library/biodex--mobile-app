@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { View, Text, StatusBar, Image, StyleSheet, Dimensions, Platform } from 'react-native';
+import { useDispatch } from 'react-redux';
 import * as ExpoImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,6 +10,7 @@ import { ScreenOrientation } from 'expo';
 import Theme from '../../theme';
 import butterfly from '../../assets/butterfly.jpg';
 import LoadingScreen from '../../components/LoadingScreen';
+import { storeSelectedImageAction } from '../../store/actions/images';
 
 const ImageCaptureScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,6 +40,8 @@ const ImageCaptureScreen = ({ navigation }) => {
     return cleanup;
   }, []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
+  const dispatch = useDispatch();
+
   // Android is asking for camera permissions on it's on. For IOS we have to ask for it at runtime.
   // This function will run once and IOS will store the result automatically.
   // Subsequent calls will return true or false based on that stored value, the user won't get asked again.
@@ -71,7 +75,8 @@ const ImageCaptureScreen = ({ navigation }) => {
       setIsLoading(false);
     } else {
       setTimeout(() => setIsLoading(false), 500);
-      navigation.navigate('ImageConfirm', { imageUri: image.uri });
+      dispatch(storeSelectedImageAction(image.uri))
+      navigation.navigate('ImageConfirm');
     }
   };
 
@@ -92,7 +97,8 @@ const ImageCaptureScreen = ({ navigation }) => {
       setIsLoading(false);
     } else {
       setTimeout(() => setIsLoading(false), 500);
-      navigation.navigate('ImageConfirm', { imageUri: image.uri });
+      dispatch(storeSelectedImageAction(image.uri))
+      navigation.navigate('ImageConfirm');
     }
   };
 

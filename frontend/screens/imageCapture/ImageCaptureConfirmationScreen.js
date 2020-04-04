@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StatusBar, Image, StyleSheet, Dimensions } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenOrientation } from 'expo';
 import * as Permissions from 'expo-permissions';
@@ -41,7 +41,7 @@ const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
     return cleanup;
   }, []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
-  const imageUri = route.params.imageUri;
+  const imageUri = useSelector(state => state.images.selectedImage);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
@@ -62,7 +62,7 @@ const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
     await getLocationAsync();
     try {
       const response = await dispatch(getPredictionsAsyncAction(imageUri));
-      if (response.status === 200) {
+      if (response && response.status === 200) {
         try {
           const db_response = await dispatch(newCaseAsyncAction(response.data, imageUri));
           if (db_response.status === 201) navigation.navigate('ButterflySelection');
@@ -71,8 +71,10 @@ const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
           console.log('ERROR IN ImageCaptureConfirmationScreen', e.message);
         }
       }
+      console.log('ERROR IN ImageCaptureConfirmationScreen - second')
+      // handle if status is not 200 / not getting response due to error in fetch
     } catch (e) {
-      console.log('ERROR IN ImageCaptureConfirmationScreen - second', e.message);
+      console.log('ERROR IN ImageCaptureConfirmationScreen - third', e.message);
     }
     setIsLoading(false);
   };
