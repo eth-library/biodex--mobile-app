@@ -1,13 +1,22 @@
 import * as ImageManipulator from 'expo-image-manipulator';
 import moment from 'moment';
+import * as Sentry from 'sentry-expo';
 
 import {
-  STORE_UPLOAD_AND_PREDICTIONS,
+  STORE_SELECTED_IMAGE,
   STORE_LOCATION,
+  STORE_UPLOAD_AND_PREDICTIONS,
   STORE_PREDICTION_CONFIRMATION,
   CLEAR_IMAGES_STATE
 } from '../types';
 import { rootEndpoint } from '../../constants/index';
+
+export const storeSelectedImageAction = imageUri => {
+  return {
+    type: STORE_SELECTED_IMAGE,
+    payload: imageUri
+  };
+};
 
 export const storeLocation = location => {
   return {
@@ -41,19 +50,20 @@ export const getPredictionsAsyncAction = imageUri => async (dispatch, getState) 
   const img = await ImageManipulator.manipulateAsync(
     imageUri,
     [{ resize: { width: 224, height: 224 } }],
-    { format: ImageManipulator.SaveFormat.PNG }
+    { format: ImageManipulator.SaveFormat.JPEG }
   );
 
   const formData = new FormData();
+  const uriParts = img.uri.split('.');
+  const fileType = uriParts[uriParts.length - 1];
   const datetime = moment().format('DD-MM-YYYY_hh-mm-ss');
   formData.append('image', {
     uri: img.uri,
-    type: 'image/jpeg',
-    name: `uploaded_user_image_${datetime}.jpg`
+    type: `image/${fileType}`,
+    name: `uploaded_user_image_${datetime}.${fileType}`
   });
 
   const headers = new Headers({
-    'Content-type': 'multipart/form-data',
     Authorization: `Bearer ${getState().auth.access}`
   });
   const method = 'POST';
@@ -70,11 +80,18 @@ export const getPredictionsAsyncAction = imageUri => async (dispatch, getState) 
       return { status: response.status, data };
     }
     if (response.status >= 400) {
-      console.log('ERROR TO HANDLE IN getPredictionsAsyncAction', JSON.stringify(response), response.status);
-      return response
+      console.log(
+        'ERROR TO HANDLE IN getPredictionsAsyncAction',
+        JSON.stringify(response),
+        response.status,
+        response.statusText
+      );
+      Sentry.captureException(`${response.status} ${response.statusText}`);
+      return response;
     }
   } catch (e) {
-    console.log('ERROR TO HANDLE IN getPredictionsAsyncAction: ', e.message);
+    console.log('ERROR TO HANDLE IN getPredictionsAsyncAction - second: ', e.message);
+    Sentry.captureException(e);
   }
 };
 
@@ -129,6 +146,7 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
     return response;
   } catch (e) {
     console.log('ERROR TO HANDLE IN newCaseAsyncAction: ', JSON.stringify(e), e.message);
+    Sentry.captureException(e);
   }
 };
 
@@ -160,5 +178,6 @@ export const confirmPredictionAsyncAction = prediction => async (dispatch, getSt
     return response;
   } catch (e) {
     console.log('ERROR TO HANDLE IN confirmPredictionAsyncAction: ', JSON.stringify(e), e.message);
+    Sentry.captureException(e);
   }
 };
