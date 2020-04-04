@@ -25,6 +25,7 @@ const ButterflySelectionScreen = ({ navigation }) => {
   const [width, setWidth] = useState(Dimensions.get('window').width);
   const [height, setHeight] = useState(Dimensions.get('window').height);
   const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarTimer, setSnackbarTimer] = useState(null);
   const screenOrientationHandler = () => {
     setPortrait(Dimensions.get('window').height > Dimensions.get('window').width);
     setWidth(Dimensions.get('window').width);
@@ -41,6 +42,7 @@ const ButterflySelectionScreen = ({ navigation }) => {
   useEffect(() => {
     const cleanup = navigation.addListener('blur', () => {
       ScreenOrientation.removeOrientationChangeListener(listener);
+      clearTimeout(snackbarTimer);
       dispatch(clearImagesState());
     });
     return cleanup;
@@ -51,9 +53,9 @@ const ButterflySelectionScreen = ({ navigation }) => {
       const response = await dispatch(confirmPredictionAsyncAction(prediction));
       if (response.status === 200) {
         setShowSnackbar(true);
-        setTimeout(() => {
+        setSnackbarTimer(setTimeout(() => {
           setShowSnackbar(false);
-        }, 2000);
+        }, 2000));
       }
     } catch (e) {
       console.log('ERROR IN confirmationHandler', e.message);
