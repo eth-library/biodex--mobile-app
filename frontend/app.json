@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "splash": {
@@ -31,6 +31,18 @@
     "android": {
       "package": "com.propulsion.lepitest",
       "versionCode": 1
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "propulsion-academy-ag",
+            "project": "lepi-app",
+            "authToken": "396a8085d58e42cc9ce4d1189228c5cc2ffc74d1e8b34fd79e616c365e16edd7"
+          }
+        }
+      ]
     }
   }
 }
