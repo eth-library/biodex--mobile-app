@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  ImageBackground,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenOrientation } from 'expo';
 
@@ -46,10 +53,24 @@ const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase 
           <Title text={data.species} prob={data.species_prob} />
           <Title text={data.species} prob={data.species_prob} />
         </View>
-        <View style={confirmedCase ? data.confirmed ? styles.imageContainer : styles.imageContainerNoButton : styles.imageContainer}>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <Image style={styles.image} source={{ uri: data.image_url }} />
-          </TouchableOpacity>
+        <View
+          style={
+            confirmedCase
+              ? data.confirmed
+                ? styles.imageContainer
+                : styles.imageContainerNoButton
+              : styles.imageContainer
+          }
+        >
+          <ImageBackground style={styles.image} source={{ uri: data.image_url }}>
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Ionicons
+                name={Platform.OS === 'ios' ? 'ios-expand' : 'md-expand'}
+                size={20}
+                color={Theme.colors.primary}
+              />
+            </TouchableOpacity>
+          </ImageBackground>
           <View style={styles.buttons}>
             {!confirmedCase && (
               <Button
@@ -59,11 +80,7 @@ const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase 
               />
             )}
             {confirmedCase && data.confirmed && (
-              <Button
-                title='CONFIRMED'
-                disabled={confirmedCase}
-                style={styles.confirmedButton}
-              />
+              <Button title='CONFIRMED' disabled={confirmedCase} style={styles.confirmedButton} />
             )}
           </View>
         </View>
@@ -98,14 +115,14 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       width: '100%',
       marginBottom: Theme.space.vertical.xxSmall,
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     butterflyContainer: {
       width: '100%',
       height: deviceHeight * 0.45,
       justifyContent: 'space-between',
       alignItems: 'center',
-      backgroundColor: Theme.colors.backgroundAccent
+      backgroundColor: Theme.colors.backgroundAccent,
     },
     imageContainer: {
       width: '98%',
@@ -113,7 +130,7 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       alignItems: 'center',
       justifyContent: 'space-evenly',
       flexDirection: 'row',
-      padding: Theme.space.vertical.xxSmall
+      padding: Theme.space.vertical.xxSmall,
     },
     imageContainerNoButton: {
       width: '98%',
@@ -121,36 +138,38 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
-      padding: Theme.space.vertical.xxSmall
+      padding: Theme.space.vertical.xxSmall,
     },
     image: {
       resizeMode: 'cover',
       height: deviceHeight * 0.44 - 50 - 30,
-      width: deviceHeight * 0.44 - 50 - 30
+      width: deviceHeight * 0.44 - 50 - 30,
+      padding: 10,
+      alignItems: 'flex-end',
     },
     titles: {
       width: '100%',
       flexDirection: 'row',
-      height: 50
+      height: 50,
     },
     buttons: {
       justifyContent: 'center',
       alignItems: 'center',
-      height: 25
+      height: 25,
     },
     confirmedButton: {
-      backgroundColor: Platform.OS === 'ios' ? Theme.colors.primary : Theme.colors.backgroundAccent
+      backgroundColor: Platform.OS === 'ios' ? Theme.colors.primary : Theme.colors.backgroundAccent,
     },
     description: {
       height: 30,
       alignItems: 'center',
       justifyContent: 'center',
-      flexDirection: 'row'
+      flexDirection: 'row',
     },
     text: {
       fontFamily: Theme.fonts.primary,
-      marginLeft: Theme.space.horizontal.xSmall
-    }
+      marginLeft: Theme.space.horizontal.xSmall,
+    },
   });
 
 const landscapeStyles = (deviceWidth, deviceHeight) =>
@@ -159,14 +178,14 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       width: '100%',
       marginBottom: Theme.space.vertical.xxSmall,
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     butterflyContainer: {
       width: '100%',
       height: deviceWidth * 0.4,
       justifyContent: 'space-between',
       alignItems: 'center',
-      backgroundColor: Theme.colors.backgroundAccent
+      backgroundColor: Theme.colors.backgroundAccent,
     },
     imageContainer: {
       width: '98%',
@@ -174,7 +193,7 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       alignItems: 'center',
       justifyContent: 'space-evenly',
       flexDirection: 'row',
-      padding: Theme.space.vertical.xxSmall
+      padding: Theme.space.vertical.xxSmall,
     },
     imageContainerNoButton: {
       width: '98%',
@@ -182,36 +201,36 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
-      padding: Theme.space.vertical.xxSmall
+      padding: Theme.space.vertical.xxSmall,
     },
     image: {
       resizeMode: 'cover',
       height: deviceWidth * 0.39 - 50 - 30,
-      width: deviceWidth * 0.39 - 50 - 30
+      width: deviceWidth * 0.39 - 50 - 30,
     },
     titles: {
       width: '100%',
       flexDirection: 'row',
-      height: 50
+      height: 50,
     },
     buttons: {
       justifyContent: 'center',
       alignItems: 'center',
-      height: 25
+      height: 25,
     },
     confirmedButton: {
-      backgroundColor: Platform.OS === 'ios' ? Theme.colors.primary : Theme.colors.backgroundAccent
+      backgroundColor: Platform.OS === 'ios' ? Theme.colors.primary : Theme.colors.backgroundAccent,
     },
     description: {
       height: 30,
       alignItems: 'center',
       justifyContent: 'center',
-      flexDirection: 'row'
+      flexDirection: 'row',
     },
     text: {
       fontFamily: Theme.fonts.primary,
-      marginLeft: Theme.space.horizontal.xSmall
-    }
+      marginLeft: Theme.space.horizontal.xSmall,
+    },
   });
 
 export default ButterflyChoice;
