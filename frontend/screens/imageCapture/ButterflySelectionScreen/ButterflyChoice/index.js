@@ -31,13 +31,20 @@ const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase 
   };
   const listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
-  // Cleanup function
+  // Cleanup function on navigation
   useEffect(() => {
     const cleanup = navigation.addListener('blur', () => {
       ScreenOrientation.removeOrientationChangeListener(listener);
     });
     return cleanup;
   }, [navigation]);
+    // Cleanup function on unmount
+    useEffect(() => {
+      const cleanup = () => {
+        ScreenOrientation.removeOrientationChangeListener(listener);
+      };
+      return cleanup;
+    }, []);
 
   return (
     <View style={styles.container}>

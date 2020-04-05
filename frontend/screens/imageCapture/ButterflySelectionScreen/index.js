@@ -39,7 +39,7 @@ const ButterflySelectionScreen = ({ navigation }) => {
   const confirmedCase = useSelector(state => Boolean(state.images.confirmedImage));
   const dispatch = useDispatch();
 
-  // Cleanup function
+  // Cleanup function on navigation
   useEffect(() => {
     const cleanup = navigation.addListener('blur', () => {
       ScreenOrientation.removeOrientationChangeListener(listener);
@@ -48,6 +48,15 @@ const ButterflySelectionScreen = ({ navigation }) => {
     });
     return cleanup;
   }, [navigation]);
+    // Cleanup function on unmount
+    useEffect(() => {
+      const cleanup = () => {
+        ScreenOrientation.removeOrientationChangeListener(listener);
+        clearTimeout(snackbarTimer);
+        dispatch(clearImagesState());
+      };
+      return cleanup;
+    }, []);
 
   const confirmationHandler = async prediction => {
     try {
