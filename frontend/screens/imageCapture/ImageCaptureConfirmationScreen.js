@@ -3,16 +3,10 @@ import { View, StatusBar, Image, StyleSheet, Dimensions } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenOrientation } from 'expo';
-import * as Permissions from 'expo-permissions';
-import * as Location from 'expo-location';
 
 import Theme from '../../theme';
 import Button from '../../components/Button';
-import {
-  getPredictionsAsyncAction,
-  newCaseAsyncAction,
-  storeLocation
-} from '../../store/actions/images';
+import { getPredictionsAsyncAction, newCaseAsyncAction } from '../../store/actions/images';
 
 const ImageCaptureConfirmationScreen = ({ navigation }) => {
   const [portrait, setPortrait] = useState(
@@ -35,31 +29,18 @@ const ImageCaptureConfirmationScreen = ({ navigation }) => {
   }, [navigation]);
   // Cleanup function on unmount
   useEffect(() => {
-    const cleanup = navigation.addListener('blur', () => {
+    const cleanup = () => {
       ScreenOrientation.removeOrientationChangeListener(listener);
-    });
+    };
     return cleanup;
   }, []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
-  const imageUri = useSelector(state => state.images.selectedImage);
+  const imageUri = useSelector((state) => state.images.selectedImage);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
-  const getLocationAsync = () => {
-    Permissions.askAsync(Permissions.LOCATION)
-      .then(res => {
-        if (res.status === 'granted') {
-          Location.getLastKnownPositionAsync().then(position => {
-            dispatch(storeLocation(position));
-          });
-        }
-      })
-      .catch(e => console.log('ERROR IN getLocationAsync', e.message));
-  };
-
   const confirmHandler = async () => {
     setIsLoading(true);
-    await getLocationAsync();
     try {
       const response = await dispatch(getPredictionsAsyncAction(imageUri));
       if (response && response.ok) {
@@ -71,7 +52,7 @@ const ImageCaptureConfirmationScreen = ({ navigation }) => {
           console.log('ERROR IN ImageCaptureConfirmationScreen', e.message);
         }
       } else {
-        console.log('ERROR IN ImageCaptureConfirmationScreen - second', JSON.stringify(response))
+        console.log('ERROR IN ImageCaptureConfirmationScreen - second', JSON.stringify(response));
       }
     } catch (e) {
       console.log('ERROR IN ImageCaptureConfirmationScreen - third', e.message);
@@ -112,26 +93,26 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
     container: {
       flex: 1,
       alignItems: 'center',
-      justifyContent: 'space-around'
+      justifyContent: 'space-around',
     },
     imagePreview: {
       height: deviceWidth * 0.9,
       width: deviceWidth * 0.9,
       borderWidth: 1,
-      borderStyle: 'solid'
+      borderStyle: 'solid',
     },
     image: {
       height: '100%',
-      width: '100%'
+      width: '100%',
     },
     button: {
-      width: '40%'
+      width: '40%',
     },
     buttonsContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: deviceWidth * 0.9
-    }
+      width: deviceWidth * 0.9,
+    },
   });
 
 const landscapeStyles = (deviceWidth, deviceHeight) =>
@@ -139,26 +120,26 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
     container: {
       flex: 1,
       alignItems: 'center',
-      justifyContent: 'space-around'
+      justifyContent: 'space-around',
     },
     imagePreview: {
       height: deviceHeight * 0.7,
-      width: deviceHeight * 0.7
+      width: deviceHeight * 0.7,
     },
     image: {
       height: '100%',
-      width: '100%'
+      width: '100%',
     },
     button: {
-      width: '20%'
+      width: '20%',
     },
     buttonsContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       width: deviceWidth * 0.9,
       position: 'absolute',
-      bottom: 30
-    }
+      bottom: 30,
+    },
   });
 
 export default ImageCaptureConfirmationScreen;

@@ -3,6 +3,7 @@ import { View, Text, StatusBar, Image, StyleSheet, Dimensions, Platform } from '
 import { useDispatch } from 'react-redux';
 import * as ExpoImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenOrientation } from 'expo';
@@ -10,7 +11,7 @@ import { ScreenOrientation } from 'expo';
 import Theme from '../../theme';
 import butterfly from '../../assets/butterfly.jpg';
 import LoadingScreen from '../../components/LoadingScreen';
-import { storeSelectedImageAction } from '../../store/actions/images';
+import { storeSelectedImageAction, storeLocation } from '../../store/actions/images';
 
 const ImageCaptureScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,9 +35,9 @@ const ImageCaptureScreen = ({ navigation }) => {
   }, [navigation]);
   // Cleanup function on unmount
   useEffect(() => {
-    const cleanup = navigation.addListener('blur', () => {
+    const cleanup = () => {
       ScreenOrientation.removeOrientationChangeListener(listener);
-    });
+    };
     return cleanup;
   }, []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
@@ -47,15 +48,18 @@ const ImageCaptureScreen = ({ navigation }) => {
   // Subsequent calls will return true or false based on that stored value, the user won't get asked again.
   // If the user declined permissions the first time, he will have to grant access through system settings.
   const verifyPermissions = async () => {
-    const result = await Permissions.askAsync(Permissions.CAMERA, Permissions.CAMERA_ROLL);
+    const result = await Permissions.askAsync(Permissions.CAMERA, Permissions.CAMERA_ROLL, Permissions.LOCATION);
     if (result.status !== 'granted') {
       Alert.alert(
         'Insufficient permissions!',
-        'You need to grant camera permissions to use this app.',
+        'You need to grant camera or camera_roll permissions to use this app.',
         [{ text: 'Okay' }]
       );
       return false;
     }
+    Location.getLastKnownPositionAsync().then(position => {
+      dispatch(storeLocation(position));
+    }).catch(console.log);
     return true;
   };
 
