@@ -3,7 +3,7 @@ import {
   STORE_UPLOAD_AND_PREDICTIONS,
   STORE_LOCATION,
   STORE_PREDICTION_CONFIRMATION,
-  CLEAR_IMAGES_STATE
+  CLEAR_IMAGES_STATE,
 } from '../types';
 
 const initialState = {
@@ -11,7 +11,12 @@ const initialState = {
   uploadedImage: null,
   confirmedImage: null,
   predictions: [],
-  location: null
+  location: null,
+  devInfo: {
+    execTime: '',
+    model: '',
+    status: '',
+  },
 };
 
 export const imagesReducer = (state = initialState, action) => {
@@ -19,24 +24,29 @@ export const imagesReducer = (state = initialState, action) => {
     case STORE_SELECTED_IMAGE:
       return {
         ...state,
-        selectedImage: action.payload
+        selectedImage: action.payload,
       };
     case STORE_UPLOAD_AND_PREDICTIONS:
       return {
         ...state,
         predictions: action.payload.predictions,
-        uploadedImage: action.payload.uploaded_image
+        uploadedImage: action.payload.uploaded_image,
+        devInfo: {
+          execTime: action.payload.prediction_exec_time,
+          model: action.payload.prediction_model,
+          status: action.payload.prediction_status,
+        },
       };
     case STORE_LOCATION:
       return {
         ...state,
-        location: action.payload
+        location: action.payload,
       };
     case STORE_PREDICTION_CONFIRMATION:
       return {
         ...state,
         predictions: action.payload.predictions,
-        confirmedImage: action.payload.confirmed_image
+        confirmedImage: action.payload.confirmed_image,
       };
     case CLEAR_IMAGES_STATE:
       return {
@@ -44,7 +54,12 @@ export const imagesReducer = (state = initialState, action) => {
         uploadedImage: null,
         confirmedImage: null,
         predictions: [],
-        location: null
+        location: null,
+        devInfo: {
+          execTime: '',
+          model: '',
+          status: '',
+        },
       };
     default:
       return state;

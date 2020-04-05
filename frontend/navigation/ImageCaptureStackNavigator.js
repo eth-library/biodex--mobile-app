@@ -48,15 +48,7 @@ const ImageCaptureStackNavigator = props => {
         component={ButterflySelectionScreen}
         options={{
           title: 'Results',
-          headerRight: () => (
-            <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
-              <Item
-                title='search'
-                iconName={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
-                onPress={() => props.navigation.popToTop()}
-              />
-            </HeaderButtons>
-          )
+          
         }}
       />
     </Stack.Navigator>

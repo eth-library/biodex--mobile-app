@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   View,
@@ -12,12 +12,19 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenOrientation } from 'expo';
 import SnackBar from 'react-native-snackbar-component';
+import { Ionicons } from '@expo/vector-icons';
+import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
 
 import Theme from '../../../theme';
 import ButterflyChoice from './ButterflyChoice';
 import Titles from './Titles';
+import DeveloperInfo from './DeveloperInfo';
 import { confirmPredictionAsyncAction, clearImagesState } from '../../../store/actions/images';
 import imgPlaceholder from '../../../assets/imgPlaceholder.png'
+
+const IoniconsHeaderButton = props => (
+  <HeaderButton {...props} IconComponent={Ionicons} iconSize={23} color={Theme.colors.white} />
+);
 
 const ButterflySelectionScreen = ({ navigation }) => {
   const [portrait, setPortrait] = useState(
@@ -27,6 +34,7 @@ const ButterflySelectionScreen = ({ navigation }) => {
   const [height, setHeight] = useState(Dimensions.get('window').height);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarTimer, setSnackbarTimer] = useState(null);
+  const [showDeveloperInfo, setShowDeveloperInfo] = useState(false);
   const screenOrientationHandler = () => {
     setPortrait(Dimensions.get('window').height > Dimensions.get('window').width);
     setWidth(Dimensions.get('window').width);
@@ -38,6 +46,25 @@ const ButterflySelectionScreen = ({ navigation }) => {
   const predictions = useSelector(state => state.images.predictions);
   const confirmedCase = useSelector(state => Boolean(state.images.confirmedImage));
   const dispatch = useDispatch();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
+          <Item
+            title='info'
+            iconName={Platform.OS === 'ios' ? 'ios-information-circle-outline' : 'md-information-circle-outline'}
+            onPress={() => setShowDeveloperInfo(!showDeveloperInfo)}
+          />
+          <Item
+            title='home'
+            iconName={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
+            onPress={() => navigation.popToTop()}
+          />
+        </HeaderButtons>
+      )
+    })
+  }, [navigation, setShowDeveloperInfo])
 
   // Cleanup function on navigation
   useEffect(() => {
@@ -75,6 +102,7 @@ const ButterflySelectionScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle='light-content' />
+      <DeveloperInfo visible={showDeveloperInfo} hideModalHandler={() => setShowDeveloperInfo(false)} />
 
       <View style={styles.container}>
         <View style={styles.imagePreview}>
