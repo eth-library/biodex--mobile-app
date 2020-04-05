@@ -1,6 +1,15 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { View, Text, StatusBar, Image, StyleSheet, Dimensions, Platform } from 'react-native';
-import { useDispatch } from 'react-redux';
+import {
+  View,
+  Text,
+  StatusBar,
+  Image,
+  StyleSheet,
+  Dimensions,
+  Platform,
+  Alert,
+} from 'react-native';
+import { useDispatch } from 'react-redux';
 import * as ExpoImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
@@ -42,29 +51,53 @@ const ImageCaptureScreen = ({ navigation }) => {
   }, []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
   const dispatch = useDispatch();
+  useEffect(() => {
+    verifyLocationPermissions();
+  }, []);
 
   // Android is asking for camera permissions on it's on. For IOS we have to ask for it at runtime.
   // This function will run once and IOS will store the result automatically.
   // Subsequent calls will return true or false based on that stored value, the user won't get asked again.
   // If the user declined permissions the first time, he will have to grant access through system settings.
-  const verifyPermissions = async () => {
-    const result = await Permissions.askAsync(Permissions.CAMERA, Permissions.CAMERA_ROLL, Permissions.LOCATION);
+  const verifyCameraPermissions = async () => {
+    const result = await Permissions.askAsync(Permissions.CAMERA);
     if (result.status !== 'granted') {
       Alert.alert(
         'Insufficient permissions!',
-        'You need to grant camera or camera_roll permissions to use this app.',
+        'You need to grant camera permissions to use this option.',
         [{ text: 'Okay' }]
       );
       return false;
     }
-    Location.getLastKnownPositionAsync().then(position => {
-      dispatch(storeLocation(position));
-    }).catch(console.log);
+    return true;
+  };
+
+  const verifyCameraRollPermissions = async () => {
+    const result = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (result.status !== 'granted') {
+      Alert.alert(
+        'Insufficient permissions!',
+        'You need to grant gallery permissions to use this option.',
+        [{ text: 'Okay' }]
+      );
+      return false;
+    }
+    return true;
+  };
+
+  const verifyLocationPermissions = async () => {
+    const result = await Permissions.askAsync(Permissions.LOCATION);
+    if (result.status !== 'granted') return false;
+    Location.getLastKnownPositionAsync()
+      .then((position) => {
+        dispatch(storeLocation(position));
+      })
+      .catch(console.log);
     return true;
   };
 
   const takeImageHandler = async () => {
-    const hasPermission = await verifyPermissions();
+    const hasPermission = await verifyCameraPermissions();
     if (!hasPermission) {
       return;
     }
@@ -72,20 +105,20 @@ const ImageCaptureScreen = ({ navigation }) => {
     const image = await ExpoImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 0.4
+      quality: 0.4,
     });
 
     if (image.cancelled) {
       setIsLoading(false);
     } else {
       setTimeout(() => setIsLoading(false), 500);
-      dispatch(storeSelectedImageAction(image.uri))
+      dispatch(storeSelectedImageAction(image.uri));
       navigation.navigate('ImageConfirm');
     }
   };
 
   const selectGalleryImageHandler = async () => {
-    const hasPermission = await verifyPermissions();
+    const hasPermission = await verifyCameraRollPermissions();
     if (!hasPermission) {
       return;
     }
@@ -94,14 +127,14 @@ const ImageCaptureScreen = ({ navigation }) => {
     const image = await ExpoImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 0.4
+      quality: 0.4,
     });
 
     if (image.cancelled) {
       setIsLoading(false);
     } else {
       setTimeout(() => setIsLoading(false), 500);
-      dispatch(storeSelectedImageAction(image.uri))
+      dispatch(storeSelectedImageAction(image.uri));
       navigation.navigate('ImageConfirm');
     }
   };
@@ -147,27 +180,27 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       flex: 1,
       alignItems: 'center',
       justifyContent: 'space-around',
-      backgroundColor: Theme.colors.background
+      backgroundColor: Theme.colors.background,
     },
     imagePreview: {
       height: deviceWidth * 0.9,
-      width: deviceWidth * 0.9
+      width: deviceWidth * 0.9,
     },
     bottomContainer: {
       alignItems: 'center',
       justifyContent: 'space-between',
-      height: deviceHeight * 0.2
+      height: deviceHeight * 0.2,
     },
     infoText: {
       fontFamily: Theme.fonts.primaryBold,
       fontSize: Theme.fonts.sizeXS,
-      color: Theme.colors.primary
+      color: Theme.colors.primary,
     },
     buttonsContainer: {
       flexDirection: 'row',
       justifyContent: 'space-around',
-      width: deviceWidth
-    }
+      width: deviceWidth,
+    },
   });
 
 const landscapeStyles = (deviceWidth, deviceHeight) =>
@@ -177,30 +210,30 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-around',
-      backgroundColor: Theme.colors.background
+      backgroundColor: Theme.colors.background,
     },
     imagePreview: {
       height: deviceHeight * 0.7,
-      width: deviceHeight * 0.7
+      width: deviceHeight * 0.7,
     },
     bottomContainer: {
       alignItems: 'center',
       justifyContent: 'space-between',
-      width: deviceWidth * 0.4
+      width: deviceWidth * 0.4,
     },
     infoContainer: {
-      height: deviceHeight * 0.3
+      height: deviceHeight * 0.3,
     },
     infoText: {
       fontFamily: Theme.fonts.primaryBold,
       fontSize: Theme.fonts.sizeXS,
-      color: Theme.colors.primary
+      color: Theme.colors.primary,
     },
     buttonsContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: '80%'
-    }
+      width: '80%',
+    },
   });
 
 export default ImageCaptureScreen;
