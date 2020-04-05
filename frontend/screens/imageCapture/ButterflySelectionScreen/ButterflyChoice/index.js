@@ -46,16 +46,25 @@ const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase 
           <Title text={data.species} prob={data.species_prob} />
           <Title text={data.species} prob={data.species_prob} />
         </View>
-        <View style={styles.imageContainer}>
+        <View style={confirmedCase ? data.confirmed ? styles.imageContainer : styles.imageContainerNoButton : styles.imageContainer}>
           <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Image style={styles.image} source={{ uri: data.image_url }} />
           </TouchableOpacity>
           <View style={styles.buttons}>
-            <Button
-              title={data.confirmed ? 'CONFIRMED' : 'CONFIRM'}
-              disabled={confirmedCase}
-              onPress={() => confirmationHandler(data)}
-            />
+            {!confirmedCase && (
+              <Button
+                title='CONFIRM'
+                disabled={confirmedCase}
+                onPress={() => confirmationHandler(data)}
+              />
+            )}
+            {confirmedCase && data.confirmed && (
+              <Button
+                title='CONFIRMED'
+                disabled={confirmedCase}
+                style={styles.confirmedButton}
+              />
+            )}
           </View>
         </View>
         <TouchableOpacity
@@ -102,7 +111,15 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       width: '98%',
       height: deviceHeight * 0.45 - 50 - 30,
       alignItems: 'center',
-      justifyContent: 'space-around',
+      justifyContent: 'space-evenly',
+      flexDirection: 'row',
+      padding: Theme.space.vertical.xxSmall
+    },
+    imageContainerNoButton: {
+      width: '98%',
+      height: deviceHeight * 0.45 - 50 - 30,
+      alignItems: 'center',
+      justifyContent: 'center',
       flexDirection: 'row',
       padding: Theme.space.vertical.xxSmall
     },
@@ -120,6 +137,9 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       justifyContent: 'center',
       alignItems: 'center',
       height: 25
+    },
+    confirmedButton: {
+      backgroundColor: Platform.OS === 'ios' ? Theme.colors.primary : Theme.colors.backgroundAccent
     },
     description: {
       height: 30,
@@ -152,7 +172,15 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       width: '98%',
       height: deviceWidth * 0.4 - 50 - 30,
       alignItems: 'center',
-      justifyContent: 'space-around',
+      justifyContent: 'space-evenly',
+      flexDirection: 'row',
+      padding: Theme.space.vertical.xxSmall
+    },
+    imageContainerNoButton: {
+      width: '98%',
+      height: deviceHeight * 0.45 - 50 - 30,
+      alignItems: 'center',
+      justifyContent: 'center',
       flexDirection: 'row',
       padding: Theme.space.vertical.xxSmall
     },
@@ -170,6 +198,9 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       justifyContent: 'center',
       alignItems: 'center',
       height: 25
+    },
+    confirmedButton: {
+      backgroundColor: Platform.OS === 'ios' ? Theme.colors.primary : Theme.colors.backgroundAccent
     },
     description: {
       height: 30,

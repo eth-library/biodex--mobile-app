@@ -30,10 +30,10 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: Theme.space.vertical.xSmall,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonContainer: {
-    width: '100%'
+    width: '100%',
   },
   button: {
     width: '80%'

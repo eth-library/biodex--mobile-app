@@ -14,7 +14,7 @@ import {
   storeLocation
 } from '../../store/actions/images';
 
-const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
+const ImageCaptureConfirmationScreen = ({ navigation }) => {
   const [portrait, setPortrait] = useState(
     Dimensions.get('window').height > Dimensions.get('window').width
   );
@@ -62,7 +62,7 @@ const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
     await getLocationAsync();
     try {
       const response = await dispatch(getPredictionsAsyncAction(imageUri));
-      if (response && response.status === 200) {
+      if (response && response.ok) {
         try {
           const db_response = await dispatch(newCaseAsyncAction(response.data, imageUri));
           if (db_response.status === 201) navigation.navigate('ButterflySelection');
@@ -70,9 +70,9 @@ const ImageCaptureConfirmationScreen = ({ navigation, route }) => {
           setIsLoading(false);
           console.log('ERROR IN ImageCaptureConfirmationScreen', e.message);
         }
+      } else {
+        console.log('ERROR IN ImageCaptureConfirmationScreen - second', JSON.stringify(response))
       }
-      console.log('ERROR IN ImageCaptureConfirmationScreen - second')
-      // handle if status is not 200 / not getting response due to error in fetch
     } catch (e) {
       console.log('ERROR IN ImageCaptureConfirmationScreen - third', e.message);
     }
