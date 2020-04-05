@@ -77,7 +77,7 @@ export const getPredictionsAsyncAction = imageUri => async (dispatch, getState) 
     );
     if (response.status === 200) {
       const data = await response.json();
-      return { status: response.status, data };
+      return { ...response, data };
     }
     if (response.status >= 400) {
       console.log(

@@ -65,7 +65,7 @@ const ImageCaptureConfirmationScreen = ({ navigation }) => {
       if (response && response.ok) {
         try {
           const db_response = await dispatch(newCaseAsyncAction(response.data, imageUri));
-          if (db_response.status === 201) navigation.navigate('ButterflySelection');
+          if (db_response.ok) navigation.navigate('ButterflySelection');
         } catch (e) {
           setIsLoading(false);
           console.log('ERROR IN ImageCaptureConfirmationScreen', e.message);

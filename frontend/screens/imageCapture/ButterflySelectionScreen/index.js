@@ -17,6 +17,7 @@ import Theme from '../../../theme';
 import ButterflyChoice from './ButterflyChoice';
 import Titles from './Titles';
 import { confirmPredictionAsyncAction, clearImagesState } from '../../../store/actions/images';
+import imgPlaceholder from '../../../assets/imgPlaceholder.png'
 
 const ButterflySelectionScreen = ({ navigation }) => {
   const [portrait, setPortrait] = useState(
@@ -69,7 +70,7 @@ const ButterflySelectionScreen = ({ navigation }) => {
       <View style={styles.container}>
         <View style={styles.imagePreview}>
           <ImageBackground
-            source={{ uri: uploadedImage }}
+            source={ uploadedImage ? { uri: uploadedImage } : imgPlaceholder}
             style={styles.imageContainer}
             imageStyle={styles.image}
           >
