@@ -9,8 +9,10 @@ import formReducer from '../formReducer';
 import Theme from '../../../theme';
 import { authStyles } from '../styles';
 import Logo from '../../../assets/logo.png';
+import LogoJPG from '../../../assets/logo.jpg';
 import Button from '../../../components/Button';
-import Input from '../../../components/Input/index.js';
+import Input from '../../../components/Input';
+import TermsAndConditions from '../../../components/TermsAndConditions';
 import { userLoginAsyncAction } from '../../../store/actions/auth';
 
 const initialState = {
@@ -75,7 +77,7 @@ const Login = ({ navigation }) => {
           scrollEnabled
           enableOnAndroid={true}
         >
-          <Image style={styles.logo} source={Logo} />
+          <Image style={styles.logo} source={LogoJPG} />
           <View style={styles.titleContainer}>
             <Text style={styles.title}>ETH Entomological Collection</Text>
             <Text style={styles.title}>Lepi Classification App</Text>
@@ -137,13 +139,7 @@ const Login = ({ navigation }) => {
             <Text style={authStyles.link} onPress={() => navigationHandler('ResetPassword')}>
               Reset Password
             </Text>
-            <Text style={authStyles.terms}>
-              By using this App, You, the user of the App, confirm your acceptance of the App terms
-              of use ('App Terms'). If you do not agree to these App Terms, you must immediately
-              uninstall the App and discontinue its use. These App Terms should be read alongside
-              our <Text style={styles.link}>Privacy Policy</Text> and{' '}
-              <Text style={styles.link}>Cookie Policy</Text>.
-            </Text>
+            <TermsAndConditions /> 
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>

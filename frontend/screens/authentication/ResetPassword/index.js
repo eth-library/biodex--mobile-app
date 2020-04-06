@@ -11,6 +11,7 @@ import { authStyles } from '../styles';
 import Logo from '../../../assets/logo.png';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input/index.js';
+import TermsAndConditions from '../../../components/TermsAndConditions';
 import { resetPasswordAsyncAction } from '../../../store/actions/resetPassword';
 
 const ResetPassword = ({ navigation }) => {
@@ -95,13 +96,7 @@ const ResetPassword = ({ navigation }) => {
               Go to password reset validation
             </Text>
           </View>
-          <Text style={authStyles.terms}>
-            By using this App, You, the user of the App, confirm your acceptance of the App terms of
-            use ('App Terms'). If you do not agree to these App Terms, you must immediately
-            uninstall the App and discontinue its use. These App Terms should be read alongside our{' '}
-            <Text style={styles.link}>Privacy Policy</Text> and{' '}
-            <Text style={styles.link}>Cookie Policy</Text>.
-          </Text>
+          <TermsAndConditions />
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>
