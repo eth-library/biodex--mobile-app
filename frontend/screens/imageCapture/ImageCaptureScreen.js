@@ -65,7 +65,7 @@ const ImageCaptureScreen = ({ navigation }) => {
     if (result.status !== 'granted') {
       Alert.alert(
         'Insufficient permissions!',
-        'You need to grant camera permissions to use this option.',
+        'You need to grant camera and camera roll permissions to use this option.',
         [{ text: 'Okay' }]
       );
       return false;
