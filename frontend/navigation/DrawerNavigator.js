@@ -24,7 +24,7 @@ const CustomDrawerContent = props => {
     <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1, marginBottom: 30 }}>
       <View style={{ height: '100%', justifyContent: 'space-between' }}>
         <View>
-          <DrawerItemList {...props} style={{ backgroundColor: 'yellow' }} />
+          <DrawerItemList {...props} />
         </View>
         <View>
           <DrawerItem
