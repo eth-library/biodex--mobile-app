@@ -1,24 +1,27 @@
+import * as Sentry from 'sentry-expo';
+
 import { rootEndpoint } from '../../constants';
 import { STORE_INVITATION_ERROR, REMOVE_INVITATION_ERROR } from '../types';
 import formatDjangoErrors from '../helpers/formatDjangoErrors';
+import { networkSuccessAsyncAction, networkErrorAsyncAction } from './network';
 
-const storeErrorAction = error => {
+const storeErrorAction = (error) => {
   return {
     type: STORE_INVITATION_ERROR,
-    payload: error
+    payload: error,
   };
 };
 
 export const removeErrorAction = () => {
   return {
-    type: REMOVE_INVITATION_ERROR
+    type: REMOVE_INVITATION_ERROR,
   };
 };
 
-export const sendInvitationAsyncAction = email => async (dispatch, getState) => {
+export const sendInvitationAsyncAction = (email) => async (dispatch, getState) => {
   const headers = new Headers({
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${getState().auth.access}`
+    Authorization: `Bearer ${getState().auth.access}`,
   });
   const method = 'POST';
   const body = JSON.stringify({ email });
@@ -26,16 +29,18 @@ export const sendInvitationAsyncAction = email => async (dispatch, getState) => 
 
   try {
     const response = await fetch(`${rootEndpoint}/auth/registration/`, config);
-    if (response.status === 200) {
+    if (response.ok) {
       dispatch(removeErrorAction());
-    }
-    if (response.status >= 400) {
+      dispatch(networkSuccessAsyncAction('Your invitation has been sent!'));
+    } else {
       const errors = await response.json();
       const cleanedErrors = formatDjangoErrors(errors);
       dispatch(storeErrorAction(cleanedErrors));
     }
     return response;
   } catch (e) {
+    dispatch(networkErrorAsyncAction());
     console.log('ERROR TO HANDLE IN sendInvitationAsyncAction: ', e.message);
+    Sentry.captureException(e);
   }
 };

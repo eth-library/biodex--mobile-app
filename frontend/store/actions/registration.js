@@ -1,28 +1,31 @@
+import * as Sentry from 'sentry-expo';
+
 import { rootEndpoint } from '../../constants';
 import { STORE_REGISTRATION_ERROR, REMOVE_REGISTRATION_ERROR } from '../types';
 import formatDjangoErrors from '../helpers/formatDjangoErrors';
+import { networkSuccessAsyncAction, networkErrorAsyncAction } from './network';
 
-const storeErrorAction = error => {
+const storeErrorAction = (error) => {
   return {
     type: STORE_REGISTRATION_ERROR,
-    payload: error
+    payload: error,
   };
 };
 
 const removeErrorAction = () => {
   return {
-    type: REMOVE_REGISTRATION_ERROR
+    type: REMOVE_REGISTRATION_ERROR,
   };
 };
 
-export const userRegistrationValidationAsyncAction = data => async (dispatch, getState) => {
+export const userRegistrationValidationAsyncAction = (data) => async (dispatch, getState) => {
   const cleanData = {
     email: data.email,
     code: data.code,
     password: data.password,
     password_repeat: data.passwordRepeat,
     full_name: data.fullName,
-    user_type: data.user_type === 'Expert' ? 'EX' : 'ST'
+    user_type: data.user_type === 'Expert' ? 'EX' : 'ST',
   };
 
   const headers = new Headers({ 'Content-Type': 'application/json' });
@@ -32,16 +35,18 @@ export const userRegistrationValidationAsyncAction = data => async (dispatch, ge
 
   try {
     const response = await fetch(`${rootEndpoint}/auth/registration/validation/`, config);
-    if (response.status === 200) {
+    if (response.ok) {
       dispatch(removeErrorAction());
-    }
-    if (response.status >= 400) {
+      dispatch(networkSuccessAsyncAction('Your account was created!'));
+    } else {
       const errors = await response.json();
       const cleanedErrors = formatDjangoErrors(errors);
       dispatch(storeErrorAction(cleanedErrors));
     }
     return response;
   } catch (e) {
+    dispatch(networkErrorAsyncAction());
     console.log('ERROR TO HANDLE IN userRegistrationValidationAsyncAction: ', e.message);
+    Sentry.captureException(e);
   }
 };

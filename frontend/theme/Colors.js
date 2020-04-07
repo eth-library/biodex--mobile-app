@@ -3,6 +3,7 @@ export default {
   accent: '#1F407A',
   link: '#1387C3',
   confirm: '#6FCB4B',
+  red: 'red',
   cancel: '#C3C3C3',
   grey: '#989898',
   lightGrey: '#C3C3C3',

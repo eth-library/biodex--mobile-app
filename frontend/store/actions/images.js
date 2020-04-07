@@ -10,6 +10,7 @@ import {
   CLEAR_IMAGES_STATE
 } from '../types';
 import { rootEndpoint } from '../../constants/index';
+import { networkSuccessAsyncAction, networkErrorAsyncAction } from './network';
 
 export const storeSelectedImageAction = imageUri => {
   return {
@@ -75,11 +76,10 @@ export const getPredictionsAsyncAction = imageUri => async (dispatch, getState) 
       `https://europe-west1-ethec-auto-insect-recognition.cloudfunctions.net/lepidoptera_clfr_objdet`,
       config
     );
-    if (response.status === 200) {
+    if (response.ok) {
       const data = await response.json();
       return { ...response, data };
-    }
-    if (response.status >= 400) {
+    } else {
       console.log(
         'ERROR TO HANDLE IN getPredictionsAsyncAction',
         JSON.stringify(response),
@@ -90,6 +90,7 @@ export const getPredictionsAsyncAction = imageUri => async (dispatch, getState) 
       return response;
     }
   } catch (e) {
+    dispatch(networkErrorAsyncAction());
     console.log('ERROR TO HANDLE IN getPredictionsAsyncAction - second: ', e.message);
     Sentry.captureException(e);
   }
@@ -145,6 +146,7 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
     }
     return response;
   } catch (e) {
+    dispatch(networkErrorAsyncAction());
     console.log('ERROR TO HANDLE IN newCaseAsyncAction: ', JSON.stringify(e), e.message);
     Sentry.captureException(e);
   }
@@ -171,12 +173,14 @@ export const confirmPredictionAsyncAction = prediction => async (dispatch, getSt
 
   try {
     const response = await fetch(`${rootEndpoint}/cases/confirm/${prediction.case}/`, config);
-    if (response.status === 200) {
+    if (response.ok) {
       const data = await response.json();
       dispatch(storePredictionsConfirmationAction(data));
+      dispatch(networkSuccessAsyncAction('Your confirmation has been registered!'));
     }
     return response;
   } catch (e) {
+    dispatch(networkErrorAsyncAction());
     console.log('ERROR TO HANDLE IN confirmPredictionAsyncAction: ', JSON.stringify(e), e.message);
     Sentry.captureException(e);
   }

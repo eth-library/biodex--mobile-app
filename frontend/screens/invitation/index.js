@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, Image, TextInput, StyleSheet, Keyboard, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
-import SnackBar from 'react-native-snackbar-component';
 
 import Button from '../../components/Button';
 import Logo from '../../assets/logo.jpg';
@@ -16,7 +15,6 @@ const Invitation = ({ navigation }) => {
   const [touched, setTouched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [localError, setLocalError] = useState(null);
-  const [success, setSuccess] = useState(false);
   const error = useSelector(state => state.invitation.error);
   const dispatch = useDispatch();
 
@@ -28,7 +26,6 @@ const Invitation = ({ navigation }) => {
       setTouched(false);
       setIsLoading(false);
       setLocalError(null);
-      setSuccess(false);
       dispatch(removeErrorAction());
     });
     return cleanup;
@@ -68,18 +65,14 @@ const Invitation = ({ navigation }) => {
     }
     setIsLoading(true);
     const response = await dispatch(sendInvitationAsyncAction(email));
-    if (response.status === 200) successHandler();
+    if (response.ok) successHandler();
     setIsLoading(false);
   };
 
   const successHandler = () => {
-    setSuccess(true);
     setLocalError(null);
     setTouched(false);
     setEmail('');
-    setTimeout(() => {
-      setSuccess(false);
-    }, 2000);
   };
 
   return (
@@ -122,12 +115,6 @@ const Invitation = ({ navigation }) => {
           />
         </View>
       </KeyboardAwareScrollView>
-      <SnackBar
-        visible={success}
-        textMessage='Your invitation has been sent!'
-        backgroundColor={Theme.colors.confirm}
-        messageColor={Theme.colors.white}
-      />
     </SafeAreaView>
   );
 };
@@ -183,14 +170,6 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: Theme.fonts.sizeTC
   },
-  successText: {
-    fontFamily: Theme.fonts.primary,
-    color: Theme.colors.confirm,
-    fontSize: Theme.fonts.sizeM,
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center'
-  }
 });
 
 export default Invitation;
