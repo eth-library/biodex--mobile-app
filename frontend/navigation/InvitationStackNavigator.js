@@ -27,7 +27,8 @@ const InvitationStackNavigator = props => {
               onPress={() => props.navigation.openDrawer()}
             />
           </HeaderButtons>
-        )
+        ),
+        gestureEnabled: false
       }}
     >
       <Stack.Screen name='Invitation' component={Invitation} />

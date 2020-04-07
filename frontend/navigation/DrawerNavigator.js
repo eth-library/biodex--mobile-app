@@ -74,7 +74,8 @@ export default function DrawerNavigator() {
               size={23}
               color={Theme.colors.primary}
             />
-          )
+          ),
+          gestureEnabled: false
         }}
       />
       <Drawer.Screen

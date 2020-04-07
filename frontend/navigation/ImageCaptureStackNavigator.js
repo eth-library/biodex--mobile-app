@@ -30,7 +30,8 @@ const ImageCaptureStackNavigator = props => {
               onPress={() => props.navigation.openDrawer()}
             />
           </HeaderButtons>
-        )
+        ),
+        gestureEnabled: false
       }}
     >
       <Stack.Screen
