@@ -5,7 +5,7 @@ import { Platform } from 'react-native';
 // Somehow the email notification doesn't work anymore - test that on IOS
 // After having installed ngrok, run `./ngrok http 8000` in terminal and updated the rootEndPoint for android to the given https url
 
-const developmentAPI = Platform.OS === 'ios' ? 'http://localhost:8000/backend/api' : 'https://4ce292ab.ngrok.io/backend/api';
+const developmentAPI = Platform.OS === 'ios' ? 'http://localhost:8000/backend/api' : 'https://39cb28b2.ngrok.io/backend/api';
 const productionAPI = 'https://api.lepi.propulsion-home.ch/backend/api';
 
 export const rootEndpoint = __DEV__ ? developmentAPI : productionAPI;
