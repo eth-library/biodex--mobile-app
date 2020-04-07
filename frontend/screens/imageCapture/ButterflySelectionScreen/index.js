@@ -105,6 +105,7 @@ const ButterflySelectionScreen = ({ navigation }) => {
       <DeveloperInfo visible={showDeveloperInfo} hideModalHandler={() => setShowDeveloperInfo(false)} />
 
       <View style={styles.container}>
+
         <View style={styles.imagePreview}>
           <ImageBackground
             source={ uploadedImage ? { uri: uploadedImage } : imgPlaceholder}
@@ -121,7 +122,6 @@ const ButterflySelectionScreen = ({ navigation }) => {
             {predictions.map((el, index) => {
               return (
                 <ButterflyChoice
-                  style={styles.butterflyChoiceContainer}
                   data={el}
                   key={index}
                   confirmationHandler={confirmationHandler}
@@ -132,6 +132,7 @@ const ButterflySelectionScreen = ({ navigation }) => {
             })}
           </ScrollView>
         </View>
+
       </View>
       <SnackBar
         visible={showSnackbar}
@@ -182,9 +183,6 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
     },
     choicesContainer: {
       flex: 1
-    },
-    butterflyChoiceContainer: {
-      height: deviceHeight * 0.45
     }
   });
 
@@ -234,9 +232,6 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
     },
     choices: {
       flex: 1
-    },
-    butterflyChoiceContainer: {
-      height: deviceWidth * 0.4
     }
   });
 

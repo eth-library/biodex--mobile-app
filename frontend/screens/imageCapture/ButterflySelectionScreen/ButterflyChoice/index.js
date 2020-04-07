@@ -38,13 +38,13 @@ const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase 
     });
     return cleanup;
   }, [navigation]);
-    // Cleanup function on unmount
-    useEffect(() => {
-      const cleanup = () => {
-        ScreenOrientation.removeOrientationChangeListener(listener);
-      };
-      return cleanup;
-    }, []);
+  // Cleanup function on unmount
+  useEffect(() => {
+    const cleanup = () => {
+      ScreenOrientation.removeOrientationChangeListener(listener);
+    };
+    return cleanup;
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -60,6 +60,7 @@ const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase 
           <Title text={data.species} prob={data.species_prob} />
           <Title text={data.species} prob={data.species_prob} />
         </View>
+
         <View
           style={
             confirmedCase
@@ -91,6 +92,7 @@ const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase 
             )}
           </View>
         </View>
+
         <TouchableOpacity
           style={styles.description}
           onPress={() => setShowDescription(!showDescription)}
@@ -126,31 +128,31 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
     },
     butterflyContainer: {
       width: '100%',
-      height: deviceHeight * 0.45,
+      height: deviceWidth * 0.8,
       justifyContent: 'space-between',
       alignItems: 'center',
       backgroundColor: Theme.colors.backgroundAccent,
     },
     imageContainer: {
       width: '98%',
-      height: deviceHeight * 0.45 - 50 - 30,
+      height: deviceWidth * 0.8 - 50 - 30,
       alignItems: 'center',
-      justifyContent: 'space-evenly',
+      justifyContent: 'space-around',
       flexDirection: 'row',
-      padding: Theme.space.vertical.xxSmall,
+      padding: Theme.space.horizontal.xxSmall,
     },
     imageContainerNoButton: {
       width: '98%',
-      height: deviceHeight * 0.45 - 50 - 30,
+      height: deviceWidth * 0.8 - 50 - 30,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
-      padding: Theme.space.vertical.xxSmall,
+      padding: Theme.space.horizontal.xxSmall,
     },
     image: {
       resizeMode: 'cover',
-      height: deviceHeight * 0.44 - 50 - 30,
-      width: deviceHeight * 0.44 - 50 - 30,
+      height: deviceWidth * 0.8 - 50 - 30,
+      width: deviceWidth * 0.8 - 50 - 30,
       padding: 10,
       alignItems: 'flex-end',
     },
@@ -214,6 +216,8 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       resizeMode: 'cover',
       height: deviceWidth * 0.39 - 50 - 30,
       width: deviceWidth * 0.39 - 50 - 30,
+      padding: 10,
+      alignItems: 'flex-end',
     },
     titles: {
       width: '100%',

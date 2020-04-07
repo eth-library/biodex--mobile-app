@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
       Dimensions.get('window').height > Dimensions.get('window').width
         ? Dimensions.get('window').width * 0.9
         : Dimensions.get('window').height * 0.9,
-    padding: 10,
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
+    paddingHorizontal: 10
   }
 });
 
