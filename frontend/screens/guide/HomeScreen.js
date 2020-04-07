@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, Dimensions } from 'react-native';
 
-import Logo from '../../assets/logo.png';
+import Logo from '../../assets/logo.jpg';
 import Butterflies from '../../assets/butterflies.jpg';
 import Theme from '../../theme';
 

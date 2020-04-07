@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import SnackBar from 'react-native-snackbar-component';
 
 import Button from '../../components/Button';
-import Logo from '../../assets/logo.png';
+import Logo from '../../assets/logo.jpg';
 import Theme from '../../theme';
 import { sendInvitationAsyncAction, removeErrorAction } from '../../store/actions/invitation';
 

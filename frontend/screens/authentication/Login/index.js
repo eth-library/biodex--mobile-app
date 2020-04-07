@@ -8,8 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import formReducer from '../formReducer';
 import Theme from '../../../theme';
 import { authStyles } from '../styles';
-import Logo from '../../../assets/logo.png';
-import LogoJPG from '../../../assets/logo.jpg';
+import Logo from '../../../assets/logo.jpg';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import TermsAndConditions from '../../../components/TermsAndConditions';
@@ -77,7 +76,7 @@ const Login = ({ navigation }) => {
           scrollEnabled
           enableOnAndroid={true}
         >
-          <Image style={styles.logo} source={LogoJPG} />
+          <Image style={styles.logo} source={Logo} />
           <View style={styles.titleContainer}>
             <Text style={styles.title}>ETH Entomological Collection</Text>
             <Text style={styles.title}>Lepi Classification App</Text>

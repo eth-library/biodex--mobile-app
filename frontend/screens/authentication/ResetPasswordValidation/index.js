@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import formReducer from '../formReducer';
 import Theme from '../../../theme';
 import { authStyles } from '../styles';
-import Logo from '../../../assets/logo.png';
+import Logo from '../../../assets/logo.jpg';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input/index.js';
 import TermsAndConditions from '../../../components/TermsAndConditions';
