@@ -1,20 +1,14 @@
 import React from 'react';
 import { Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import * as WebBrowser from 'expo-web-browser';
 
 import Theme from '../../theme';
 
 const TermsAndConditions = () => {
-  const downloadTerms = () => {
-    FileSystem.downloadAsync(
-      'https://drive.google.com/file/d/1gsSL9kRH0Qf1cdjkvQQXwKBA-RFnUg4t/view',
-      FileSystem.documentDirectory + 'TermsAndConditions-v0.01.pdf'
-    )
-      .then(({ uri }) => {
-        console.log('Finished downloading to ', uri);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  const downloadTerms = async () => {
+    await WebBrowser.openBrowserAsync(
+      'https://drive.google.com/file/d/1gsSL9kRH0Qf1cdjkvQQXwKBA-RFnUg4t/view'
+    );
   };
 
   return (
