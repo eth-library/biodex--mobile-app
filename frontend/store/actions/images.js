@@ -7,47 +7,47 @@ import {
   STORE_LOCATION,
   STORE_UPLOAD_AND_PREDICTIONS,
   STORE_PREDICTION_CONFIRMATION,
-  CLEAR_IMAGES_STATE
+  CLEAR_IMAGES_STATE,
 } from '../types';
 import { rootEndpoint } from '../../constants/index';
 import { networkSuccessAsyncAction, networkErrorAsyncAction } from './network';
 
-export const storeSelectedImageAction = imageUri => {
+export const storeSelectedImageAction = (imageUri) => {
   return {
     type: STORE_SELECTED_IMAGE,
-    payload: imageUri
+    payload: imageUri,
   };
 };
 
-export const storeLocation = location => {
+export const storeLocation = (location) => {
   return {
     type: STORE_LOCATION,
-    payload: location
+    payload: location,
   };
 };
 
-const storePredictionsAction = data => {
+const storePredictionsAction = (data) => {
   return {
     type: STORE_UPLOAD_AND_PREDICTIONS,
-    payload: data
+    payload: data,
   };
 };
 
-const storePredictionsConfirmationAction = data => {
+const storePredictionsConfirmationAction = (data) => {
   return {
     type: STORE_PREDICTION_CONFIRMATION,
-    payload: data
+    payload: data,
   };
 };
 
 export const clearImagesState = () => {
   return {
-    type: CLEAR_IMAGES_STATE
+    type: CLEAR_IMAGES_STATE,
   };
 };
 
 // in case the image has to be compressed to <256kb, use FileSystem from expo-file-system
-export const getPredictionsAsyncAction = imageUri => async (dispatch, getState) => {
+export const getPredictionsAsyncAction = (imageUri) => async (dispatch, getState) => {
   const img = await ImageManipulator.manipulateAsync(
     imageUri,
     [{ resize: { width: 224, height: 224 } }],
@@ -61,11 +61,11 @@ export const getPredictionsAsyncAction = imageUri => async (dispatch, getState) 
   formData.append('image', {
     uri: img.uri,
     type: `image/${fileType}`,
-    name: `uploaded_user_image_${datetime}.${fileType}`
+    name: `uploaded_user_image_${datetime}.${fileType}`,
   });
 
   const headers = new Headers({
-    Authorization: `Bearer ${getState().auth.access}`
+    Authorization: `Bearer ${getState().auth.access}`,
   });
   const method = 'POST';
   const body = formData;
@@ -82,11 +82,10 @@ export const getPredictionsAsyncAction = imageUri => async (dispatch, getState) 
     } else {
       console.log(
         'ERROR TO HANDLE IN getPredictionsAsyncAction',
-        JSON.stringify(response),
         response.status,
         response.statusText
       );
-      Sentry.captureException(`${response.status} ${response.statusText}`);
+      Sentry.captureMessage(`${response.status} - ${response.statusText}`);
       return response;
     }
   } catch (e) {
@@ -99,7 +98,7 @@ export const getPredictionsAsyncAction = imageUri => async (dispatch, getState) 
 export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState) => {
   const location = getState().images.location;
 
-  const predictions = Object.values(data.predictions).map(el => {
+  const predictions = Object.values(data.predictions).map((el) => {
     return {
       index: el.index,
       family: el.family,
@@ -109,10 +108,7 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
       species: el.species,
       species_prob: el.species_prob,
       image_url: el.example_image_0,
-      image_id: el.example_image_0
-        .split('')
-        .splice(-32)
-        .join('')
+      image_id: el.example_image_0.split('').splice(-32).join(''),
     };
   });
   const formData = new FormData();
@@ -128,11 +124,11 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
   formData.append('uploaded_image', {
     uri: imageUri,
     type: 'image/jpeg',
-    name: `uploaded_user_image_${datetime}.jpg`
+    name: `uploaded_user_image_${datetime}.jpg`,
   });
 
   const headers = new Headers({
-    Authorization: `Bearer ${getState().auth.access}`
+    Authorization: `Bearer ${getState().auth.access}`,
   });
   const method = 'POST';
   const body = formData;
@@ -140,9 +136,12 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
 
   try {
     const response = await fetch(`${rootEndpoint}/cases/create/`, config);
-    if (response.status === 201) {
+    if (response.ok) {
       const res_data = await response.json();
       dispatch(storePredictionsAction(res_data));
+    } else {
+      dispatch(networkErrorAsyncAction());
+      Sentry.captureMessage(`${response.status} - ${response.statusText}`);
     }
     return response;
   } catch (e) {
@@ -152,20 +151,17 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
   }
 };
 
-export const confirmPredictionAsyncAction = prediction => async (dispatch, getState) => {
+export const confirmPredictionAsyncAction = (prediction) => async (dispatch, getState) => {
   const formData = new FormData();
   formData.append('confirmed_image', {
     uri: prediction.image_url,
     type: 'image/jpeg',
-    name: prediction.image_url
-      .split('')
-      .splice(-32)
-      .join('')
+    name: prediction.image_url.split('').splice(-32).join(''),
   });
   formData.append('prediction_id', prediction.id);
 
   const headers = new Headers({
-    Authorization: `Bearer ${getState().auth.access}`
+    Authorization: `Bearer ${getState().auth.access}`,
   });
   const method = 'PATCH';
   const body = formData;
@@ -177,6 +173,8 @@ export const confirmPredictionAsyncAction = prediction => async (dispatch, getSt
       const data = await response.json();
       dispatch(storePredictionsConfirmationAction(data));
       dispatch(networkSuccessAsyncAction('Your confirmation has been registered!'));
+    } else {
+      Sentry.captureMessage(`${response.status} - ${response.statusText}`);
     }
     return response;
   } catch (e) {

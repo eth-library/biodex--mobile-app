@@ -48,7 +48,7 @@ const ResetPasswordValidation = ({ navigation }) => {
     setIsLoading(true);
     const response = await dispatch(resetPasswordValidationAsyncAction(formState.values));
     setIsLoading(false);
-    if (response.status === 200) navigation.navigate('Login');
+    if (response.ok) navigation.navigate('Login');
   }, [formState]);
 
   const inputChangeHandler = useCallback(

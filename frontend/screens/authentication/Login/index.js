@@ -1,5 +1,15 @@
-import React, { useState, useReducer, useCallback } from 'react';
-import { View, Image, Text, StyleSheet, Switch, Platform, Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import React, { useState, useReducer, useCallback, useEffect } from 'react';
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  Switch,
+  Platform,
+  Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { ScreenOrientation } from 'expo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
@@ -17,14 +27,14 @@ import { userLoginAsyncAction } from '../../../store/actions/auth';
 const initialState = {
   values: {
     email: '',
-    password: ''
+    password: '',
   },
   validities: {
     email: false,
-    password: false
+    password: false,
   },
   isValid: false,
-  submitted: false
+  submitted: false,
 };
 
 const Login = ({ navigation }) => {
@@ -32,7 +42,7 @@ const Login = ({ navigation }) => {
   const [formState, dispatchFormState] = useReducer(formReducer, initialState);
   const [stayLoggedIn, setStayLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const error = useSelector(state => state.auth.error);
+  const error = useSelector((state) => state.auth.error);
   const dispatch = useDispatch();
   const passwordRef = React.createRef();
 
@@ -53,18 +63,10 @@ const Login = ({ navigation }) => {
         type: 'FORM_INPUT_UPDATE',
         name: inputIdentifier,
         value: inputValue,
-        isValid: inputValidity
+        isValid: inputValidity,
       });
     },
     [dispatchFormState]
-  );
-
-  const navigationHandler = useCallback(
-    destination => {
-      dispatchFormState({ type: 'FORM_INPUT_RESET', payload: initialState });
-      navigation.navigate(destination);
-    },
-    [dispatchFormState, navigation]
   );
 
   return (
@@ -131,14 +133,14 @@ const Login = ({ navigation }) => {
             />
             <View style={authStyles.center}>
               <Text style={authStyles.text}>Don't have an account?</Text>
-              <Text style={authStyles.link} onPress={() => navigationHandler('Registration')}>
+              <Text style={authStyles.link} onPress={() => navigation.navigate('Registration')}>
                 Sign up here
               </Text>
             </View>
-            <Text style={authStyles.link} onPress={() => navigationHandler('ResetPassword')}>
+            <Text style={authStyles.link} onPress={() => navigation.navigate('ResetPassword')}>
               Reset Password
             </Text>
-            <TermsAndConditions /> 
+            <TermsAndConditions />
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>
@@ -151,33 +153,33 @@ const styles = StyleSheet.create({
     width: 100,
     height: 20,
     resizeMode: 'center',
-    marginTop: Theme.space.vertical.medium
+    marginTop: Theme.space.vertical.medium,
   },
   titleContainer: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 55
+    height: 55,
   },
   title: {
     fontFamily: Theme.fonts.primaryBold,
     fontSize: Theme.fonts.sizeL,
-    color: Theme.colors.black
+    color: Theme.colors.black,
   },
   stayLoggedInContainer: {
     flexDirection: 'row',
     width: '100%',
     alignItems: 'center',
-    marginBottom: Theme.space.vertical.xSmall
+    marginBottom: Theme.space.vertical.xSmall,
   },
   switchContainer: {
     transform:
       Platform.OS === 'ios'
         ? [{ scaleX: 0.5 }, { scaleY: 0.5 }]
-        : [{ scaleX: 0.8 }, { scaleY: 0.8 }]
+        : [{ scaleX: 0.8 }, { scaleY: 0.8 }],
   },
   link: {
-    color: Theme.colors.link
-  }
+    color: Theme.colors.link,
+  },
 });
 
 export default Login;
