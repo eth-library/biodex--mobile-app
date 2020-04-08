@@ -71,7 +71,6 @@ const ButterflySelectionScreen = ({ navigation }) => {
   useEffect(() => {
     const cleanup = navigation.addListener('blur', () => {
       ScreenOrientation.removeOrientationChangeListener(listener);
-      dispatch(clearImagesState());
     });
     return cleanup;
   }, [navigation]);
