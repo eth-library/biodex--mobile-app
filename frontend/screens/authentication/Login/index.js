@@ -46,6 +46,13 @@ const Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const passwordRef = React.createRef();
 
+  useEffect(() => {
+    const cleanup = () => {
+      ScreenOrientation.unlockAsync();
+    };
+    return cleanup;
+  }, []);
+
   const submitHandler = useCallback(async () => {
     dispatchFormState({ type: 'SUBMITTED' });
     if (!formState.isValid) {

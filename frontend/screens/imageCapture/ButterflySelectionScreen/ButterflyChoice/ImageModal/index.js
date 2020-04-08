@@ -6,7 +6,6 @@ import {
   Dimensions,
   ImageBackground
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
 import Theme from '../../../../../theme';
@@ -17,8 +16,9 @@ const ImageModal = ({ visible, hideModalHandler, imageUri }) => {
       animationType='slide'
       transparent={false}
       visible={visible}
+      supportedOrientations={['portrait', 'landscape']}
     >
-      <SafeAreaView style={{ flex: 1 }}>
+
         <View style={styles.container}>
           <ImageBackground style={styles.image} source={{ uri: imageUri }}>
             <Ionicons
@@ -29,7 +29,7 @@ const ImageModal = ({ visible, hideModalHandler, imageUri }) => {
             />
           </ImageBackground>
         </View>
-      </SafeAreaView>
+
     </Modal>
   );
 };
@@ -39,7 +39,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Theme.colors.lightGrey
+    backgroundColor: Theme.colors.lightGrey,
+    padding: 10,
+    overflow: 'hidden'
   },
   image: {
     width:

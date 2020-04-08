@@ -12,6 +12,7 @@ const ImageCaptureConfirmationScreen = ({ navigation }) => {
   const [portrait, setPortrait] = useState(
     Dimensions.get('window').height > Dimensions.get('window').width
   );
+  let listener = null;
   const [width, setWidth] = useState(Dimensions.get('window').width);
   const [height, setHeight] = useState(Dimensions.get('window').height);
   const screenOrientationHandler = () => {
@@ -19,7 +20,10 @@ const ImageCaptureConfirmationScreen = ({ navigation }) => {
     setWidth(Dimensions.get('window').width);
     setHeight(Dimensions.get('window').height);
   };
-  const listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
+  // On mount
+  useEffect(() => {
+    listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
+  }, []);
   // Cleanup function on navigation
   useEffect(() => {
     const cleanup = navigation.addListener('blur', () => {
