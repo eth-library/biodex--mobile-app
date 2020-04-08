@@ -28,7 +28,7 @@ const MainNavigator = () => {
           const body = JSON.stringify({ refresh: refreshToken });
           const config = { method: 'POST', headers, body };
           const response = await fetch(`${rootEndpoint}/auth/token/refresh/`, config);
-          if (response.ok) {
+          if (response && response.ok) {
             const data = await response.json();
             accessToken = data.access;
             user = data.user

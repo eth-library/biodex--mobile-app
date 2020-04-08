@@ -54,7 +54,7 @@ const Registration = ({ navigation }) => {
     setIsLoading(true);
     const response = await dispatch(userRegistrationValidationAsyncAction(formState.values));
     setIsLoading(false);
-    if (response.ok) navigation.navigate('Login');
+    if (response && response.ok) navigation.navigate('Login');
   }, [formState]);
 
   const inputChangeHandler = useCallback(

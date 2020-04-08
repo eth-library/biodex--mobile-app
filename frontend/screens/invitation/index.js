@@ -65,7 +65,7 @@ const Invitation = ({ navigation }) => {
     }
     setIsLoading(true);
     const response = await dispatch(sendInvitationAsyncAction(email));
-    if (response.ok) successHandler();
+    if (response && response.ok) successHandler();
     setIsLoading(false);
   };
 
