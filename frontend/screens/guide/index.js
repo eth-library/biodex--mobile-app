@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { ScreenOrientation } from 'expo';
 
@@ -12,9 +12,25 @@ import Theme from '../../theme';
 const Guide = ({ navigation }) => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
 
+  // Cleanup function on navigation
+  useEffect(() => {
+    const cleanup = navigation.addListener('blur', () => {
+      ScreenOrientation.unlockAsync();
+    });
+    return cleanup;
+  }, [navigation]);
+
+  // Cleanup function on unmount
+  useEffect(() => {
+    const cleanup = () => {
+      ScreenOrientation.unlockAsync();
+    };
+    return cleanup;
+  }, []);
+
   return (
     <View style={styles.container}>
-      <SwiperFlatList index={0} showPagination navigation={navigation} >
+      <SwiperFlatList index={0} showPagination navigation={navigation}>
         <HomeScreen style={styles.child} />
         <ImageCaptureScreen style={styles.child} />
         <ButterflySelectionScreen style={styles.child} />
@@ -30,16 +46,16 @@ const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   child: {
     width: width,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Theme.colors.background
+    backgroundColor: Theme.colors.background,
   },
   text: {
     fontSize: 20,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });

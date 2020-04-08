@@ -34,12 +34,18 @@ const ImageCaptureScreen = ({ navigation }) => {
     setWidth(Dimensions.get('window').width);
     setHeight(Dimensions.get('window').height);
   };
-  const listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
+  let listener = null;
+  // On mount
+  useEffect(() => {
+    listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
+  }, []);
   // Cleanup function on navigation
   useEffect(() => {
-    const cleanup = navigation.addListener('blur', () => {
-      ScreenOrientation.removeOrientationChangeListener(listener);
-    });
+    const cleanup = () => {
+      navigation.addListener('blur', () => {
+        ScreenOrientation.removeOrientationChangeListener(listener);
+      });
+    };
     return cleanup;
   }, [navigation]);
   // Cleanup function on unmount

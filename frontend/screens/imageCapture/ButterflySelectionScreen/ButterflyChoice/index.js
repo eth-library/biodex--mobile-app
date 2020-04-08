@@ -29,8 +29,13 @@ const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase 
     setWidth(Dimensions.get('window').width);
     setHeight(Dimensions.get('window').height);
   };
-  const listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
+  let listener = null;
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
+  
+  // On mount
+  useEffect(() => {
+    listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
+  }, []);
   // Cleanup function on navigation
   useEffect(() => {
     const cleanup = navigation.addListener('blur', () => {
