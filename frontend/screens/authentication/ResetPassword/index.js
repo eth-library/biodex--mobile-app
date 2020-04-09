@@ -1,6 +1,6 @@
 import React, { useState, useReducer, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { View, Image, Text, StyleSheet, Alert, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, Alert, Keyboard } from 'react-native';
 import { ScreenOrientation } from 'expo';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
@@ -8,7 +8,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview'
 import formReducer from '../formReducer';
 import Theme from '../../../theme';
 import { authStyles } from '../styles';
-import Logo from '../../../assets/logo.jpg';
+import Logo from '../../../components/Logo';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input/index.js';
 import TermsAndConditions from '../../../components/TermsAndConditions';
@@ -18,18 +18,18 @@ const ResetPassword = ({ navigation }) => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     values: {
-      email: ''
+      email: '',
     },
     validities: {
-      email: false
+      email: false,
     },
     isValid: false,
-    submitted: false
+    submitted: false,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const error = useSelector(state => state.resetPassword.error);
+  const error = useSelector((state) => state.resetPassword.error);
   const dispatch = useDispatch();
-  
+
   const submitHandler = useCallback(async () => {
     dispatchFormState({ type: 'SUBMITTED' });
     if (!formState.isValid) {
@@ -48,7 +48,7 @@ const ResetPassword = ({ navigation }) => {
         type: 'FORM_INPUT_UPDATE',
         name: inputIdentifier,
         value: inputValue,
-        isValid: inputValidity
+        isValid: inputValidity,
       });
     },
     [dispatchFormState]
@@ -62,7 +62,7 @@ const ResetPassword = ({ navigation }) => {
         scrollEnabled
         enableOnAndroid={true}
       >
-        <Image style={styles.logo} source={Logo} />
+        <Logo style={styles.logo} />
         <View style={styles.titleContainer}>
           <Text style={styles.title}>ETH Entomological Collection</Text>
           <Text style={styles.title}>Lepi Classification App</Text>
@@ -82,7 +82,12 @@ const ResetPassword = ({ navigation }) => {
             email
             submitted={formState.submitted}
           />
-          <Button title='SEND' onPress={submitHandler} isLoading={isLoading} error={error && error.email}/>
+          <Button
+            title='SEND'
+            onPress={submitHandler}
+            isLoading={isLoading}
+            error={error && error.email}
+          />
           <View style={authStyles.center}>
             <Text style={authStyles.text}>Remember your password?</Text>
             <Text style={authStyles.link} onPress={() => navigation.navigate('Login')}>
@@ -105,24 +110,21 @@ const ResetPassword = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   logo: {
-    width: 100,
-    height: 20,
-    resizeMode: 'center',
-    marginTop: Theme.space.vertical.medium
+    marginTop: Theme.space.vertical.medium,
   },
   titleContainer: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 55
+    height: 55,
   },
   title: {
     fontFamily: Theme.fonts.primaryBold,
     fontSize: Theme.fonts.sizeL,
-    color: Theme.colors.black
+    color: Theme.colors.black,
   },
   link: {
-    color: Theme.colors.link
-  }
+    color: Theme.colors.link,
+  },
 });
 
 export default ResetPassword;

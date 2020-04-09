@@ -1,7 +1,6 @@
 import React, { useState, useReducer, useCallback, useEffect } from 'react';
 import {
   View,
-  Image,
   Text,
   StyleSheet,
   Switch,
@@ -18,7 +17,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import formReducer from '../formReducer';
 import Theme from '../../../theme';
 import { authStyles } from '../styles';
-import Logo from '../../../assets/logo.jpg';
+import Logo from '../../../components/Logo';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import TermsAndConditions from '../../../components/TermsAndConditions';
@@ -85,7 +84,7 @@ const Login = ({ navigation }) => {
           scrollEnabled
           enableOnAndroid={true}
         >
-          <Image style={styles.logo} source={Logo} />
+          <Logo style={styles.logo} />
           <View style={styles.titleContainer}>
             <Text style={styles.title}>ETH Entomological Collection</Text>
             <Text style={styles.title}>Lepi Classification App</Text>
@@ -157,9 +156,6 @@ const Login = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   logo: {
-    width: 100,
-    height: 20,
-    resizeMode: 'center',
     marginTop: Theme.space.vertical.medium,
   },
   titleContainer: {
