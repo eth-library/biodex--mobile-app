@@ -1,15 +1,15 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, Dimensions } from 'react-native';
 
-import Logo from '../../assets/logo.jpg';
 import Butterflies from '../../assets/butterflies.jpg';
 import Theme from '../../theme';
+import Logo from '../../components/Logo';
 
 function HomeScreen({ style }) {
   return (
     <View style={{ ...style, ...styles.container }}>
       <View style={styles.contentContainer}>
-        <Image style={styles.logo} source={Logo} />
+        <Logo style={styles.logo} />
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Welcome</Text>
           <Text style={styles.title}>to the</Text>
@@ -31,9 +31,6 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height * 0.7
   },
   logo: {
-    width: 100,
-    height: 50,
-    resizeMode: 'center',
     marginTop: Theme.space.vertical.medium
   },
   titleContainer: {
