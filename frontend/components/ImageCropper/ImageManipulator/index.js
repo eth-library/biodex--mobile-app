@@ -464,18 +464,21 @@ class ExpoImageManipulator extends Component {
                         {!!cropMode && (
                             <ImageCropOverlay
                                 onLayoutChanged={(top, left, w, height) => {
+                                  console.log('stuff', top, left, w, height)
                                     this.currentSize.width = w
                                     this.currentSize.height = height
                                     this.currentPos.top = top
                                     this.currentPos.left = left
                                 }}
-                                initialWidth={(fixedMask && fixedMask.width) || cropWidth}
-                                initialHeight={(fixedMask && fixedMask.height) || cropHeight}
+                                initialWidth={Dimensions.get('window').width}
+                                initialHeight={Dimensions.get('window').width}
                                 initialTop={cropInitialTop}
                                 initialLeft={cropInitialLeft}
                                 minHeight={(fixedMask && fixedMask.height) || 100}
                                 minWidth={(fixedMask && fixedMask.width) || 100}
                                 borderColor={borderColor}
+                                currentSize={this.currentSize}
+                                currentPos={this.currentPos}
                             />
                         )
                         }
