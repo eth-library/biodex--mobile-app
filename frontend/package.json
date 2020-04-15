@@ -15,6 +15,7 @@
         "expo": "~36.0.0",
         "expo-camera": "~8.0.0",
         "expo-file-system": "~8.0.0",
+        "expo-image-crop": "^1.0.4",
         "expo-image-manipulator": "~8.0.0",
         "expo-image-picker": "~8.0.1",
         "expo-location": "~8.0.0",
@@ -32,14 +33,14 @@
         "react-native-screens": "^2.0.0-alpha.12",
         "react-native-snackbar-component": "^1.1.8",
         "react-native-status-bar-height": "^2.4.0",
+        "react-native-svg": "9.13.3",
         "react-native-web": "~0.11.7",
         "react-navigation-header-buttons": "^3.0.5",
         "react-redux": "^7.2.0",
         "redux": "^4.0.5",
         "redux-devtools-extension": "^2.13.8",
         "redux-thunk": "^2.3.0",
-        "sentry-expo": "^2.0.3",
-        "react-native-svg": "9.13.3"
+        "sentry-expo": "^2.0.3"
     },
     "devDependencies": {
         "@babel/core": "^7.0.0",
