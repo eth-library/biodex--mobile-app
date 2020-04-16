@@ -5,7 +5,6 @@ const activeColor = 'rgba(52, 52, 52, 0.5)';
 import Theme from '../../../../theme';
 
 const TopRow = ({ draggingTL, draggingTM, draggingTR }) => {
-  console.log(draggingTL, draggingTM, draggingTR)
   return (
     <View
       style={{
