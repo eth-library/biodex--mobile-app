@@ -35,25 +35,26 @@ class ExpoImageManipulator extends Component {
             cropMode: false,
             processing: false,
             zoomScale: 1,
+            // position of the cropoverlay
+            currentPos: {
+                left: null,
+                top: null
+            },
+            // size of the cropoverlay
+            currentSize: {
+                width: 0,
+                height: 0,
+            }
         }
 
         this.scrollOffset = 0
-
-        this.currentPos = {
-            left: 0,
-            top: 0,
-        }
-
-        this.currentSize = {
-            width: 0,
-            height: 0,
-        }
 
         this.maxSizes = {
             width: 0,
             height: 0,
         }
 
+        // size of the image
         this.actualSize = {
             width: 0,
             height: 0,
@@ -108,6 +109,7 @@ class ExpoImageManipulator extends Component {
     }
 
     onCropImage = () => {
+        console.log('onCropImage')
         this.setState({ processing: true })
         const { uri } = this.state
         Image.getSize(uri, async (actualWidth, actualHeight) => {
@@ -174,6 +176,7 @@ class ExpoImageManipulator extends Component {
     }
 
     getCropBounds = (actualWidth, actualHeight) => {
+        console.log('getCropBounds')
         const imageRatio = actualHeight / actualWidth
         let originalHeight = Dimensions.get('window').height - 64
         if (isIphoneX()) {
@@ -191,11 +194,12 @@ class ExpoImageManipulator extends Component {
             width: renderedImageWidth,
             height: renderedImageHeight,
         }
+        console.log('CROP BOUNDS', this.state.currentPos)
         const cropOverlayObj = {
-            left: this.currentPos.left,
-            top: this.currentPos.top,
-            width: this.currentSize.width,
-            height: this.currentSize.height,
+            left: this.state.currentPos.left,
+            top: this.state.currentPos.top,
+            width: this.state.currentSize.width,
+            height: this.state.currentSize.height,
         }
 
         let intersectAreaObj = {}
@@ -245,6 +249,7 @@ class ExpoImageManipulator extends Component {
     }
 
     crop = async (cropObj, uri) => {
+        console.log('crop')
         const { saveOptions } = this.props
         if (cropObj.height > 0 && cropObj.width > 0) {
             const manipResult = await ImageManipulator.manipulateAsync(
@@ -302,6 +307,8 @@ class ExpoImageManipulator extends Component {
             base64,
             cropMode,
             processing,
+            currentSize, 
+            currentPos
         } = this.state
 
         const imageRatio = this.actualSize.height / this.actualSize.width
@@ -319,12 +326,12 @@ class ExpoImageManipulator extends Component {
         const cropInitialLeft = (width - cropWidth) / 2.0
 
 
-        if (this.currentSize.width === 0 && cropMode) {
-            this.currentSize.width = cropWidth
-            this.currentSize.height = cropHeight
+        if (currentSize.width === 0 && cropMode) {
+            currentSize.width = 224
+            currentSize.height = 224
 
-            this.currentPos.top = cropInitialTop
-            this.currentPos.left = cropInitialLeft
+            currentPos.top = cropInitialTop
+            currentPos.left = cropInitialLeft
         }
         return (
             <Modal
@@ -464,21 +471,25 @@ class ExpoImageManipulator extends Component {
                         {!!cropMode && (
                             <ImageCropOverlay
                                 onLayoutChanged={(top, left, w, height) => {
-                                  console.log('stuff', top, left, w, height)
-                                    this.currentSize.width = w
-                                    this.currentSize.height = height
-                                    this.currentPos.top = top
-                                    this.currentPos.left = left
+                                  this.setState({
+                                    currentSize: {
+                                        width: w,
+                                        height: height
+                                    },
+                                    currentPos: {
+                                        top: top,
+                                        left: left
+                                    }
+                                  })
                                 }}
                                 initialWidth={Dimensions.get('window').width}
-                                initialHeight={Dimensions.get('window').width}
+                                initialHeight={224 || Dimensions.get('window').width}
                                 initialTop={cropInitialTop}
                                 initialLeft={cropInitialLeft}
-                                minHeight={(fixedMask && fixedMask.height) || 100}
-                                minWidth={(fixedMask && fixedMask.width) || 100}
+                                minSize={150}
                                 borderColor={borderColor}
-                                currentSize={this.currentSize}
-                                currentPos={this.currentPos}
+                                currentSize={this.state.currentSize}
+                                currentPos={this.state.currentPos}
                             />
                         )
                         }
