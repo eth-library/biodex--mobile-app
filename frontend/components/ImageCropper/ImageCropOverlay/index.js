@@ -183,6 +183,8 @@ class ImageCropOverlay extends React.Component {
     const x = gestureState.dx;
     // Only biggest move, as the cropping should always be a square
     const biggestMove = y > x ? y : x;
+    const biggestMoveNegative = - Math.abs(biggestMove)
+    const biggestMovePositive = Math.abs(biggestMove)
     const biggestMoveX = x >= 0 ? Math.abs(biggestMove) : - Math.abs(biggestMove);
     const biggestMoveY = y >= 0 ? Math.abs(biggestMove) : - Math.abs(biggestMove);
 
@@ -192,24 +194,26 @@ class ImageCropOverlay extends React.Component {
     let gestureBottomLeftToTopRight;
     let gestureBottomRightToTopLeft;
     let previousGestureNotBottomLeftToTopRight;
+    const diagonalMovement = y !== 0 && x !== 0
     if (previousX && previousY) {
-      gestureTopLeftToBottomRight = y > previousY && x > previousX;
-      gestureTopRightToBottomLeft = y > previousY && x < previousX;
-      gestureBottomLeftToTopRight = y < previousY && x > previousX;
-      gestureBottomRightToTopLeft = y < previousY && x < previousX;
+      gestureTopLeftToBottomRight = diagonalMovement && y > previousY && x > previousX;
+      gestureTopRightToBottomLeft = diagonalMovement && y > previousY && x < previousX;
+      console.log('gestureTopRightToBottomLeft', gestureTopRightToBottomLeft, y, previousY, x, previousX)
+      gestureBottomLeftToTopRight = diagonalMovement && y < previousY && x > previousX;
+      gestureBottomRightToTopLeft = diagonalMovement && y < previousY && x < previousX;
       previousGestureNotBottomLeftToTopRight = previousY < 0 && x < previousX;
       state.previousX = x;
       state.previousY = y;
     } else {
-      gestureTopLeftToBottomRight = y > 0 && x > 0;
-      gestureTopRightToBottomLeft = y > 0 && x < 0;
-      gestureBottomLeftToTopRight = y < 0 && x > 0;
-      gestureBottomRightToTopLeft = y < 0 && x < 0;
+      gestureTopLeftToBottomRight = diagonalMovement && y > 0 && x > 0;
+      gestureTopRightToBottomLeft = diagonalMovement && y > 0 && x < 0;
+      gestureBottomLeftToTopRight = diagonalMovement && y < 0 && x > 0;
+      gestureBottomRightToTopLeft = diagonalMovement && y < 0 && x < 0;
       previousGestureNotBottomLeftToTopRight = true;
       state.previousX = x;
       state.previousY = y;
     }
-
+    // if (gestureTopLeftToBottomRight || gestureTopRightToBottomLeft || gestureBottomLeftToTopRight || gestureBottomRightToTopLeft) console.log('\n', 'gestureTopLeftToBottomRight', gestureTopLeftToBottomRight, '\n', 'gestureTopRightToBottomLeft', gestureTopRightToBottomLeft, '\n', 'gestureBottomLeftToTopRight', gestureBottomLeftToTopRight, '\n', 'gestureBottomRightToTopLeft', gestureBottomRightToTopLeft, '\n')
     let originalHeight = Dimensions.get('window').height - 64;
     if (isIphoneX()) {
       originalHeight = Dimensions.get('window').height - 122;
@@ -397,18 +401,20 @@ class ImageCropOverlay extends React.Component {
     if (draggingBL) {
       if (gestureTopRightToBottomLeft) {
         const willOverlapBottom = this.props.currentPos.top + this.props.currentSize.height + biggestMove > maxHeight;
-        console.log('will overlap bottom', this.props.currentPos.top + this.props.currentSize.height + biggestMove > maxHeight, this.props.currentPos.top, this.props.currentSize.height, biggestMove, maxHeight)
+        // console.log('will overlap bottom', this.props.currentPos.top + this.props.currentSize.height + biggestMove > maxHeight, this.props.currentPos.top, this.props.currentSize.height, biggestMove, maxHeight)
         const willOverlapLeft = this.props.currentPos.left - biggestMove < 0;
         const maxPossibleWidth = this.props.currentSize.width - this.props.currentPos.left;
         const maxPossibleHeight = maxHeight - this.props.currentPos.top;
         const maxPossibleLeft = this.props.currentPos.left;
         const maxPossibleDown = maxHeight - this.props.currentPos.top - this.props.currentSize.height;
         const respectsMinSize = this.props.currentSize.width - biggestMove >= this.props.minSize;
-        console.log('draggingBL down', previousGestureNotBottomLeftToTopRight)
+        const isMinSize = currentWidth <= this.props.minSize;
+        console.log('isMinSize', isMinSize, currentWidth, this.props.minSize)
+        // console.log('draggingBL down', previousGestureNotBottomLeftToTopRight)
         if (!willOverlapBottom && !willOverlapLeft) {
           // move
           console.log('draggingBL down')
-          state.currentLeft = this.props.currentPos.left - biggestMove;
+          state.currentLeft = this.props.currentPos.left - biggestMovePositive;
           state.currentWidth = this.props.currentSize.width + biggestMove;
           state.currentHeight = this.props.currentSize.height + biggestMove;
         } else if (willOverlapBottom && willOverlapLeft) {
@@ -424,7 +430,7 @@ class ImageCropOverlay extends React.Component {
           state.currentLeft = this.props.currentPos.left - maxPossibleDown;
           state.currentWidth = this.props.currentSize.width + maxPossibleDown;
           state.currentHeight = this.props.currentSize.height + maxPossibleDown;
-        } else if (!willOverlapBottom && willOverlapLeft && !previousGestureNotBottomLeftToTopRight) {
+        } else if (!willOverlapBottom && willOverlapLeft) {
           console.log('draggingBL down else 3')
           // size should be maxPossibleWidth
           state.currentLeft = this.props.currentPos.left - maxPossibleLeft;
@@ -435,21 +441,22 @@ class ImageCropOverlay extends React.Component {
       
       if (gestureBottomLeftToTopRight) {
         const willOverlapBottom = currentTop + currentHeight + biggestMove > maxHeight;
-        console.log('will overlap bottom', currentTop + currentHeight + biggestMove > maxHeight, currentTop, currentHeight, biggestMove, maxHeight, biggestMoveX, biggestMoveY)
+        // console.log('will overlap bottom', currentTop + currentHeight + biggestMove > maxHeight, currentTop, currentHeight, biggestMove, maxHeight, biggestMoveX, biggestMoveY)
         const willOverlapLeft = currentLeft === 0 && currentLeft - biggestMoveY < 0;
-        console.log('will overlap left', willOverlapLeft)
+        // console.log('will overlap left', willOverlapLeft)
         const maxPossibleWidth = this.props.currentSize.width - this.props.currentPos.left;
         const maxPossibleHeight = maxHeight - this.props.currentPos.top;
         const maxPossibleLeft = this.props.currentPos.left;
         const maxPossibleDown = maxHeight - this.props.currentPos.top - this.props.currentSize.height;
         const respectsMinSize = this.props.currentSize.width - biggestMove >= this.props.minSize;
-        console.log('draggingBL up', biggestMove, x, y, willOverlapBottom, willOverlapLeft, respectsMinSize)
+        // console.log('respectsMinSize', respectsMinSize, this.props.currentSize.width, biggestMove, this.props.minSize)
+        // console.log('draggingBL up', biggestMove, x, y, willOverlapBottom, willOverlapLeft, respectsMinSize)
         if (!willOverlapBottom && !willOverlapLeft && respectsMinSize) {
-          console.log('data', this.props.currentPos.left, this.props.currentSize.width, this.props.currentSize.height, biggestMove )
+          console.log('if draggingBL up', this.props.currentPos.left, this.props.currentSize.width, this.props.currentSize.height, biggestMove )
           state.currentLeft = this.props.currentPos.left + biggestMove;
           state.currentWidth = this.props.currentSize.width - biggestMove;
           state.currentHeight = this.props.currentSize.height - biggestMove;
-        } else if (!willOverlapBottom && !willOverlapLeft) {
+        } else if (willOverlapBottom && willOverlapLeft) {
           console.log('else draggingBL up')
           state.currentLeft = this.props.currentPos.left + this.props.currentSize.width - this.props.minSize;
           state.currentWidth = this.props.minSize;
@@ -463,7 +470,28 @@ class ImageCropOverlay extends React.Component {
       }
     }
     // # If movement is from bottom right to top left and the dragging is done on the top left or bottom right square and the next position won't be out of the screen
-    if (draggingBR) {
+    if (draggingTR) {
+      const gesture = gestureTopRightToBottomLeft ? 'down' : gestureBottomLeftToTopRight ? 'up' : '';
+      // console.log('\n', 'BIGGEST ' + gesture, biggestMove, '\n', 'Y: ', y, '\n', 'X :', x, '\n', '\n')
+      if (gestureTopRightToBottomLeft) {
+        if (true) {
+          console.log('TOP RIGHT TO BOTTOM LEFT?')
+          // console.log('AAA', currentWidth, this.props.currentSize.width)
+          state.currentTop = currentWidth > this.props.currentSize.width ? this.props.currentPos.top - biggestMove : this.props.currentPos.top + biggestMove;
+          state.currentWidth = currentWidth > this.props.currentSize.width ? this.props.currentSize.width + biggestMove : this.props.currentSize.width - biggestMove;
+          state.currentHeight = currentHeight > this.props.currentSize.height ? this.props.currentSize.height + biggestMove : this.props.currentSize.height - biggestMove;
+        }
+      }
+      if (gestureBottomLeftToTopRight) {
+        
+        if (true) {
+          console.log('BOTTOM LEFT TO TOP RIGHT?')
+          // console.log('BBB', currentWidth, this.props.currentSize.width)
+          state.currentTop = currentWidth < this.props.currentSize.width ? this.props.currentPos.top + biggestMove : this.props.currentPos.top - biggestMove;
+          state.currentWidth = currentWidth < this.props.currentSize.width ? this.props.currentSize.width - biggestMove : this.props.currentSize.width + biggestMove;
+          state.currentHeight = currentHeight < this.props.currentSize.height ? this.props.currentSize.height - biggestMove : this.props.currentSize.height + biggestMove;
+        }
+      }
     }
 
     this.setState(state);
@@ -500,6 +528,8 @@ class ImageCropOverlay extends React.Component {
       draggingBR: false,
       offsetTop: 0,
       offsetLeft: 0,
+      previousX: null,
+      previousY: null
     };
 
     this.setState(state);
