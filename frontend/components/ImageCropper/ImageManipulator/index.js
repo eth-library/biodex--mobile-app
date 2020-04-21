@@ -8,12 +8,10 @@ import {
     Text,
     SafeAreaView,
     TouchableOpacity,
-    YellowBox,
 } from 'react-native'
 import * as ImageManipulator from 'expo-image-manipulator'
 import * as FileSystem from 'expo-file-system'
 import PropTypes from 'prop-types'
-import AutoHeightImage from 'react-native-auto-height-image'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import { isIphoneX } from 'react-native-iphone-x-helper'
@@ -21,12 +19,6 @@ import ImageCropOverlay from '../ImageCropOverlay'
 
 const { width } = Dimensions.get('window')
 
-YellowBox.ignoreWarnings(['componentWillReceiveProps', 'componentWillUpdate', 'componentWillMount'])
-YellowBox.ignoreWarnings([
-    'Warning: componentWillMount is deprecated',
-    'Warning: componentWillReceiveProps is deprecated',
-    'Module RCTImageLoader requires',
-])
 
 class ExpoImageManipulator extends Component {
     constructor(props) {
@@ -109,7 +101,6 @@ class ExpoImageManipulator extends Component {
     }
 
     onCropImage = () => {
-        console.log('onCropImage')
         this.setState({ processing: true })
         const { uri } = this.state
         Image.getSize(uri, async (actualWidth, actualHeight) => {
@@ -176,8 +167,8 @@ class ExpoImageManipulator extends Component {
     }
 
     getCropBounds = (actualWidth, actualHeight) => {
-        console.log('getCropBounds')
-        const imageRatio = actualHeight / actualWidth
+
+      const imageRatio = actualHeight / actualWidth
         let originalHeight = Dimensions.get('window').height - 64
         if (isIphoneX()) {
             originalHeight = Dimensions.get('window').height - 122
@@ -194,7 +185,7 @@ class ExpoImageManipulator extends Component {
             width: renderedImageWidth,
             height: renderedImageHeight,
         }
-        console.log('CROP BOUNDS', this.state.currentPos)
+
         const cropOverlayObj = {
             left: this.state.currentPos.left,
             top: this.state.currentPos.top,
@@ -249,7 +240,6 @@ class ExpoImageManipulator extends Component {
     }
 
     crop = async (cropObj, uri) => {
-        console.log('crop')
         const { saveOptions } = this.props
         if (cropObj.height > 0 && cropObj.width > 0) {
             const manipResult = await ImageManipulator.manipulateAsync(
@@ -266,31 +256,6 @@ class ExpoImageManipulator extends Component {
             base64: null,
         }
     };
-
-    // calculateMaxSizes = (event) => {
-    //     const { fixedSquareAspect } = this.state
-    //     let w1 = event.nativeEvent.layout.width || 100
-    //     let h1 = event.nativeEvent.layout.height || 100
-    //     if (fixedSquareAspect) {
-    //         if (w1 < h1) h1 = w1
-    //         else w1 = h1
-    //     }
-    //     this.maxSizes.width = w1
-    //     this.maxSizes.height = h1
-    // };
-
-    // eslint-disable-next-line camelcase
-    async UNSAFE_componentWillReceiveProps() {
-        await this.onConvertImageToEditableSize()
-    }
-
-    zoomImage() {
-        // this.refs.imageScrollView.zoomScale = 5
-        // this.setState({width: width})
-        // this.setState({zoomScale: 5})
-
-        // this.setState(curHeight)
-    }
 
     render() {
         const {
@@ -460,7 +425,7 @@ class ExpoImageManipulator extends Component {
                         // scrollEnabled={cropMode ? false : true}
                         // pinchGestureEnabled={cropMode ? false : pinchGestureEnabled}
                     >
-                        <AutoHeightImage
+                        <Image
                             style={{ backgroundColor: 'black' }}
                             source={{ uri }}
                             resizeMode={imageRatio >= 1 ? 'contain' : 'contain'}
