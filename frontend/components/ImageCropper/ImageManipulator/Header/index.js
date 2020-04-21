@@ -32,7 +32,7 @@ const Header = ({ onToggleModal, cropMode, setCropMode, onCropImage, processing 
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => setCropMode(true)}
+            onPress={setCropMode}
             style={{
               marginLeft: 10,
               width: 32,
@@ -47,7 +47,7 @@ const Header = ({ onToggleModal, cropMode, setCropMode, onCropImage, processing 
       ) : (
         <Fragment>
           <TouchableOpacity
-            onPress={() => setCropMode(false)}
+            onPress={setCropMode}
             style={{
               width: 32,
               height: 32,
