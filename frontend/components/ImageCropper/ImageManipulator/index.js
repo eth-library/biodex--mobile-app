@@ -130,21 +130,21 @@ class ExpoImageManipulator extends Component {
         })
     }
 
-    onRotateImage = async () => {
-        const { uri } = this.state
-        let uriToCrop = uri
-        if (this.isRemote) {
-            const response = await FileSystem.downloadAsync(
-                uri,
-                FileSystem.documentDirectory + 'image',
-            )
-            uriToCrop = response.uri
-        }
-        Image.getSize(uri, async (width2, height2) => {
-            const { uri: rotUri, base64 } = await this.rotate(uriToCrop, width2, height2)
-            this.setState({ uri: rotUri, base64 })
-        })
-    }
+    // onRotateImage = async () => {
+    //     const { uri } = this.state
+    //     let uriToCrop = uri
+    //     if (this.isRemote) {
+    //         const response = await FileSystem.downloadAsync(
+    //             uri,
+    //             FileSystem.documentDirectory + 'image',
+    //         )
+    //         uriToCrop = response.uri
+    //     }
+    //     Image.getSize(uri, async (width2, height2) => {
+    //         const { uri: rotUri, base64 } = await this.rotate(uriToCrop, width2, height2)
+    //         this.setState({ uri: rotUri, base64 })
+    //     })
+    // }
 
     onFlipImage = async (orientation) => {
         const { uri } = this.state
@@ -226,18 +226,18 @@ class ExpoImageManipulator extends Component {
         return manipResult
     };
 
-    rotate = async (uri, width2) => {
-        const { saveOptions } = this.props
-        const manipResult = await ImageManipulator.manipulateAsync(uri, [{
-            rotate: -90,
-        }, {
-            resize: {
-                width: this.trueWidth || width2,
-                // height: this.trueHeight || height2,
-            },
-        }], saveOptions)
-        return manipResult
-    }
+    // rotate = async (uri, width2) => {
+    //     const { saveOptions } = this.props
+    //     const manipResult = await ImageManipulator.manipulateAsync(uri, [{
+    //         rotate: -90,
+    //     }, {
+    //         resize: {
+    //             width: this.trueWidth || width2,
+    //             // height: this.trueHeight || height2,
+    //         },
+    //     }], saveOptions)
+    //     return manipResult
+    // }
 
     crop = async (cropObj, uri) => {
         const { saveOptions } = this.props
@@ -260,12 +260,12 @@ class ExpoImageManipulator extends Component {
     render() {
         const {
             isVisible,
-            onPictureChoosed,
+            chosenPicture,
+            onCancel,
             borderColor,
             allowRotate = true,
             allowFlip = true,
             btnTexts,
-            fixedMask,
         } = this.props
         const {
             uri,
@@ -322,7 +322,7 @@ class ExpoImageManipulator extends Component {
                         {!cropMode
                             ? (
                                 <View style={{ flexDirection: 'row' }}>
-                                    <TouchableOpacity onPress={() => this.onToggleModal()}
+                                    <TouchableOpacity onPress={onCancel}
                                         style={{
                                             width: 32, height: 32, alignItems: 'center', justifyContent: 'center',
                                         }}
@@ -337,7 +337,7 @@ class ExpoImageManipulator extends Component {
                                         >
                                             <Icon size={20} name="crop" color="white" />
                                         </TouchableOpacity>
-                                        {
+                                        {/* {
                                             allowRotate
                                             && (
                                                 <View style={{ flexDirection: 'row' }}>
@@ -358,7 +358,7 @@ class ExpoImageManipulator extends Component {
                                                     </TouchableOpacity>
                                                 </View>
                                             )
-                                        }
+                                        } */}
                                         {
                                             allowFlip
                                             && (
@@ -371,7 +371,7 @@ class ExpoImageManipulator extends Component {
                                                     >
                                                         <MaterialIcon size={20} name="flip" color="white" />
                                                     </TouchableOpacity>
-                                                    <TouchableOpacity onPress={() => { onPictureChoosed({ uri, base64 }); this.onToggleModal() }}
+                                                    <TouchableOpacity onPress={() => { chosenPicture({ uri, base64 }); this.onToggleModal() }}
                                                         style={{
                                                             marginLeft: 10, width: 60, height: 32, alignItems: 'center', justifyContent: 'center',
                                                         }}
@@ -422,8 +422,6 @@ class ExpoImageManipulator extends Component {
                         scrollEventThrottle={16}
                         scrollEnabled={false}
                         pinchGestureEnabled={false}
-                        // scrollEnabled={cropMode ? false : true}
-                        // pinchGestureEnabled={cropMode ? false : pinchGestureEnabled}
                     >
                         <Image
                             style={{ backgroundColor: 'black' }}
@@ -431,7 +429,6 @@ class ExpoImageManipulator extends Component {
                             resizeMode={imageRatio >= 1 ? 'contain' : 'contain'}
                             width={width}
                             height={originalHeight}
-                            // onLayout={this.calculateMaxSizes}
                         />
                         {!!cropMode && (
                             <ImageCropOverlay
@@ -468,7 +465,6 @@ class ExpoImageManipulator extends Component {
 export default ExpoImageManipulator
 
 ExpoImageManipulator.defaultProps = {
-    onPictureChoosed: ({ uri, base64 }) => console.log('URI:', uri, base64),
     borderColor: '#a4a4a4',
     btnTexts: {
         crop: 'Crop',
@@ -487,7 +483,6 @@ ExpoImageManipulator.defaultProps = {
 ExpoImageManipulator.propTypes = {
     borderColor: PropTypes.string,
     isVisible: PropTypes.bool.isRequired,
-    onPictureChoosed: PropTypes.func,
     btnTexts: PropTypes.object,
     fixedMask: PropTypes.object,
     saveOptions: PropTypes.object,

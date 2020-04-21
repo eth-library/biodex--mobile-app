@@ -1,11 +1,7 @@
-import { Platform } from 'react-native';
+// Android doesn't allow http requests - a https tunnel can be created with https://dashboard.ngrok.com/get-started 
+// After having installed ngrok, run `./ngrok http 8000` in the terminal and updated the devRoot with the given https url
 
-// Android doesn't allow http requests by default and to change that, I only found a solution where I would have to eject the expo app
-// An alternative is to use https://dashboard.ngrok.com/get-started to create a https tunnel to the localhost api and use the returned https address
-// Somehow the email notification doesn't work anymore - test that on IOS
-// After having installed ngrok, run `./ngrok http 8000` in terminal and updated the rootEndPoint for android to the given https url
+const devRoot = 'https://a885671a.ngrok.io/backend/api';
+const prodRoot = 'https://api.lepi.propulsion-home.ch/backend/api';
 
-const developmentAPI = Platform.OS === 'ios' ? 'http://localhost:8000/backend/api' : 'https://6dc99cb4.ngrok.io/backend/api';
-const productionAPI = 'https://api.lepi.propulsion-home.ch/backend/api';
-
-export const rootEndpoint = __DEV__ ? developmentAPI : productionAPI;
+export const rootEndpoint = __DEV__ ? devRoot : prodRoot;
