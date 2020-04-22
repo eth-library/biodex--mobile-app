@@ -6,7 +6,6 @@ import {
   Image,
   StyleSheet,
   Dimensions,
-  Platform,
   Alert,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
@@ -162,13 +161,13 @@ const ImageCaptureScreen = ({ navigation }) => {
             </View>
             <View style={styles.buttonsContainer}>
               <Ionicons
-                name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'}
+                name='md-camera'
                 size={40}
                 color={Theme.colors.accent}
                 onPress={takeImageHandler}
               />
               <Ionicons
-                name={Platform.OS === 'ios' ? 'ios-images' : 'md-images'}
+                name='md-images'
                 size={40}
                 color={Theme.colors.accent}
                 onPress={selectGalleryImageHandler}
