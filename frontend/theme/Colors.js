@@ -7,6 +7,7 @@ export default {
   cancel: '#C3C3C3',
   grey: '#989898',
   lightGrey: '#C3C3C3',
+  darkGrey: '#6B6A6A',
   white: '#FFFFFF',
   black: '#0F0F0F',
   background: '#F7F6F6',

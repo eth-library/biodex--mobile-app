@@ -2,10 +2,12 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
+import Theme from '../../theme';
+
 // Guide on how to use SVG in React Native with Expo / Why it was implemented like this
 // https://medium.com/@briworkman9/how-to-use-svgs-in-react-native-with-expo-ec34f085f5e0
 
-const Logo = ({ style }) => {
+const Logo = ({ style }) => {
   const logoSvg = `<svg
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:cc="http://creativecommons.org/ns#"
@@ -57,15 +59,33 @@ const Logo = ({ style }) => {
         style="fill:#231f20;fill-opacity:1;fill-rule:nonzero;stroke:none"
         d="M 739.102,365.68 H 688.086 L 706,453.547 H 272.355 L 226.813,226.785 h 172.898 l 11.324,56.68 H 308.949 l 6.192,31.183 h 102.05 l 10.274,51.032 H 325.391 l 6.179,31.183 h 161.805 l -34.16,-170.078 h 70.867 l 34.156,170.078 h 59.496 L 589.578,226.785 h 70.883 l 17.488,87.863 h 51.004 l -17.488,-87.863 h 70.863 l 45.563,226.762 H 757.02 L 739.102,365.68" /></g></g></svg>`;
 
-  const LogoComponent = () => <View style={{...styles.container, ...style}}><SvgXml xml={logoSvg} width={'100%'} height={'100%'} /></View>;
+  const LogoComponent = () => (
+    <View style={{ ...styles.container, ...style }}>
+      <View style={styles.subContainer}>
+        <SvgXml xml={logoSvg} width={'100%'} height={'100%'} />
+      </View>
+    </View>
+  );
   return <LogoComponent />;
 };
 
 const styles = StyleSheet.create({
   container: {
+    width: 150,
+    height: 50,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: Theme.colors.grey,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 1,
+  },
+  subContainer: {
     width: 200,
-    height: 50
-  }
-})
+    height: 50,
+    backgroundColor: Theme.colors.white,
+  },
+});
 
 export default Logo;

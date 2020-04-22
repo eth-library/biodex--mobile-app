@@ -48,7 +48,7 @@ export default function DrawerNavigator() {
   return (
     <Drawer.Navigator
       drawerStyle={{ backgroundColor: Theme.colors.background }}
-      initialRouteName='Home'
+      initialRouteName='Image Capture'
       drawerContent={props => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen

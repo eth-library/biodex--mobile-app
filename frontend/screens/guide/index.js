@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, StatusBar } from 'react-native';
 import { ScreenOrientation } from 'expo';
 
 import SwiperFlatList from '../../components/SwiperFlatList';
 import HomeScreen from './HomeScreen';
 import ImageCaptureScreen from './ImageCaptureScreen';
+import CroppingScreen from './CroppingScreen';
 import ButterflySelectionScreen from './ButterflySelectionScreen';
 import StartScreen from './StartScreen';
 import Theme from '../../theme';
@@ -14,25 +15,24 @@ const Guide = ({ navigation }) => {
 
   // Cleanup function on navigation
   useEffect(() => {
-    const cleanup = navigation.addListener('blur', () => {
-      ScreenOrientation.unlockAsync();
-    });
+    const cleanup = navigation.addListener('blur', () => ScreenOrientation.unlockAsync());
     return cleanup;
   }, [navigation]);
 
-  // Cleanup function on unmount
+  // Adding navigation focus listener and cleanup function on unmount
   useEffect(() => {
-    const cleanup = () => {
-      ScreenOrientation.unlockAsync();
-    };
+    navigation.addListener('focus', () => ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP));
+    const cleanup = () => ScreenOrientation.unlockAsync();
     return cleanup;
   }, []);
 
   return (
     <View style={styles.container}>
+      <StatusBar hidden />
       <SwiperFlatList index={0} showPagination navigation={navigation}>
         <HomeScreen style={styles.child} />
         <ImageCaptureScreen style={styles.child} />
+        <CroppingScreen style={styles.child} />
         <ButterflySelectionScreen style={styles.child} />
         <StartScreen style={styles.child} navigation={navigation} />
       </SwiperFlatList>

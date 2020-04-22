@@ -1,6 +1,8 @@
 export default {
   primary: 'open-sans',
+  primaryItalic: 'open-sans-italic',
   primaryBold: 'open-sans-bold',
+  primaryBoldItalic: 'open-sans-bold-italic',
   sizeXXS: 10,
   sizeXS: 12,
   sizeS: 14,
