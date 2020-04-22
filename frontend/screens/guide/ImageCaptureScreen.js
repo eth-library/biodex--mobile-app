@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   block: {
     width: '100%',
-    height: 60,
+    height: 75,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 60,
+    width: 70,
   },
 });
 

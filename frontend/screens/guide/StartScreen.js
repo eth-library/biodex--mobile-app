@@ -29,7 +29,7 @@ const StartScreen = ({ style, navigation }) => {
   return (
     <View style={{ ...style }}>
       <Text style={styles.text}>You're ready to go!</Text>
-      <Button title='Go to Login' onPress={firstTimeUseHandler} />
+      <View style={styles.buttonContainer}><Button title='Go to Login' onPress={firstTimeUseHandler} /></View>
     </View>
   );
 };
@@ -40,6 +40,10 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fonts.primaryBoldItalic,
     fontSize: Theme.fonts.sizeL,
     textAlign: 'center',
+  },
+  buttonContainer: {
+    width: '50%',
+    marginTop: Theme.space.vertical.xSmall
   }
 });
 

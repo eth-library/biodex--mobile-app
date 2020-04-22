@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, Text, StyleSheet } from 'react-native';
+import { View, Image, Text, StyleSheet, Dimensions } from 'react-native';
 
 import IntroContainer from './IntroContainer';
 import CroppingGif from '../../assets/Cropping.gif';
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: '75%',
-    height: '60%',
+    height: '70%',
   },
   image: {
     width: '100%',
@@ -50,10 +50,10 @@ const styles = StyleSheet.create({
   },
   block: {
     width: '100%',
-    height: 60,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginTop: Dimensions.get('window').height > 700 ? Theme.space.vertical.xSmall : 5
   },
   text: {
     color: Theme.colors.accent,

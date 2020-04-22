@@ -19,17 +19,6 @@ const HomeScreen = ({ style }) => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'flex-start',
-  },
-  contentContainer: {
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: Dimensions.get('window').height * 0.75,
-  },
-  logo: {
-    marginTop: Theme.space.vertical.medium,
-  },
   titleContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -48,6 +37,7 @@ const styles = StyleSheet.create({
   img: {
     width: 260,
     height: 260,
+    marginBottom: Theme.space.vertical.small
   },
 });
 
