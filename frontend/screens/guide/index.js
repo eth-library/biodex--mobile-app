@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, StatusBar } from 'react-native';
 import { ScreenOrientation } from 'expo';
 
 import SwiperFlatList from '../../components/SwiperFlatList';
@@ -28,6 +28,7 @@ const Guide = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar hidden />
       <SwiperFlatList index={0} showPagination navigation={navigation}>
         <HomeScreen style={styles.child} />
         <ImageCaptureScreen style={styles.child} />
