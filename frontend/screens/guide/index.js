@@ -5,6 +5,7 @@ import { ScreenOrientation } from 'expo';
 import SwiperFlatList from '../../components/SwiperFlatList';
 import HomeScreen from './HomeScreen';
 import ImageCaptureScreen from './ImageCaptureScreen';
+import CroppingScreen from './CroppingScreen';
 import ButterflySelectionScreen from './ButterflySelectionScreen';
 import StartScreen from './StartScreen';
 import Theme from '../../theme';
@@ -33,6 +34,7 @@ const Guide = ({ navigation }) => {
       <SwiperFlatList index={0} showPagination navigation={navigation}>
         <HomeScreen style={styles.child} />
         <ImageCaptureScreen style={styles.child} />
+        <CroppingScreen style={styles.child} />
         <ButterflySelectionScreen style={styles.child} />
         <StartScreen style={styles.child} navigation={navigation} />
       </SwiperFlatList>

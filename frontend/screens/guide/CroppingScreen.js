@@ -2,20 +2,30 @@ import React from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
 
 import IntroContainer from './IntroContainer';
-import ResultsGif from '../../assets/ResultsScreen.gif';
+import CroppingGif from '../../assets/Cropping.gif';
 import Theme from '../../theme';
 
-const ButterflySelectionScreen = ({ style }) => {
+const ImageCaptureScreen = ({ style }) => {
   return (
     <IntroContainer style={style}>
       <View style={styles.container}>
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={ResultsGif} />
+          <Image style={styles.image} source={CroppingGif} />
         </View>
 
         <View style={styles.block}>
           <Text style={styles.text}>
-            After a few seconds, a sorted list of the most similar species will be returned.
+            Use the cropping tool to fill most of the square with your specimen.
+          </Text>
+        </View>
+
+        <View style={styles.block}>
+          <Text style={styles.text}>Try to exclude any other specimens from view.</Text>
+        </View>
+
+        <View style={styles.block}>
+          <Text style={styles.text}>
+            Confirm your selection to send the image to the online classifier.
           </Text>
         </View>
       </View>
@@ -26,25 +36,21 @@ const ButterflySelectionScreen = ({ style }) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    justifyContent: 'space-between',
     width: '100%',
     height: '100%',
   },
   imageContainer: {
     width: '75%',
-    height: '85%',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: Theme.colors.lightGrey
+    height: '60%',
   },
   image: {
     width: '100%',
     height: '100%',
-    resizeMode: 'contain'
+    resizeMode: 'cover'
   },
   block: {
     width: '100%',
-    height: 50,
+    height: 60,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -58,4 +64,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ButterflySelectionScreen;
+export default ImageCaptureScreen;

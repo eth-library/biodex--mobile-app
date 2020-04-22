@@ -1,51 +1,54 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet, Dimensions } from 'react-native';
 
-import Butterflies from '../../assets/butterflies.jpg';
+import ExamplePic from '../../assets/app_example_use.jpg';
 import Theme from '../../theme';
-import Logo from '../../components/Logo';
+import IntroContainer from './IntroContainer';
 
-function HomeScreen({ style }) {
+const HomeScreen = ({ style }) => {
   return (
-    <View style={{ ...style, ...styles.container }}>
-      <View style={styles.contentContainer}>
-        <Logo style={styles.logo} />
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Welcome</Text>
-          <Text style={styles.title}>to the</Text>
-          <Text style={styles.title}>ETH Leipdoptera Classifier</Text>
-        </View>
-        <Image style={styles.img} source={Butterflies} />
+    <IntroContainer style={style}>
+      <View style={styles.titleContainer}>
+        <Text style={styles.titleBold}>Welcome</Text>
+        <Text style={styles.title}>to the</Text>
+        <Text style={styles.titleBold}>ETH Lepidoptera Classifier</Text>
       </View>
-    </View>
+      <Image style={styles.img} source={ExamplePic} />
+    </IntroContainer>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
   contentContainer: {
     justifyContent: 'space-around',
     alignItems: 'center',
-    height: Dimensions.get('window').height * 0.7
+    height: Dimensions.get('window').height * 0.75,
   },
   logo: {
-    marginTop: Theme.space.vertical.medium
+    marginTop: Theme.space.vertical.medium,
   },
   titleContainer: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: Theme.space.vertical.large,
   },
-  title: {
+  titleBold: {
     fontFamily: Theme.fonts.primaryBold,
     fontSize: Theme.fonts.sizeL,
-    color: Theme.colors.black
+    color: Theme.colors.black,
+  },
+  title: {
+    fontFamily: Theme.fonts.primary,
+    fontSize: Theme.fonts.sizeL,
+    color: Theme.colors.black,
   },
   img: {
-    width: 200,
-    height: 200
-  }
+    width: 260,
+    height: 260,
+  },
 });
 
 export default HomeScreen;
