@@ -15,17 +15,14 @@ const Guide = ({ navigation }) => {
 
   // Cleanup function on navigation
   useEffect(() => {
-    const cleanup = navigation.addListener('blur', () => {
-      ScreenOrientation.unlockAsync();
-    });
+    const cleanup = navigation.addListener('blur', () => ScreenOrientation.unlockAsync());
     return cleanup;
   }, [navigation]);
 
-  // Cleanup function on unmount
+  // Adding navigation focus listener and cleanup function on unmount
   useEffect(() => {
-    const cleanup = () => {
-      ScreenOrientation.unlockAsync();
-    };
+    navigation.addListener('focus', () => ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP));
+    const cleanup = () => ScreenOrientation.unlockAsync();
     return cleanup;
   }, []);
 
