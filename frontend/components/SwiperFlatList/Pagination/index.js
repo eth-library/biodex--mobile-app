@@ -1,6 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, TouchableOpacity, View, ViewPropTypes, Text, Dimensions } from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewPropTypes,
+  Text,
+  Dimensions,
+  Platform,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { colors, vertical, horizontal } from '../themes';
 import Theme from '../../../theme';
@@ -10,13 +19,22 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginVertical: vertical.xxSmall,
     alignItems: 'center',
-    bottom: Dimensions.get('window').height * 0.15,
-    width: '100%'
+    bottom: Dimensions.get('window').height * 0.05,
+    width: '100%',
+  },
+  textContainer: {
+    flexDirection: 'row',
+    marginBottom: Theme.space.vertical.xxSmall,
+    alignItems: 'center',
+    height: 30,
   },
   text: {
-    color: Theme.colors.grey,
-    fontFamily: Theme.fonts.primary,
-    marginBottom: vertical.xxSmall
+    color: Theme.colors.black,
+    fontFamily: Theme.fonts.primaryItalic,
+    marginRight: Theme.space.horizontal.xSmall,
+  },
+  iconContainer: {
+    alignSelf: 'flex-end'
   },
   pagination: {
     width: horizontal.small,
@@ -25,8 +43,8 @@ const styles = StyleSheet.create({
     marginHorizontal: horizontal.xSmall,
   },
   paginationContainer: {
-    flexDirection: 'row'
-  }
+    flexDirection: 'row',
+  },
 });
 
 const Pagination = ({
@@ -36,12 +54,24 @@ const Pagination = ({
   paginationDefaultColor,
   paginationActiveColor,
   paginationStyle,
-  paginationStyleItem
+  paginationStyleItem,
 }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>swipe</Text>
-      <View style={{...styles.paginationContainer, ...paginationStyle}}>
+      {paginationIndex === 0 && (
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>swipe</Text>
+          <View style={styles.iconContainer}>
+            <Ionicons
+              name={Platform.OS === 'ios' ? 'ios-arrow-round-forward' : 'md-arrow-forward'}
+              size={30}
+              color={Theme.colors.black}
+              backgroundColor='orange'
+            />
+          </View>
+        </View>
+      )}
+      <View style={{ ...styles.paginationContainer, ...paginationStyle }}>
         {Array.from({ length: size }).map((_, index) => (
           <TouchableOpacity
             style={[
@@ -49,7 +79,7 @@ const Pagination = ({
               paginationStyleItem,
               paginationIndex === index
                 ? { backgroundColor: paginationActiveColor }
-                : { backgroundColor: paginationDefaultColor }
+                : { backgroundColor: paginationDefaultColor },
             ]}
             key={index}
             onPress={() => scrollToIndex({ index })}
@@ -66,7 +96,7 @@ Pagination.propTypes = {
   paginationActiveColor: PropTypes.string,
   paginationDefaultColor: PropTypes.string,
   paginationStyle: ViewPropTypes.style,
-  paginationStyleItem: ViewPropTypes.style
+  paginationStyleItem: ViewPropTypes.style,
 };
 
 Pagination.defaultProps = {
@@ -74,7 +104,7 @@ Pagination.defaultProps = {
   paginationActiveColor: colors.white,
   paginationDefaultColor: colors.gray,
   paginationStyle: {},
-  paginationStyleItem: {}
+  paginationStyleItem: {},
 };
 
 export default Pagination;
