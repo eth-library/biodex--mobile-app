@@ -1,103 +1,315 @@
-import React, { useState } from 'react';
-import { Dimensions, View, Image, Text } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { Component } from 'react';
+import {
+  Dimensions,
+  Image,
+  ScrollView,
+  Modal,
+  View,
+} from 'react-native';
+import * as ExpoImageManipulator from 'expo-image-manipulator';
+import PropTypes from 'prop-types';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
-import ImageManipulator from './ImageManipulator/';
-import HybridTouch from './HybridTouch';
+import ImageCropOverlay from './ImageCropOverlay';
+import Header from './Header';
 
-const noImage = require('./assets/no_image.png');
+const { width } = Dimensions.get('window');
 
-const ImageCropper = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [uri, setUri] = useState(null);
+class ImageCropper extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      mounted: false,
+      cropMode: false,
+      processing: false,
+      zoomScale: 1,
+      // position of the cropoverlay
+      currentPos: {
+        left: null,
+        top: null,
+      },
+      // size of the cropoverlay
+      currentSize: {
+        width: 0,
+        height: 0,
+      },
+      // image editable size
+      actualSize: {
+        width: 0,
+        height: 0,
+      },
+    };
 
-  const pickGalleryImage = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    if (status === 'granted') {
-      const result = await ImagePicker.launchImageLibraryAsync();
-      if (!result.cancelled) {
-        setUri(result.uri);
-        setIsVisible(true);
-      }
-    }
+    this.scrollOffset = 0;
+  }
+
+  async componentDidMount() {
+    await this.onConvertImageToEditableSize();
+    this.setState({ mounted: true });
+  }
+
+  onGetCorrectSizes = (w, h) => {
+    const sizes = {
+      convertedWidth: w,
+      convertedheight: h,
+    };
+    const ratio = Math.min(1920 / w, 1080 / h);
+    sizes.convertedWidth = Math.round(w * ratio);
+    sizes.convertedheight = Math.round(h * ratio);
+    return sizes;
   };
 
-  const pickCameraImage = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA, Permissions.CAMERA_ROLL);
-    if (status === 'granted') {
-      const result = await ImagePicker.launchCameraAsync();
-      if (!result.cancelled) {
-        setUri(result.uri);
-        setIsVisible(true);
+  async onConvertImageToEditableSize() {
+    const {
+      photo: { uri: rawUri },
+    } = this.props;
+    Image.getSize(rawUri, async (imgW, imgH) => {
+      const { convertedWidth, convertedheight } = this.onGetCorrectSizes(imgW, imgH);
+      const { uri, width: w, height } = await ExpoImageManipulator.manipulateAsync(rawUri, [
+        {
+          resize: {
+            width: convertedWidth,
+            height: convertedheight,
+          },
+        },
+      ]);
+      this.setState({
+        uri,
+        actualSize: {
+          width: w,
+          height: height,
+        },
+        cropMode: true,
+      });
+    });
+  }
+
+  onCropImage = () => {
+    this.setState({ processing: true });
+    const { uri } = this.state;
+    Image.getSize(uri, async (actualWidth, actualHeight) => {
+      const cropObj = this.getCropBounds(actualWidth, actualHeight);
+      if (cropObj.height > 0 && cropObj.width > 0) {
+        let uriToCrop = uri;
+        const {
+          uri: uriCroped,
+          base64,
+          width: croppedWidth,
+          height: croppedHeight,
+        } = await this.crop(cropObj, uriToCrop);
+
+        this.state.actualSize.width = croppedWidth;
+        this.state.actualSize.height = croppedHeight;
+
+        this.props.chosenPicture({ uri: uriCroped, base64 });
+        this.props.onToggleModal();
+      } else {
+        this.setState({ cropMode: false, processing: false });
       }
-    }
+    });
   };
 
-  const { width, height } = Dimensions.get('window');
+  onHandleScroll = (event) => {
+    this.scrollOffset = event.nativeEvent.contentOffset.y;
+  };
 
-  return (
-    <SafeAreaView
-      style={{
-        backgroundColor: '#fcfcfc',
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center',
-        flex: 1,
-      }}
-    >
-      <Image
-        resizeMode='contain'
-        style={{
-          width: 224,
-          height: 224,
-          marginBottom: 40,
-          backgroundColor: 'grey',
-        }}
-        source={uri ? { uri } : noImage}
-      />
+  getCropBounds = (actualWidth, actualHeight) => {
+    const imageRatio = actualHeight / actualWidth;
+    let originalHeight = Dimensions.get('window').height - 64;
+    if (isIphoneX()) {
+      originalHeight = Dimensions.get('window').height - 122;
+    }
+    const renderedImageWidth =
+      imageRatio < originalHeight / width ? width : originalHeight / imageRatio;
+    const renderedImageHeight =
+      imageRatio < originalHeight / width ? width * imageRatio : originalHeight;
 
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          backgroundColor: '#2c98fd',
-          width,
-          position: 'absolute',
-          bottom: 0,
-          padding: 20,
-        }}
+    const renderedImageY = (originalHeight - renderedImageHeight) / 2.0;
+    const renderedImageX = (width - renderedImageWidth) / 2.0;
+
+    const renderImageObj = {
+      left: renderedImageX,
+      top: renderedImageY,
+      width: renderedImageWidth,
+      height: renderedImageHeight,
+    };
+
+    const cropOverlayObj = {
+      left: this.state.currentPos.left,
+      top: this.state.currentPos.top,
+      width: this.state.currentSize.width,
+      height: this.state.currentSize.height,
+    };
+
+    let intersectAreaObj = {};
+
+    const x = Math.max(renderImageObj.left, cropOverlayObj.left);
+    const num1 = Math.min(
+      renderImageObj.left + renderImageObj.width,
+      cropOverlayObj.left + cropOverlayObj.width
+    );
+    const y = Math.max(renderImageObj.top, cropOverlayObj.top);
+    const num2 = Math.min(
+      renderImageObj.top + renderImageObj.height,
+      cropOverlayObj.top + cropOverlayObj.height
+    );
+    if (num1 >= x && num2 >= y) {
+      intersectAreaObj = {
+        originX: (x - renderedImageX) * (actualWidth / renderedImageWidth),
+        originY: (y - renderedImageY) * (actualWidth / renderedImageWidth),
+        width: (num1 - x) * (actualWidth / renderedImageWidth),
+        height: (num2 - y) * (actualWidth / renderedImageWidth),
+      };
+    } else {
+      intersectAreaObj = {
+        originX: x - renderedImageX,
+        originY: y - renderedImageY,
+        width: 0,
+        height: 0,
+      };
+    }
+    return intersectAreaObj;
+  };
+
+  crop = async (cropObj, uri) => {
+    const { saveOptions } = this.props;
+    if (cropObj.height > 0 && cropObj.width > 0) {
+      const manipResult = await ExpoImageManipulator.manipulateAsync(
+        uri,
+        [
+          {
+            crop: cropObj,
+          },
+        ],
+        saveOptions
+      );
+      return manipResult;
+    }
+    return {
+      uri: null,
+      base64: null,
+    };
+  };
+
+  render() {
+    const { isVisible, borderColor, btnTexts } = this.props;
+    const {
+      uri,
+      cropMode,
+      mounted,
+      processing,
+      currentSize,
+      currentPos,
+      actualSize,
+    } = this.state;
+
+    const imageRatio =
+      actualSize.height / actualSize.width ? actualSize.height / actualSize.width : 0;
+
+    let originalHeight = Dimensions.get('window').height - 64;
+    if (isIphoneX()) {
+      originalHeight = Dimensions.get('window').height - 122;
+    }
+
+    const cropRatio = originalHeight / width;
+
+    const cropWidth = imageRatio < cropRatio ? width : originalHeight / imageRatio;
+    const cropHeight = imageRatio < cropRatio ? width * imageRatio : originalHeight;
+    const cropInitialTop = (originalHeight - cropHeight) / 2.0;
+    const cropInitialLeft = (width - cropWidth) / 2.0;
+
+    if (currentSize.width === 0 && cropMode) {
+      currentSize.width = Math.min(cropWidth, cropHeight);
+      currentSize.height = Math.min(cropWidth, cropHeight);
+      currentPos.top = cropInitialTop;
+      currentPos.left = cropInitialLeft;
+    }
+
+    return (
+      <Modal
+        animationType='slide'
+        transparent
+        visible={isVisible}
+        hardwareAccelerated
       >
-        <HybridTouch style={{ flex: 1, alignItems: 'center' }} onPress={() => pickGalleryImage()}>
-          <View style={{ alignItems: 'center' }}>
-            <Icon size={30} name='photo' color='white' />
-            <Text style={{ color: 'white', fontSize: 18 }}>Gallery</Text>
-          </View>
-        </HybridTouch>
-        <HybridTouch style={{ flex: 1, alignItems: 'center' }} onPress={() => pickCameraImage()}>
-          <View style={{ alignItems: 'center' }}>
-            <Icon size={30} name='photo-camera' color='white' />
-            <Text style={{ color: 'white', fontSize: 18 }}>Camera</Text>
-          </View>
-        </HybridTouch>
-      </View>
-
-      {uri && <ImageManipulator
-        photo={{ uri }}
-        isVisible={isVisible}
-        chosenPicture={(data) => setUri(data.uri)}
-        onToggleModal={() => setIsVisible(!isVisible)}
-        saveOptions={{
-          compress: 1,
-          format: 'jpeg',
-          base64: true,
-        }}
-      />}
-      
-    </SafeAreaView>
-  );
-};
+        <Header onCropImage={this.onCropImage} onCancel={this.props.onCancel} processing={processing} btnTexts={btnTexts} />
+        <View style={{ flex: 1, backgroundColor: 'black', width: Dimensions.get('window').width }}>
+          <ScrollView
+            style={{ position: 'relative', flex: 1 }}
+            contentContainerStyle={{ backgroundColor: 'black' }}
+            maximumZoomScale={5}
+            minimumZoomScale={0.5}
+            onScroll={this.onHandleScroll}
+            bounces={false}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            ref={(c) => {
+              this.scrollView = c;
+            }}
+            scrollEventThrottle={16}
+            scrollEnabled={false}
+            pinchGestureEnabled={false}
+          >
+            <Image
+              style={{ backgroundColor: 'black' }}
+              source={{ uri }}
+              resizeMode={imageRatio >= 1 ? 'contain' : 'contain'}
+              width={width}
+              height={originalHeight}
+            />
+            {mounted && cropMode && (
+              <ImageCropOverlay
+                onLayoutChanged={(top, left, w, height) => {
+                  this.setState({
+                    currentSize: {
+                      width: w,
+                      height: height,
+                    },
+                    currentPos: {
+                      top: top,
+                      left: left,
+                    },
+                  });
+                }}
+                initialTop={cropInitialTop}
+                initialLeft={cropInitialLeft}
+                minSize={150}
+                borderColor={borderColor}
+                currentSize={this.state.currentSize}
+                currentPos={this.state.currentPos}
+              />
+            )}
+          </ScrollView>
+        </View>
+      </Modal>
+    );
+  }
+}
 
 export default ImageCropper;
+
+ImageCropper.defaultProps = {
+  borderColor: '#a4a4a4',
+  btnTexts: {
+    crop: 'Crop',
+    rotate: 'Rotate',
+    done: 'Done',
+    processing: 'Processing',
+  },
+  saveOptions: {
+    compress: 1,
+    format: ExpoImageManipulator.SaveFormat.PNG,
+    base64: false,
+  },
+  fixedMask: null,
+};
+
+ImageCropper.propTypes = {
+  borderColor: PropTypes.string,
+  isVisible: PropTypes.bool.isRequired,
+  btnTexts: PropTypes.object,
+  fixedMask: PropTypes.object,
+  saveOptions: PropTypes.object,
+  photo: PropTypes.object.isRequired,
+  onToggleModal: PropTypes.func.isRequired,
+};

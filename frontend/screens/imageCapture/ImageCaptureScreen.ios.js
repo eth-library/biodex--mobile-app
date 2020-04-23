@@ -11,7 +11,7 @@ import { ScreenOrientation } from 'expo';
 import Theme from '../../theme';
 import butterfly from '../../assets/butterfly.jpg';
 import LoadingScreen from '../../components/LoadingScreen';
-import ImageManipulator from '../../components/ImageCropper/ImageManipulator';
+import ImageCropper from '../../components/ImageCropper';
 import { storeSelectedImageAction, storeLocation } from '../../store/actions/images';
 
 const ImageCaptureScreen = ({ navigation }) => {
@@ -170,13 +170,10 @@ const ImageCaptureScreen = ({ navigation }) => {
         </Fragment>
       )}
       {cropModalVisible && (
-        <ImageManipulator
+        <ImageCropper
           photo={{ uri }}
           isVisible={cropModalVisible}
-          chosenPicture={(data) => {
-            console.log('chosen', data.uri);
-            storeCroppedImageHandler(data.uri);
-          }}
+          chosenPicture={(data) => storeCroppedImageHandler(data.uri)}
           onToggleModal={() => setCropModalVisible(!cropModalVisible)}
           onCancel={() => {
             setCropModalVisible(!cropModalVisible)
