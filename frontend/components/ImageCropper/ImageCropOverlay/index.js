@@ -19,9 +19,7 @@ class ImageCropOverlay extends React.Component {
     draggingBR: false,
     initialTop: this.props.initialTop,
     currentTop: this.props.currentPos.top,
-    initialLeft: this.props.initialLeft,
     currentLeft: this.props.currentPos.left,
-    initialWidth: this.props.initialWidth,
     currentWidth: this.props.currentSize.width,
     initialHeight: this.props.initialHeight,
     currentHeight: this.props.currentSize.height,
@@ -50,6 +48,7 @@ class ImageCropOverlay extends React.Component {
       currentTop,
       currentLeft,
     } = this.state;
+
     return (
       <View
         {...this.state.panResponder.panHandlers}
@@ -59,9 +58,6 @@ class ImageCropOverlay extends React.Component {
             justifyContent: 'center',
             alignItems: 'center',
             position: 'absolute',
-            borderStyle: 'solid',
-            borderWidth: 2,
-            borderColor: 'red',
             backgroundColor: 'rgb(0,0,0,0.5)',
             width: currentWidth,
             height: currentHeight,
@@ -352,10 +348,6 @@ class ImageCropOverlay extends React.Component {
       if (gestureBottomLeftToTopRight && respectsSquare && respectsMinSize) {
         const willOverlapBottom = currentTop + currentHeight + biggestMove > maxHeight;
         const willOverlapLeft = currentLeft === 0 && currentLeft - biggestMoveY < 0;
-        const maxPossibleWidth = this.props.currentSize.width - this.props.currentPos.left;
-        const maxPossibleHeight = maxHeight - this.props.currentPos.top;
-        const maxPossibleLeft = this.props.currentPos.left;
-        const maxPossibleDown = maxHeight - this.props.currentPos.top - this.props.currentSize.height;
         const respectsMinSize = this.props.currentSize.width - biggestMove >= this.props.minSize;
         if (!willOverlapBottom && !willOverlapLeft && respectsMinSize) {
           state.currentLeft = this.props.currentPos.left + biggestMoveX;

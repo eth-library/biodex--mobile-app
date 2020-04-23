@@ -16,7 +16,7 @@ const MidRow = ({ draggingML, draggingMM, draggingMR }) => {
         borderStyle: 'solid',
         borderLeftWidth: 2,
         borderRightWidth: 2,
-        borderColor: Theme.colors.white,
+        borderColor: Theme.colors.primary,
       }}
     >
       <View
@@ -28,7 +28,7 @@ const MidRow = ({ draggingML, draggingMM, draggingMR }) => {
       />
       <View
         style={{
-          borderColor: Theme.colors.white,
+          borderColor: Theme.colors.primary,
           borderLeftWidth: 2,
           borderRightWidth: 2,
           backgroundColor: draggingMM ? activeColor : 'transparent',
@@ -45,7 +45,7 @@ const MidRow = ({ draggingML, draggingMM, draggingMR }) => {
             borderTopWidth: 2,
             height: 15,
             width: 15,
-            borderColor: '#f4f4f4',
+            borderColor: Theme.colors.primary,
             borderStyle: 'solid',
           }}
         />
@@ -58,7 +58,7 @@ const MidRow = ({ draggingML, draggingMM, draggingMR }) => {
             borderTopWidth: 2,
             height: 15,
             width: 15,
-            borderColor: '#f4f4f4',
+            borderColor: Theme.colors.primary,
             borderStyle: 'solid',
           }}
         />
@@ -71,7 +71,7 @@ const MidRow = ({ draggingML, draggingMM, draggingMR }) => {
             borderBottomWidth: 2,
             height: 15,
             width: 15,
-            borderColor: '#f4f4f4',
+            borderColor: Theme.colors.primary,
             borderStyle: 'solid',
           }}
         />
@@ -84,7 +84,7 @@ const MidRow = ({ draggingML, draggingMM, draggingMR }) => {
             borderBottomWidth: 2,
             height: 15,
             width: 15,
-            borderColor: '#f4f4f4',
+            borderColor: Theme.colors.primary,
             borderStyle: 'solid',
           }}
         />

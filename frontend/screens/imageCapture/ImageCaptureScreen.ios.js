@@ -173,10 +173,7 @@ const ImageCaptureScreen = ({ navigation }) => {
         <ImageManipulator
           photo={{ uri }}
           isVisible={cropModalVisible}
-          chosenPicture={(data) => {
-            console.log('chosen', data.uri);
-            storeCroppedImageHandler(data.uri);
-          }}
+          chosenPicture={(data) => storeCroppedImageHandler(data.uri)}
           onToggleModal={() => setCropModalVisible(!cropModalVisible)}
           onCancel={() => {
             setCropModalVisible(!cropModalVisible)

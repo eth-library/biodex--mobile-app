@@ -14,7 +14,7 @@ const BottomRow = ({ draggingBL, draggingBM, draggingBR }) => {
         backgroundColor: 'transparent',
         borderStyle: 'solid',
         borderWidth: 2,
-        borderColor: Theme.colors.white,
+        borderColor: Theme.colors.primary,
       }}
     >
       <View
@@ -33,14 +33,14 @@ const BottomRow = ({ draggingBL, draggingBM, draggingBR }) => {
             borderBottomWidth: 2,
             height: 35,
             width: 35,
-            borderColor: '#f4f4f4',
+            borderColor: Theme.colors.primary,
             borderStyle: 'solid',
           }}
         />
       </View>
       <View
         style={{
-          borderColor: Theme.colors.white,
+          borderColor: Theme.colors.primary,
           borderLeftWidth: 2,
           borderRightWidth: 2,
           backgroundColor: draggingBM ? 'transparent' : 'transparent',
@@ -64,7 +64,7 @@ const BottomRow = ({ draggingBL, draggingBM, draggingBR }) => {
             borderBottomWidth: 2,
             height: 35,
             width: 35,
-            borderColor: '#f4f4f4',
+            borderColor: Theme.colors.primary,
             borderStyle: 'solid',
           }}
         />
