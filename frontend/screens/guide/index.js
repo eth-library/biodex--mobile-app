@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, StatusBar } from 'react-native';
 import { ScreenOrientation } from 'expo';
 
@@ -11,24 +11,31 @@ import StartScreen from './StartScreen';
 import Theme from '../../theme';
 
 const Guide = ({ navigation }) => {
+  const [hidden, setHidden] = useState(true);
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
 
   // Cleanup function on navigation
   useEffect(() => {
-    const cleanup = navigation.addListener('blur', () => ScreenOrientation.unlockAsync());
+    const cleanup = navigation.addListener('blur', () => {
+      setHidden(false);
+      ScreenOrientation.unlockAsync()
+    });
     return cleanup;
   }, [navigation]);
 
   // Adding navigation focus listener and cleanup function on unmount
   useEffect(() => {
-    navigation.addListener('focus', () => ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP));
+    navigation.addListener('focus', () => {
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+      setHidden(false);
+    });
     const cleanup = () => ScreenOrientation.unlockAsync();
     return cleanup;
   }, []);
 
   return (
     <View style={styles.container}>
-      <StatusBar hidden />
+      <StatusBar hidden={hidden} />
       <SwiperFlatList index={0} showPagination navigation={navigation}>
         <HomeScreen style={styles.child} />
         <ImageCaptureScreen style={styles.child} />
