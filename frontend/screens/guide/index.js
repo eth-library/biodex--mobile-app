@@ -27,7 +27,7 @@ const Guide = ({ navigation }) => {
   useEffect(() => {
     navigation.addListener('focus', () => {
       ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-      setHidden(false);
+      setHidden(true);
     });
     const cleanup = () => ScreenOrientation.unlockAsync();
     return cleanup;
@@ -53,7 +53,7 @@ const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   child: {
     width: width,

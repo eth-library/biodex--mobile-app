@@ -2,34 +2,34 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, AsyncStorage, StyleSheet } from 'react-native';
 
-import { SET_NOT_FIRST_TIME_USER } from '../../store/types';
+import { SET_NOT_FIRST_TIME_USER } from '../../store/types';
 import Button from '../../components/Button';
 import Theme from '../../theme';
 
-const StartScreen = ({ style, navigation }) => {
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+const StartScreen = ({ style, navigation }) => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
 
   const firstTimeUseHandler = async () => {
     await AsyncStorage.setItem('used', 'true');
     dispatch({
-      type: SET_NOT_FIRST_TIME_USER
-    })
-  };
-
-  if (isAuthenticated) {
-    return (
-      <View style={{ ...style }}>
-        <Text style={styles.text}>You're ready to go!</Text>
-        <Button title='Capture Your First Image' onPress={() => navigation.navigate('Image Capture')} />
-      </View>
-    );
+      type: SET_NOT_FIRST_TIME_USER,
+    });
   };
 
   return (
     <View style={{ ...style }}>
       <Text style={styles.text}>You're ready to go!</Text>
-      <View style={styles.buttonContainer}><Button title='Go to Login' onPress={firstTimeUseHandler} /></View>
+      <View style={styles.buttonContainer}>
+        {isAuthenticated ? (
+          <Button
+            title='Capture Your First Image'
+            onPress={() => navigation.navigate('Image Capture')}
+          />
+        ) : (
+          <Button title='Go to Login' onPress={firstTimeUseHandler} />
+        )}
+      </View>
     </View>
   );
 };
@@ -42,9 +42,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   buttonContainer: {
-    width: '50%',
-    marginTop: Theme.space.vertical.xSmall
-  }
+    width: '65%',
+    marginTop: Theme.space.vertical.xSmall,
+  },
 });
 
 export default StartScreen;
