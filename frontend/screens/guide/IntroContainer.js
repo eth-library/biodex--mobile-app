@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   logo: {
-    marginTop: Dimensions.get('window').height > 600 ? Theme.space.vertical.xLarge : Theme.space.vertical.medium,
+    marginTop: Dimensions.get('window').height > 700 ? Theme.space.vertical.xLarge : Theme.space.vertical.medium,
     marginBottom: Theme.space.vertical.xSmall
   },
   contentContainer: {

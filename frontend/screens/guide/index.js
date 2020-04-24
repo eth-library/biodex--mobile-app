@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, StatusBar } from 'react-native';
 import { ScreenOrientation } from 'expo';
 
@@ -11,6 +11,7 @@ import StartScreen from './StartScreen';
 import Theme from '../../theme';
 
 const Guide = ({ navigation }) => {
+  const [hidden, setHidden] = useState(true);
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
 
   // Cleanup function on navigation
@@ -21,20 +22,23 @@ const Guide = ({ navigation }) => {
 
   // Adding navigation focus listener and cleanup function on unmount
   useEffect(() => {
-    navigation.addListener('focus', () => ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP));
+    navigation.addListener('focus', () => {
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+      setHidden(true);
+    });
     const cleanup = () => ScreenOrientation.unlockAsync();
     return cleanup;
   }, []);
 
   return (
     <View style={styles.container}>
-      <StatusBar hidden />
+      <StatusBar hidden={hidden} />
       <SwiperFlatList index={0} showPagination navigation={navigation}>
         <HomeScreen style={styles.child} />
         <ImageCaptureScreen style={styles.child} />
         <CroppingScreen style={styles.child} />
         <ButterflySelectionScreen style={styles.child} />
-        <StartScreen style={styles.child} navigation={navigation} />
+        <StartScreen style={styles.child} navigation={navigation} setHidden={setHidden} />
       </SwiperFlatList>
     </View>
   );
@@ -46,7 +50,7 @@ const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   child: {
     width: width,
