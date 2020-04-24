@@ -110,7 +110,7 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       width: '100%',
     },
     button: {
-      width: '40%',
+      width: '45%',
     },
     buttonsContainer: {
       flexDirection: 'row',
@@ -135,7 +135,7 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       width: '100%',
     },
     button: {
-      width: '20%',
+      width: '25%',
     },
     buttonsContainer: {
       flexDirection: 'row',
