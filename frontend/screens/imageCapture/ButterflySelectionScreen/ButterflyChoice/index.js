@@ -16,7 +16,7 @@ import Title from './Title';
 import Description from './Description';
 import ImageModal from './ImageModal';
 
-const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase }) => {
+const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase, isLoading }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [showDescription, setShowDescription] = useState(false);
   const [portrait, setPortrait] = useState(
@@ -90,6 +90,7 @@ const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase 
                 title='CONFIRM'
                 disabled={confirmedCase}
                 onPress={() => confirmationHandler(data)}
+                isLoading={isLoading}
               />
             )}
             {confirmedCase && data.confirmed && (
