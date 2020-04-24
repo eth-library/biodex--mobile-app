@@ -19,13 +19,14 @@ import ButterflyChoice from './ButterflyChoice';
 import Titles from './Titles';
 import DeveloperInfo from './DeveloperInfo';
 import { confirmPredictionAsyncAction, clearImagesState } from '../../../store/actions/images';
-import imgPlaceholder from '../../../assets/imgPlaceholder.png';
+import imgPlaceholder from '../../../assets/imgNotFound.png';
 
 const IoniconsHeaderButton = (props) => (
   <HeaderButton {...props} IconComponent={Ionicons} iconSize={23} color={Theme.colors.white} />
 );
 
 const ButterflySelectionScreen = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [portrait, setPortrait] = useState(
     Dimensions.get('window').height > Dimensions.get('window').width
   );
@@ -88,11 +89,13 @@ const ButterflySelectionScreen = ({ navigation }) => {
   }, []);
 
   const confirmationHandler = async (prediction) => {
+    setIsLoading(true);
     try {
       await dispatch(confirmPredictionAsyncAction(prediction));
     } catch (e) {
       console.log('ERROR IN confirmationHandler', e.message);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -125,6 +128,7 @@ const ButterflySelectionScreen = ({ navigation }) => {
                   confirmationHandler={confirmationHandler}
                   confirmedCase={confirmedCase}
                   navigation={navigation}
+                  isLoading={isLoading}
                 />
               );
             })}
