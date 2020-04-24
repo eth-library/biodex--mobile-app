@@ -190,7 +190,7 @@ const Registration = ({ navigation }) => {
                 title={'Create your Account'}
                 isLoading={isLoading}
                 onPress={submitHandler}
-                error={error && error.global}
+                error={error && error.general}
               />
               <View style={authStyles.center}>
                 <Text style={authStyles.text}>Already have an account?</Text>
