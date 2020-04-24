@@ -16,7 +16,7 @@ import NetworkSnackbar from './components/NetworkSnackbar';
 
 Sentry.init({
   dsn: 'https://309c9a72ae8d41689b69f8de6cfe390a@sentry.io/5187634',
-  enableInExpoDevelopment: true,
+  enableInExpoDevelopment: false,
   debug: true,
 });
 Sentry.setRelease(Constants.manifest.revisionId);
