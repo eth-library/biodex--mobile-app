@@ -16,10 +16,7 @@ const Guide = ({ navigation }) => {
 
   // Cleanup function on navigation
   useEffect(() => {
-    const cleanup = navigation.addListener('blur', () => {
-      setHidden(false);
-      ScreenOrientation.unlockAsync()
-    });
+    const cleanup = navigation.addListener('blur', () => ScreenOrientation.unlockAsync());
     return cleanup;
   }, [navigation]);
 
@@ -41,7 +38,7 @@ const Guide = ({ navigation }) => {
         <ImageCaptureScreen style={styles.child} />
         <CroppingScreen style={styles.child} />
         <ButterflySelectionScreen style={styles.child} />
-        <StartScreen style={styles.child} navigation={navigation} />
+        <StartScreen style={styles.child} navigation={navigation} setHidden={setHidden} />
       </SwiperFlatList>
     </View>
   );

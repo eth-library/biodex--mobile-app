@@ -6,7 +6,7 @@ import { SET_NOT_FIRST_TIME_USER } from '../../store/types';
 import Button from '../../components/Button';
 import Theme from '../../theme';
 
-const StartScreen = ({ style, navigation }) => {
+const StartScreen = ({ style, navigation, setHidden }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
 
@@ -17,6 +17,11 @@ const StartScreen = ({ style, navigation }) => {
     });
   };
 
+  const navigationHandler = () => {
+    setHidden(false);
+    navigation.navigate('Image Capture');
+  };
+
   return (
     <View style={{ ...style }}>
       <Text style={styles.text}>You're ready to go!</Text>
@@ -24,7 +29,7 @@ const StartScreen = ({ style, navigation }) => {
         {isAuthenticated ? (
           <Button
             title='Capture Your First Image'
-            onPress={() => navigation.navigate('Image Capture')}
+            onPress={navigationHandler}
           />
         ) : (
           <Button title='Go to Login' onPress={firstTimeUseHandler} />
