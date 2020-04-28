@@ -3,11 +3,11 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import Theme from '../../../../../theme';
 
-const Title = ({ text, prob }) => {
+const Title = ({ text, prob, style }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.name}>{ text }</Text>
-      <Text style={styles.percentage}>{ Math.trunc(prob * 100) }%</Text>
+      <Text style={{...styles.name, ...style}}>{ text }</Text>
+      <Text style={{...styles.name, ...style}}>{ Math.trunc(prob * 100) }%</Text>
     </View>
   )
 };

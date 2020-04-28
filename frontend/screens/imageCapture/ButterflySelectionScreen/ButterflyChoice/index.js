@@ -62,8 +62,8 @@ const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase,
         <View style={styles.titles}>
           <Title text={data.family} prob={data.family_prob} />
           <Title text={data.subfamily} prob={data.subfamily_prob} />
-          <Title text={data.species} prob={data.species_prob} />
-          <Title text={data.species} prob={data.species_prob} />
+          <Title text={data.species} prob={data.species_prob} style={styles.italicTitle} />
+          <Title text={data.species} prob={data.species_prob} style={styles.italicTitle} />
         </View>
 
         <View
@@ -166,6 +166,9 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       width: '100%',
       flexDirection: 'row',
       height: 50,
+    },
+    italicTitle: {
+      fontFamily: Theme.fonts.primaryBoldItalic,
     },
     buttons: {
       justifyContent: 'center',
