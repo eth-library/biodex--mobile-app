@@ -7,7 +7,7 @@ const Description = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
-        To be added.{' '}
+        To be added.
       </Text>
     </View>
   );
