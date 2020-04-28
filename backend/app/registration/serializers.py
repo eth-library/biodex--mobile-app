@@ -12,6 +12,7 @@ User = get_user_model()
 
 
 def email_does_not_exist(email):
+    email = email.lower()
     try:
         User.objects.get(email=email)
         raise ValidationError(message='This email is taken')
@@ -20,8 +21,9 @@ def email_does_not_exist(email):
 
 
 def email_does_exist(email):
+    email = email.lower()
     try:
-        User.objects.get(email=email)
+        User.objects.get(email=email.lower())
         return email
     except User.DoesNotExist:
         raise ValidationError(message='User does not exist!')
@@ -42,7 +44,7 @@ class RegistrationSerializer(serializers.Serializer):
     email = serializers.EmailField(label='Registration E-Mail Address', validators=[email_does_not_exist])
 
     def save(self, validated_data):
-        email = validated_data.get('email')
+        email = validated_data.get('email').lower()
         new_user = User(
             username=email,
             email=email,
@@ -72,7 +74,7 @@ class RegistrationValidationSerializer(serializers.Serializer):
 
     def validate(self, data):
         code = data.get('code')
-        email = data.get('email')
+        email = data.get('email').lower()
         user = User.objects.get(email=email)
         if user.is_active:
             raise ValidationError(message='This user is already registered!')
@@ -84,7 +86,7 @@ class RegistrationValidationSerializer(serializers.Serializer):
         return data
 
     def save(self, validated_data):
-        email = validated_data.get('email')
+        email = validated_data.get('email').lower()
         user = User.objects.get(email=email)
         user.full_name = validated_data.get('full_name')
         user.user_type = validated_data.get('user_type')
@@ -101,7 +103,7 @@ class PasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField(label='Password Reset E-Mail Address', validators=[email_does_exist])
 
     def send_password_reset_email(self):
-        email = self.validated_data.get('email')
+        email = self.validated_data.get('email').lower()
         user = User.objects.get(email=email)
         user.registration_profile.code = code_generator()
         user.registration_profile.code_used = False
@@ -118,7 +120,7 @@ class PasswordResetValidationSerializer(serializers.Serializer):
 
     def validate(self, data):
         code = data.get('code')
-        email = data.get('email')
+        email = data.get('email').lower()
         user = User.objects.get(email=email)
         reg_profile = RegistrationProfile.objects.get(code=code)
         if reg_profile != user.registration_profile:

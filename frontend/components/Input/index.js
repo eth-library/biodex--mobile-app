@@ -47,7 +47,12 @@ const Input = React.forwardRef((props, ref) => {
       isValid = false;
       errorText = 'Password is too short. Min length is 8 characters.';
     }
-    dispatch({ type: 'INPUT_CHANGE', value: text, errorText, isValid });
+    // email should always be lowercase (Barry's request)  
+    dispatch({ 
+      type: 'INPUT_CHANGE', 
+      value: props.email ? text.toLowerCase() : text, 
+      errorText, 
+      isValid });
   };
 
   const lostFocusHandler = () => {
