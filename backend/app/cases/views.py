@@ -1,9 +1,11 @@
 from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView
 from rest_framework.parsers import JSONParser, FormParser
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 from app.cases.models import Case
 from app.cases.parsers import MultiPartJSONParser
+from app.cases.permissions import IsOwnerOrAdmin
 from app.cases.serializers import CaseReadSerializer, CaseCreateSerializer, CaseUpdateSerializer
 
 
@@ -13,6 +15,7 @@ class CaseListView(ListAPIView):
     """
     queryset = Case.objects.all()
     serializer_class = CaseReadSerializer
+    permission_classes = [IsAdminUser]
 
 
 class CaseCreateView(CreateAPIView):
@@ -33,6 +36,7 @@ class CaseUpdateView(UpdateAPIView):
     """
     queryset = Case
     serializer_class = CaseUpdateSerializer
+    permission_classes = [IsOwnerOrAdmin]
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -55,3 +59,4 @@ class CaseReadView(RetrieveAPIView):
     """
     queryset = Case
     serializer_class = CaseReadSerializer
+    permission_classes = [IsAdminUser]
