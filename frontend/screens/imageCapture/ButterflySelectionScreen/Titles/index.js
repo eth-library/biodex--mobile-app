@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import Theme from '../../../theme';
+import Theme from '../../../../theme';
 
 const Titles = () => {
   return (
@@ -25,6 +25,10 @@ const Titles = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    backgroundColor: Theme.colors.accent,
+    marginTop: Theme.space.vertical.xxSmall,
+    borderBottomColor: Theme.colors.white,
+    borderBottomWidth: 1
   },
   title: {
     width: '25%',
@@ -33,7 +37,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontFamily: Theme.fonts.primaryBold,
-    color: Theme.colors.accent
+    color: Theme.colors.white
   },
 });
 
