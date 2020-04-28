@@ -1,5 +1,4 @@
 const formatDjangoErrors = errors => {
-  console.log('ERRORS', errors)
   const cleanedErrors = {};
   for (let key in errors) {
     if (key === 'detail') {
