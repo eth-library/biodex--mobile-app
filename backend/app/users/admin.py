@@ -1,15 +1,35 @@
 from django.contrib import admin
+from django import forms
+
 from .models import User
 from django.contrib.auth.admin import UserAdmin
 
+from ..registration.models import RegistrationProfile
 
-@admin.register(User)
-class UserAdmin(UserAdmin):
+
+class RegistrationProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(RegistrationProfileForm, self).__init__(*args, **kwargs)
+        if self.instance.pk is None:
+            self.empty_permitted = False
+
+    class Meta:
+        model = RegistrationProfile
+        fields = '__all__'
+
+
+class RegistrationProfileInline(admin.StackedInline):
+    model = RegistrationProfile
+    form = RegistrationProfileForm
+
+
+class CustomUserAdmin(UserAdmin):
+    inlines = (RegistrationProfileInline,)
     readonly_fields = ('date_joined',)
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'username', 'password1', 'password2')}
+            'fields': ('email', 'username', 'password1', 'password2')},
          ),
     )
     fieldsets = (
@@ -21,3 +41,11 @@ class UserAdmin(UserAdmin):
     )
     list_display = ('pk', 'email', 'full_name', 'is_staff')
     ordering = ('email',)
+
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return list()
+        return super(CustomUserAdmin, self).get_inline_instances(request, obj)
+
+
+admin.site.register(User, CustomUserAdmin)
