@@ -28,13 +28,18 @@ function withOrientation(WrappedComponent) {
       this.orientationListener = ScreenOrientation.addOrientationChangeListener(
         this.onChangeHandler
       );
-      this.unsubscribeNavigation = this.props.navigation.addListener('blur', () => {
+      this.unsubscribeNavigation = () => this.props.navigation.addListener('blur', () => {
+        console.log('blurring away')
         ScreenOrientation.removeOrientationChangeListener(this.orientationListener);
       });
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+      console.log('did update', prevProps.navigation === this.props.navigation)
+    }
+
     componentWillUnmount() {
-      this.unsubscribeNavigation();
+      console.log('will unmount')
       ScreenOrientation.removeOrientationChangeListener(this.orientationListener);
     }
 
@@ -44,6 +49,11 @@ function withOrientation(WrappedComponent) {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
       });
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+      console.log('next', nextProps, nextState, this.props.navigation === nextProps.navigation)
+      return true
     }
 
     render() {
