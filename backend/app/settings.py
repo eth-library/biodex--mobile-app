@@ -205,7 +205,7 @@ CACHES = {
 # Error Monitoring with sentry
 if not DEBUG:
     sentry_sdk.init(
-        dsn=os.environ.get('SENTRY_DSN'),
+        dsn=os.environ.get('https://54454fc36eac49cdb6b13bdbb72f4ede@o344553.ingest.sentry.io/5216249'),
         integrations=[DjangoIntegration()],
 
         # If you wish to associate users to errors (assuming you are using
