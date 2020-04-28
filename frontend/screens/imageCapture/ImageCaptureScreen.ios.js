@@ -14,11 +14,43 @@ import LoadingScreen from '../../components/LoadingScreen';
 import ImageCropper from '../../components/ImageCropper';
 import { storeSelectedImageAction, storeLocation } from '../../store/actions/images';
 
-const ImageCaptureScreen = ({ navigation, portrait, width, height }) => {
+const ImageCaptureScreen = ({ navigation }) => {
   const [cropModalVisible, setCropModalVisible] = useState(false);
   const [uri, setUri] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [portrait, setPortrait] = useState(
+    Dimensions.get('window').height > Dimensions.get('window').width
+  );
+  const [width, setWidth] = useState(Dimensions.get('window').width);
+  const [height, setHeight] = useState(Dimensions.get('window').height);
+  const screenOrientationHandler = () => {
+    setPortrait(Dimensions.get('window').height > Dimensions.get('window').width);
+    setWidth(Dimensions.get('window').width);
+    setHeight(Dimensions.get('window').height);
+  };
+  let listener = null;
+  // On mount
+  useEffect(() => {
+    listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
+  }, []);
+  // Cleanup function on navigation
+  useEffect(() => {
+    const cleanup = () => {
+      console.log('adding listener')
+      navigation.addListener('blur', () => {
+        console.log('blurring away')
+        ScreenOrientation.removeOrientationChangeListener(listener);
+      });
+    };
+    return cleanup;
+  }, [navigation]);
+  // Cleanup function on unmount
+  useEffect(() => {
+    const cleanup = () => {
+      ScreenOrientation.removeOrientationChangeListener(listener);
+    };
+    return cleanup;
+  }, []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
   const dispatch = useDispatch();
   useEffect(() => {
