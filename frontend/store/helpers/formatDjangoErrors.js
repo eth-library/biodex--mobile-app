@@ -5,7 +5,8 @@ const formatDjangoErrors = errors => {
       cleanedErrors['general'] = errors[key];
     } else if (key === 'non_field_errors') {
       cleanedErrors['general'] = errors[key].length > 1 ? errors[key].join(' - ') : errors[key][0];
-    } else {
+    } else if (Array.isArray(errors[key])) {
+      console.log('else', errors[key], errors[key].length)
       cleanedErrors[key] = errors[key].length > 1 ? errors[key].join(' - ') : errors[key][0];
     }
   };

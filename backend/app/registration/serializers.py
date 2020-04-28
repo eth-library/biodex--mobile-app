@@ -4,7 +4,6 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from app.emails.signals import send_email
-from app.notifications.signals import notify_users
 from app.registration.models import RegistrationProfile
 from app.registration.models import code_generator
 from app.registration.signals import post_user_registration_validation, post_user_password_reset_validation
@@ -95,7 +94,6 @@ class RegistrationValidationSerializer(serializers.Serializer):
         user.save()
         user.registration_profile.save()
         post_user_registration_validation.send(sender=User, user=user)
-        notify_users.send(sender=User, notification_key='new_user_registered', request=self.context['request'], email=user.email)
         return user
 
 
@@ -138,15 +136,10 @@ class PasswordResetValidationSerializer(serializers.Serializer):
         user.save()
         user.registration_profile.save()
         post_user_password_reset_validation.send(sender=User, user=user)
-        notify_users.send(sender=User, notification_key='user_reset_password', request=self.context['request'], email=user.email)
         return user
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        # The default result (access/refresh tokens)
-        data = super(CustomTokenObtainPairSerializer, self).validate(attrs)
-        # Custom data you want to include
-        data.update({'user': self.user})
-        # and everything else you want to send in the response
-        return data
+    default_error_messages = {
+        'no_active_account': 'Incorrect email or password. Try again or reset password'
+    }

@@ -17,6 +17,9 @@ class DevEmails(models.Model):
     def __str__(self):
         return self.email
 
+    class Meta:
+        verbose_name_plural = 'DevEmails'
+
 
 class Email(TimeStampedModel):
     template_name = 'mail_base.html'

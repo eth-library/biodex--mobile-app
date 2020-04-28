@@ -51,7 +51,7 @@ export const userLoginAsyncAction = (credentials, stayLoggedIn) => async (dispat
     }
   } catch (e) {
     dispatch(networkErrorAsyncAction());
-    console.log('ERROR TO HANDLE IN userLoginAsyncAction: ', e.message);
+    console.log('ERROR IN userLoginAsyncAction: ', e.message);
     Sentry.captureException(e);
   }
 };

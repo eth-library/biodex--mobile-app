@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
@@ -7,7 +8,6 @@ import ImageCaptureScreen from '../screens/imageCapture/ImageCaptureScreen';
 import ImageCaptureConfirmationScreen from '../screens/imageCapture/ImageCaptureConfirmationScreen';
 import ButterflySelectionScreen from '../screens/imageCapture/ButterflySelectionScreen';
 import Theme from '../theme';
-import { Platform } from 'react-native';
 
 const Stack = createStackNavigator();
 
