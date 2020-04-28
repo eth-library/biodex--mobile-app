@@ -39,7 +39,7 @@ export const resetPasswordAsyncAction = (email) => async (dispatch, getState) =>
     return response;
   } catch (e) {
     dispatch(networkErrorAsyncAction());
-    console.log('ERROR TO HANDLE IN resetPasswordAsyncAction: ', e.message);
+    console.log('ERROR IN resetPasswordAsyncAction: ', e.message);
     Sentry.captureException(e);
   }
 };
@@ -62,7 +62,7 @@ export const resetPasswordValidationAsyncAction = (data) => async (dispatch, get
     return response;
   } catch (e) {
     dispatch(networkErrorAsyncAction());
-    console.log('ERROR TO HANDLE IN resetPasswordValidationAsyncAction :', e.message);
+    console.log('ERROR IN resetPasswordValidationAsyncAction :', e.message);
     Sentry.captureException(e);
   }
 };

@@ -40,7 +40,7 @@ export const sendInvitationAsyncAction = (email) => async (dispatch, getState) =
     return response;
   } catch (e) {
     dispatch(networkErrorAsyncAction());
-    console.log('ERROR TO HANDLE IN sendInvitationAsyncAction: ', e.message);
+    console.log('ERROR IN sendInvitationAsyncAction: ', e.message);
     Sentry.captureException(e);
   }
 };

@@ -81,7 +81,7 @@ export const getPredictionsAsyncAction = (imageUri) => async (dispatch, getState
       return { ...response, data };
     } else {
       console.log(
-        'ERROR TO HANDLE IN getPredictionsAsyncAction',
+        'ERROR IN getPredictionsAsyncAction',
         response.status,
         response.statusText
       );
@@ -90,7 +90,7 @@ export const getPredictionsAsyncAction = (imageUri) => async (dispatch, getState
     }
   } catch (e) {
     dispatch(networkErrorAsyncAction());
-    console.log('ERROR TO HANDLE IN getPredictionsAsyncAction - second: ', e.message);
+    console.log('ERROR IN getPredictionsAsyncAction - second: ', e.message);
     Sentry.captureException(e);
   }
 };
@@ -146,7 +146,7 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
     return response;
   } catch (e) {
     dispatch(networkErrorAsyncAction());
-    console.log('ERROR TO HANDLE IN newCaseAsyncAction: ', JSON.stringify(e), e.message);
+    console.log('ERROR IN newCaseAsyncAction: ', JSON.stringify(e), e.message);
     Sentry.captureException(e);
   }
 };
@@ -179,7 +179,7 @@ export const confirmPredictionAsyncAction = (prediction) => async (dispatch, get
     return response;
   } catch (e) {
     dispatch(networkErrorAsyncAction());
-    console.log('ERROR TO HANDLE IN confirmPredictionAsyncAction: ', JSON.stringify(e), e.message);
+    console.log('ERROR IN confirmPredictionAsyncAction: ', JSON.stringify(e), e.message);
     Sentry.captureException(e);
   }
 };

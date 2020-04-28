@@ -46,7 +46,7 @@ export const userRegistrationValidationAsyncAction = (data) => async (dispatch, 
     return response;
   } catch (e) {
     dispatch(networkErrorAsyncAction());
-    console.log('ERROR TO HANDLE IN userRegistrationValidationAsyncAction: ', e.message);
+    console.log('ERROR IN userRegistrationValidationAsyncAction: ', e.message);
     Sentry.captureException(e);
   }
 };

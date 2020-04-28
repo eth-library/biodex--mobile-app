@@ -38,7 +38,8 @@ const MainNavigator = () => {
             refreshToken = null;
           }
         } catch (e) {
-          console.log('ERROR TO HANDLE IN MainNavigator!', e.message);
+          console.log('ERROR IN MainNavigator!', e.message);
+          Sentry.captureException(e);
         }
       }
       dispatch({
