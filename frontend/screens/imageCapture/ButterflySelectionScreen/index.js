@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
 
 import Theme from '../../../theme';
+import HeaderTitle from './HeaderTitle';
 import ButterflyChoice from './ButterflyChoice';
 import Titles from './Titles';
 import DeveloperInfo from './DeveloperInfo';
@@ -47,17 +48,9 @@ const ButterflySelectionScreen = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerTitle: props => <HeaderTitle showDeveloperInfo={showDeveloperInfo} setShowDeveloperInfo={setShowDeveloperInfo} />,
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
-          <Item
-            title='info'
-            iconName={
-              Platform.OS === 'ios'
-                ? 'ios-information-circle-outline'
-                : 'md-information-circle-outline'
-            }
-            onPress={() => setShowDeveloperInfo(!showDeveloperInfo)}
-          />
           <Item
             title='home'
             iconName={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
@@ -145,7 +138,7 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       width: '100%',
       height: '100%',
       alignItems: 'center',
-      paddingTop: Theme.space.vertical.xxSmall,
+      paddingTop: 2,
     },
     imagePreview: {
       height: 224,
