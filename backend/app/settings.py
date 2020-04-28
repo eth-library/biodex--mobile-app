@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'app.users',
     'app.emails',
     'app.registration',
-    'app.notifications',
     'app.cases',
     'app.predictions'
 ]
