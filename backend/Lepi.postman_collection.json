@@ -1,0 +1,618 @@
+{
+	"info": {
+		"_postman_id": "4fe475af-6c9a-4f5c-9e73-38b460d0db92",
+		"name": "Lepi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "List Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/users/1/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve Update Destroy logged-in User",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/me/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"me",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Registration",
+			"item": [
+				{
+					"name": "Registration / Invitation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"tests@email.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/registration/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"registration",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registration Validation",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\t\n\t\"email\": \"tests@email.com\",\n\t\"code\": \"07286\",\n\t\"password\": \"lepipassword\",\n\t\"password_repeat\": \"lepipassword\",\n\t\"full_name\": \"Test User\",\n\t\"user_type\": \"EX\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/registration/validation/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"registration",
+								"validation",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password reset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"tests@email.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/backend/api/auth/password-reset/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"backend",
+								"api",
+								"auth",
+								"password-reset",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password Reset Validation",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\t\n\t\"email\": \"tests@email.com\",\n\t\"code\":\"54261\",\n\t\"password\": \"adminadmin\",\n\t\"password_repeat\": \"adminadmin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/backend/api/auth/password-reset/validation/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"backend",
+								"api",
+								"auth",
+								"password-reset",
+								"validation",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2818e2a1-9517-4e05-9447-4a5a29d4353e",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setGlobalVariable(\"access\", jsonData.access);",
+									"postman.setGlobalVariable(\"refresh\", jsonData.refresh);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"fitz@email.com\",\n\t\"password\": \"lepipassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/backend/api/auth/token/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"backend",
+								"api",
+								"auth",
+								"token",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2818e2a1-9517-4e05-9447-4a5a29d4353e",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setGlobalVariable(\"access\", jsonData.access);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"refresh\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTU4ODQzMjYwMiwianRpIjoiZGI3MzgyOTZmYTNlNGU1YzhiZGU1MDA5Mjc5NjhkMzkiLCJ1c2VyX2lkIjo0NX0.tfRLhGCfZlq0R7yBTxtOatTKXKJPoiobX_maNqfaTpU\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/token/refresh/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"token",
+								"refresh",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Cases",
+			"item": [
+				{
+					"name": "Get all cases",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/backend/api/cases/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"backend",
+								"api",
+								"cases",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new case - NOT WORKING IN POSTMAN",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"longitude\": 8.5416933,\n  \"latitude\": 47.376885,\n  \"predictions\": [{\n      \"index\": 57,\n      \"family\": \"Papilionidae\",\n      \"family_prob\": 0.9987090826,\n      \"subfamily\": \"Papilioninae\",\n      \"subfamily_prob\": 0.9983495474,\n      \"species\": \"Iphiclides podalirius\",\n      \"species_prob\": 0.9917422533,\n      \"image_id\": \"ETHZ_ENT01_2017_03_20_004690\"\n    }, {\n      \"index\": 58,\n      \"family\": \"Papilionidae\",\n      \"family_prob\": 0.9987090826,\n      \"subfamily\": \"Papilioninae\",\n      \"subfamily_prob\": 0.9983495474,\n      \"species\": \"Iphiclides feisthamelii\",\n      \"species_prob\": 0.0060221944,\n      \"image_id\": \"ETHZ_ENT01_2017_03_21_004903\"\n    }, {\n      \"index\": 92,\n      \"family\": \"Papilionidae\",\n      \"family_prob\": 0.9987090826,\n      \"subfamily\": \"Papilioninae\",\n      \"subfamily_prob\": 0.9983495474,\n      \"species\": \"Papilio alexanor\",\n      \"species_prob\": 0.0002632738,\n      \"image_id\": \"ETHZ_ENT01_2017_03_20_004662\"\n    }\n\t],\n  \"prediction_exec_time\": \"0:00:01.561352\",\n  \"prediction_model\": \"resnet_hier_v03 | ssd_mobilenet_v2_coco_butterfly\",\n  \"prediction_status\": \"OK: image processed | build version v09-20191121-0000\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/backend/api/cases/create/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"backend",
+								"api",
+								"cases",
+								"create",
+								""
+							]
+						},
+						"description": "Couldn't figure a way to send an image as well as an array of objects in Postman. With raw JSON the image can't be added and in form-data I couldn't manage to send the array with nested objects."
+					},
+					"response": []
+				},
+				{
+					"name": "Update specific case by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "confirmed_image",
+									"type": "file",
+									"src": ""
+								},
+								{
+									"key": "prediction_id",
+									"value": "64",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/backend/api/cases/confirm/22/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"backend",
+								"api",
+								"cases",
+								"confirm",
+								"22",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific case by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/backend/api/cases/28/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"backend",
+								"api",
+								"cases",
+								"28",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Send image and get predictions",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "https://europe-west1-ethec-auto-insect-recognition.cloudfunctions.net/lepidoptera_clfr_objdet",
+					"protocol": "https",
+					"host": [
+						"europe-west1-ethec-auto-insect-recognition",
+						"cloudfunctions",
+						"net"
+					],
+					"path": [
+						"lepidoptera_clfr_objdet"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "9db1c8c2-4ced-4800-929a-2da793fdaf67",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "e17c2c3f-da3c-417f-8638-0809aacfbef3",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
