@@ -36,9 +36,7 @@ const ImageCaptureScreen = ({ navigation }) => {
   // Cleanup function on navigation
   useEffect(() => {
     const cleanup = () => {
-      console.log('adding listener')
       navigation.addListener('blur', () => {
-        console.log('blurring away')
         ScreenOrientation.removeOrientationChangeListener(listener);
       });
     };
