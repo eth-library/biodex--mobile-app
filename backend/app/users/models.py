@@ -2,10 +2,14 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
+from app.users.manager import CustomUserManager
+
 
 class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+    objects = CustomUserManager()
 
     email = models.EmailField(unique=True)
 
