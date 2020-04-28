@@ -98,7 +98,7 @@ const ResetPassword = ({ navigation }) => {
               style={authStyles.link}
               onPress={() => navigation.navigate('ResetPasswordValidation')}
             >
-              Go to password reset validation
+              Set new password
             </Text>
           </View>
           <TermsAndConditions />

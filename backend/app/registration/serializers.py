@@ -75,6 +75,8 @@ class RegistrationValidationSerializer(serializers.Serializer):
         code = data.get('code')
         email = data.get('email')
         user = User.objects.get(email=email)
+        if user.is_active:
+            raise ValidationError(message='This user is already registered!')
         reg_profile = RegistrationProfile.objects.get(code=code)
         if reg_profile != user.registration_profile:
             raise ValidationError(message='The code does not belong to this email!')

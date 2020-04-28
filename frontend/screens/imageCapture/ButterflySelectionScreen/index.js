@@ -15,17 +15,19 @@ import { Ionicons } from '@expo/vector-icons';
 import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
 
 import Theme from '../../../theme';
+import HeaderTitle from './HeaderTitle';
 import ButterflyChoice from './ButterflyChoice';
 import Titles from './Titles';
 import DeveloperInfo from './DeveloperInfo';
 import { confirmPredictionAsyncAction, clearImagesState } from '../../../store/actions/images';
-import imgPlaceholder from '../../../assets/imgPlaceholder.png';
+import imgPlaceholder from '../../../assets/imgNotFound.png';
 
 const IoniconsHeaderButton = (props) => (
   <HeaderButton {...props} IconComponent={Ionicons} iconSize={23} color={Theme.colors.white} />
 );
 
 const ButterflySelectionScreen = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [portrait, setPortrait] = useState(
     Dimensions.get('window').height > Dimensions.get('window').width
   );
@@ -46,17 +48,9 @@ const ButterflySelectionScreen = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerTitle: props => <HeaderTitle showDeveloperInfo={showDeveloperInfo} setShowDeveloperInfo={setShowDeveloperInfo} />,
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
-          <Item
-            title='info'
-            iconName={
-              Platform.OS === 'ios'
-                ? 'ios-information-circle-outline'
-                : 'md-information-circle-outline'
-            }
-            onPress={() => setShowDeveloperInfo(!showDeveloperInfo)}
-          />
           <Item
             title='home'
             iconName={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
@@ -88,11 +82,13 @@ const ButterflySelectionScreen = ({ navigation }) => {
   }, []);
 
   const confirmationHandler = async (prediction) => {
+    setIsLoading(true);
     try {
       await dispatch(confirmPredictionAsyncAction(prediction));
     } catch (e) {
       console.log('ERROR IN confirmationHandler', e.message);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -125,6 +121,7 @@ const ButterflySelectionScreen = ({ navigation }) => {
                   confirmationHandler={confirmationHandler}
                   confirmedCase={confirmedCase}
                   navigation={navigation}
+                  isLoading={isLoading}
                 />
               );
             })}
@@ -141,7 +138,7 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       width: '100%',
       height: '100%',
       alignItems: 'center',
-      paddingTop: Theme.space.vertical.xxSmall,
+      paddingTop: 2,
     },
     imagePreview: {
       height: 224,

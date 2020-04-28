@@ -41,8 +41,11 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     fontFamily: Theme.fonts.primary,
-    fontSize: Theme.fonts.sizeTC,
-    marginTop: Theme.space.vertical.xxSmall
+    fontSize: Theme.fonts.sizeXXS,
+    marginTop: Theme.space.vertical.xxSmall,
+    textAlign: 'center',
+    width: '100%',
+    textAlign: 'center',
   }
 });
 
