@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from .serializers import RegistrationSerializer, RegistrationValidationSerializer, PasswordResetSerializer, \
-    PasswordResetValidationSerializer
+    PasswordResetValidationSerializer, CustomTokenObtainPairSerializer
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -19,6 +19,8 @@ class TokenUserObtainView(TokenObtainPairView):
     post:
     Create a new session for a user. Sends back tokens and user.
     """
+    serializer_class = CustomTokenObtainPairSerializer
+
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
 
