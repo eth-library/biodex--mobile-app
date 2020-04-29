@@ -4,7 +4,6 @@ import {
   Text,
   StatusBar,
   Image,
-  StyleSheet,
   Dimensions,
   Alert,
 } from 'react-native';
@@ -20,6 +19,7 @@ import Theme from '../../theme';
 import butterfly from '../../assets/butterfly.jpg';
 import LoadingScreen from '../../components/LoadingScreen';
 import { storeSelectedImageAction, storeLocation } from '../../store/actions/images';
+import { portraitStyles, landscapeStyles } from './styles';
 
 const ImageCaptureScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -155,20 +155,20 @@ const ImageCaptureScreen = ({ navigation }) => {
           <Image style={styles.imagePreview} source={butterfly} />
           <View style={styles.bottomContainer}>
             <View style={styles.infoContainer}>
-              <Text style={styles.infoText}>tips:</Text>
-              <Text style={styles.infoText}>capture all of the insect inside the square frame</Text>
-              <Text style={styles.infoText}>keep parts of other specimens out of the frame</Text>
+              <Text style={styles.infoTitle}>Tips</Text>
+              <Text style={styles.infoText}>- capture all of the insect inside the square frame</Text>
+              <Text style={styles.infoText}>- keep parts of other specimens out of the frame</Text>
             </View>
             <View style={styles.buttonsContainer}>
               <Ionicons
                 name='md-camera'
-                size={40}
+                size={55}
                 color={Theme.colors.accent}
                 onPress={takeImageHandler}
               />
               <Ionicons
                 name='md-images'
-                size={40}
+                size={50}
                 color={Theme.colors.accent}
                 onPress={selectGalleryImageHandler}
               />
@@ -179,67 +179,5 @@ const ImageCaptureScreen = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-const portraitStyles = (deviceWidth, deviceHeight) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      backgroundColor: Theme.colors.background,
-    },
-    imagePreview: {
-      height: deviceWidth * 0.9,
-      width: deviceWidth * 0.9,
-    },
-    bottomContainer: {
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      height: deviceHeight * 0.2,
-    },
-    infoText: {
-      fontFamily: Theme.fonts.primaryBold,
-      fontSize: Theme.fonts.sizeXS,
-      color: Theme.colors.primary,
-    },
-    buttonsContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      width: deviceWidth,
-    },
-  });
-
-const landscapeStyles = (deviceWidth, deviceHeight) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      backgroundColor: Theme.colors.background,
-    },
-    imagePreview: {
-      height: deviceHeight * 0.7,
-      width: deviceHeight * 0.7,
-    },
-    bottomContainer: {
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      width: deviceWidth * 0.4,
-    },
-    infoContainer: {
-      height: deviceHeight * 0.3,
-    },
-    infoText: {
-      fontFamily: Theme.fonts.primaryBold,
-      fontSize: Theme.fonts.sizeXS,
-      color: Theme.colors.primary,
-    },
-    buttonsContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      width: '80%',
-    },
-  });
 
 export default ImageCaptureScreen;

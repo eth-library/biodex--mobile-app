@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { View, Text, StatusBar, Image, StyleSheet, Dimensions, Alert } from 'react-native';
+import { View, Text, StatusBar, Image, Dimensions, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import * as ExpoImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
@@ -13,6 +13,7 @@ import butterfly from '../../assets/butterfly.jpg';
 import LoadingScreen from '../../components/LoadingScreen';
 import ImageCropper from '../../components/ImageCropper';
 import { storeSelectedImageAction, storeLocation } from '../../store/actions/images';
+import { portraitStyles, landscapeStyles } from './styles';
 
 const ImageCaptureScreen = ({ navigation }) => {
   const [cropModalVisible, setCropModalVisible] = useState(false);
@@ -148,20 +149,20 @@ const ImageCaptureScreen = ({ navigation }) => {
           <Image style={styles.imagePreview} source={butterfly} />
           <View style={styles.bottomContainer}>
             <View style={styles.infoContainer}>
-              <Text style={styles.infoText}>tips:</Text>
-              <Text style={styles.infoText}>capture all of the insect inside the square frame</Text>
-              <Text style={styles.infoText}>keep parts of other specimens out of the frame</Text>
+              <Text style={styles.infoTitle}>Tips</Text>
+              <Text style={styles.infoText}>- capture all of the insect inside the square frame</Text>
+              <Text style={styles.infoText}>- keep parts of other specimens out of the frame</Text>
             </View>
             <View style={styles.buttonsContainer}>
               <Ionicons
                 name='ios-camera'
-                size={40}
+                size={55}
                 color={Theme.colors.accent}
                 onPress={takeImageHandler}
               />
               <Ionicons
                 name='ios-images'
-                size={40}
+                size={50}
                 color={Theme.colors.accent}
                 onPress={selectGalleryImageHandler}
               />
@@ -189,67 +190,5 @@ const ImageCaptureScreen = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-const portraitStyles = (deviceWidth, deviceHeight) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      backgroundColor: Theme.colors.background,
-    },
-    imagePreview: {
-      height: deviceWidth * 0.9,
-      width: deviceWidth * 0.9,
-    },
-    bottomContainer: {
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      height: deviceHeight * 0.2,
-    },
-    infoText: {
-      fontFamily: Theme.fonts.primaryBold,
-      fontSize: Theme.fonts.sizeXS,
-      color: Theme.colors.primary,
-    },
-    buttonsContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      width: deviceWidth,
-    },
-  });
-
-const landscapeStyles = (deviceWidth, deviceHeight) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      backgroundColor: Theme.colors.background,
-    },
-    imagePreview: {
-      height: deviceHeight * 0.7,
-      width: deviceHeight * 0.7,
-    },
-    bottomContainer: {
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      width: deviceWidth * 0.4,
-    },
-    infoContainer: {
-      height: deviceHeight * 0.3,
-    },
-    infoText: {
-      fontFamily: Theme.fonts.primaryBold,
-      fontSize: Theme.fonts.sizeXS,
-      color: Theme.colors.primary,
-    },
-    buttonsContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      width: '80%',
-    },
-  });
 
 export default ImageCaptureScreen;
