@@ -10,5 +10,4 @@ static-files
 /app/htmlcov
 /prediction_api
 
-*.md
-django-social-media-template.postman_collection.json
+TODO.md
