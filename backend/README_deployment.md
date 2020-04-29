@@ -23,4 +23,7 @@ EMAIL_HOST_PASSWORD = '***'
 DEFAULT_FROM_EMAIL = '***'
 ```
 
-5. Update image in docker-compose.deploy.yml if you pull from a different gitlab registry
+5. Change the postgres username and password in prod.env and dev.env. Or actually don't use a prod.env at all and inject all 
+env variables you need from gitlab.
+
+6. Update image in docker-compose.deploy.yml if you pull from a different gitlab registry
