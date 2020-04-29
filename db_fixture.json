@@ -10,7 +10,7 @@
     "model": "emails.devemails",
     "pk": 2,
     "fields": {
-      "email": "SignalFlux@outlook.com"
+      "email": "cedricd@propulsionacademy.com"
     }
   },
   {
@@ -18,9 +18,9 @@
     "pk": 1,
     "fields": {
       "key": "registration_email",
-      "subject": "Subject: Thank you for registering!",
-      "title": "Title: Thank you for registering!",
-      "template": "Here is your validation code: {{code}}"
+      "subject": "You have been invited to join Lepi!",
+      "title": "You have been invited to join Lepi!",
+      "template": "{{ value|linebreaks }}Welcome to Lepi{{ value|linebreaks }}\nIf you don't have the app yet, download it via App store and create a new account.\nYou will need following validation code for that: {{code}}"
     }
   },
   {
@@ -28,31 +28,9 @@
     "pk": 2,
     "fields": {
       "key": "password_reset_email",
-      "subject": "Subject: Password reset",
-      "title": "Title: Password reset",
-      "template": "Here is your password reset code: {{code}}"
-    }
-  },
-  {
-    "model": "notifications.notificationtype",
-    "pk": 1,
-    "fields": {
-      "key": "new_user_registered",
-      "subject": "Subject: A new User has registered",
-      "title": "Title: A new User has registered",
-      "description": "Description: A new User has registered",
-      "template": "Email: {{ email }}\r\nLink: <a href=\"https://google.com\">Link</a>"
-    }
-  },
-  {
-    "model": "notifications.notificationtype",
-    "pk": 2,
-    "fields": {
-      "key": "user_reset_password",
-      "subject": "Subject: A User reset his password.",
-      "title": "Title: A User reset his password.",
-      "description": "Tittle: A User reset his password.",
-      "template": "Password reset for: {{ email }}"
+      "subject": "Password reset",
+      "title": "Password reset",
+      "template": "{{ value|linebreaks }}This is the code to reset your password: {{code}}"
     }
   },
   {
