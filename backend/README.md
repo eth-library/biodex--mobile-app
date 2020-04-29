@@ -9,6 +9,15 @@ The data is stored in a Postgres database.
 > In following explanation, https://api.lepi.propulsion-home.ch is used as domain name. If you deploy your app to another domain, you will of course have to update this address.
 > Each url is also accessible with http://yourLocalDomain:PORT, if you run a local development server
 
+- [Endpoints](#endpoints)
+- [Admin](#admin)
+- [Users](#users)
+- [Cases and Predictions](#cases-and-predictions)
+- [Emails](#emails)
+- [Email Models](#email-models)
+- [Models](#models)
+- [Run the project locally](#run-the-project-locally)
+
 ## Endpoints
 
 Detailed documentation about the API endpoints can be found at https://api.lepi.propulsion-home.ch/backend/api/docs/
