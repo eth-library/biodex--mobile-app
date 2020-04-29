@@ -4,12 +4,6 @@ from django.db import migrations
 
 
 def populate_db(apps, schema_editor):
-    # Dev Emails
-    dev_emails = ['SignalFlux@outlook.com', 'danieler@propulsionacademy.com', 'rubenv@propulsionacademy.com', 'cedricd@propulsionacademy.com']
-    DevEmail = apps.get_model('emails', 'DevEmails')
-    for email in dev_emails:
-        DevEmail(email=email).save()
-
     # Email Types
     email_types = [
         {
@@ -28,8 +22,6 @@ def populate_db(apps, schema_editor):
     EmailType = apps.get_model('emails', 'EmailType')
     for email_type in email_types:
         EmailType(**email_type).save()
-
-
 
 
 class Migration(migrations.Migration):

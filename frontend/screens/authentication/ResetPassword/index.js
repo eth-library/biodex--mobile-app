@@ -86,7 +86,7 @@ const ResetPassword = ({ navigation }) => {
             title='SEND'
             onPress={submitHandler}
             isLoading={isLoading}
-            error={error && error.email}
+            error={error && error.general || error && error.email}
           />
           <View style={authStyles.center}>
             <Text style={authStyles.text}>Remember your password?</Text>

@@ -102,6 +102,13 @@ class RegistrationValidationSerializer(serializers.Serializer):
 class PasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField(label='Password Reset E-Mail Address', validators=[email_does_exist])
 
+    def validate(self, data):
+        email = data.get('email').lower()
+        user = User.objects.get(email=email)
+        if not user.is_active:
+            raise ValidationError(message="This user didn't sign up yet!")
+        return data
+
     def send_password_reset_email(self):
         email = self.validated_data.get('email').lower()
         user = User.objects.get(email=email)
