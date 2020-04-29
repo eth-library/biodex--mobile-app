@@ -1,6 +1,6 @@
-# Deployment
+# REST API Deployment
 
-api.lepi.propulsion-home.ch is running in a Digital Ocean droplet. The code is pushed to Gitlab and running to a pipeline every time to check for errors. After that, the new code can be deployed manually via Gitlab.
+https://api.lepi.propulsion-home.ch is running in a Digital Ocean droplet. The code is pushed to Gitlab and running through a pipeline every time to check that everything runs smoothly. After that, the new code can be deployed manually via Gitlab.
 
 ## Things you need to change
 1. Change the hostname to your hostname in the nginx conf file for deployment. Currently it is set to api.lepi.propulsion-home.ch.

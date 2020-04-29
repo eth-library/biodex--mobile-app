@@ -14,21 +14,24 @@ will allow the non-expert staff to correctly sort the majority of specimens whic
 
 ## Mobile App
 - React-Native with Expo framework
-[more info](./frontend/README.md)
+
+[Frontend README](./frontend/README.md)
 
 ## REST API
 - Django REST Framework
 - Postgres
 - Redis
 - Celery
-[more info](./backend/README.md)
+
+[Backend README](./backend/README.md)
 
 ## REST API Deployment
 - Docker
 - Docker Compose
 - Nginx
 - Gunicorn
-[more info](./backend/README_deployment.md)
+
+[REST API Deployment README](./backend/README_deployment.md)
 
 ## Predictions API - not in this codebase!
 
