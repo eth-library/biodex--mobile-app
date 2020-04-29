@@ -2,7 +2,7 @@ version: '3'
 
 services:
   postgres:
-    image: postgres:11
+    image: postgres:12
     ports:
       - '5432:5432'
     env_file:
@@ -26,7 +26,6 @@ services:
       - static-files:/static-files
     tty: true
 
-
   redis:
     image: redis:latest
     restart: always
@@ -34,7 +33,7 @@ services:
       - redis_data:/data
 
   celery:
-    image: lepi
+    image: registry.gitlab.propulsion-home.ch/propulsion/projects/clients/lepi:latest
     restart: always
     env_file:
       - ./envs/dev.env
