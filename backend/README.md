@@ -68,5 +68,6 @@ background / asynchronously with redis and celery.
 
 - Run `docker-compose up -d` in your terminal, to start up all containers. This will also pull the Docker images if you don't already have them on your machine.
 - Run `docker exec -ti lepi_backend_1 bash` in your terminal. This is to log into the container, which is running the REST API. Make sure 'lepi_backend_1' is the name of the running container. Else replace it with the correct name or with the container ID.
-- Run `python manage.py runserver 0:8000` and visit http://0.0.0.0:8000/ - you should get a 404 served by Django
+- Run `python manage.py runserver 0:8000` and visit http://0.0.0.0:8000/ - you should get a 404 served by Django, means it is running!
+- Run `python manage.py migrate` to create the tables in your database (this needs only to be done the first time or if you update the models)
 - Run `python manage.py createsuperuser` to create a superuser. Visit http://0.0.0.0:8000/backend/lepi-admin and use the credentials to log in
