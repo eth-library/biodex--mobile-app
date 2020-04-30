@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Theme from '../theme';
 import ImageCaptureStackNavigator from './ImageCaptureStackNavigator';
 import InvitationStackNavigator from './InvitationStackNavigator';
+import AboutStackNavigator from './AboutStackNavigator';
 import Guide from '../screens/guide';
 import { logoutAsyncAction } from '../store/actions/auth';
 
@@ -85,6 +86,19 @@ export default function DrawerNavigator() {
           drawerIcon: () => (
             <Ionicons
               name={Platform.OS === 'ios' ? 'ios-person-add' : 'md-person-add'}
+              size={23}
+              color={Theme.colors.primary}
+            />
+          )
+        }}
+      />
+      <Drawer.Screen
+        name='About'
+        component={AboutStackNavigator}
+        options={{
+          drawerIcon: () => (
+            <Ionicons
+              name={Platform.OS === 'ios' ? 'ios-information-circle' : 'md-information-circle'}
               size={23}
               color={Theme.colors.primary}
             />
