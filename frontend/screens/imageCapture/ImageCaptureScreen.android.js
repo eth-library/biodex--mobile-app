@@ -168,7 +168,7 @@ const ImageCaptureScreen = ({ navigation }) => {
               />
               <Ionicons
                 name='md-images'
-                size={50}
+                size={55}
                 color={Theme.colors.accent}
                 onPress={selectGalleryImageHandler}
               />
