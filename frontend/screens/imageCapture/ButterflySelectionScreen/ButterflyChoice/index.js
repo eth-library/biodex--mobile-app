@@ -134,14 +134,14 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
     },
     butterflyContainer: {
       width: '100%',
-      height: deviceWidth * 0.8,
+      height: deviceWidth * 0.85,
       justifyContent: 'space-between',
       alignItems: 'center',
       backgroundColor: Theme.colors.backgroundAccent,
     },
     imageContainer: {
       width: '98%',
-      height: deviceWidth * 0.8 - 50 - 30,
+      height: deviceWidth * 0.85 - 50 - 40, // deviceWidth * 0.8 = container, titles height = 50, description button height = 30
       alignItems: 'center',
       justifyContent: 'space-around',
       flexDirection: 'row',
@@ -149,7 +149,7 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
     },
     imageContainerNoButton: {
       width: '98%',
-      height: deviceWidth * 0.8 - 50 - 30,
+      height: deviceWidth * 0.85 - 50 - 40,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
@@ -157,8 +157,8 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
     },
     image: {
       resizeMode: 'cover',
-      height: deviceWidth * 0.8 - 50 - 30,
-      width: deviceWidth * 0.8 - 50 - 30,
+      height: deviceWidth * 0.85 - 50 - 40,
+      width: deviceWidth * 0.85 - 50 - 40,
       padding: 10,
       alignItems: 'flex-end',
     },
@@ -179,7 +179,7 @@ const portraitStyles = (deviceWidth, deviceHeight) =>
       backgroundColor: Platform.OS === 'ios' ? Theme.colors.primary : Theme.colors.backgroundAccent,
     },
     description: {
-      height: 30,
+      height: 40,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
@@ -200,14 +200,14 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
     },
     butterflyContainer: {
       width: '100%',
-      height: deviceWidth * 0.4,
+      height: deviceWidth * 0.45,
       justifyContent: 'space-between',
       alignItems: 'center',
       backgroundColor: Theme.colors.backgroundAccent,
     },
     imageContainer: {
       width: '98%',
-      height: deviceWidth * 0.4 - 50 - 30,
+      height: deviceWidth * 0.45 - 50 - 40,
       alignItems: 'center',
       justifyContent: 'space-evenly',
       flexDirection: 'row',
@@ -215,7 +215,7 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
     },
     imageContainerNoButton: {
       width: '98%',
-      height: deviceHeight * 0.45 - 50 - 30,
+      height: deviceHeight * 0.50 - 50 - 40,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
@@ -223,8 +223,8 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
     },
     image: {
       resizeMode: 'cover',
-      height: deviceWidth * 0.39 - 50 - 30,
-      width: deviceWidth * 0.39 - 50 - 30,
+      height: deviceWidth * 0.44 - 50 - 40,
+      width: deviceWidth * 0.44 - 50 - 40,
       padding: 10,
       alignItems: 'flex-end',
     },
@@ -242,7 +242,7 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
       backgroundColor: Platform.OS === 'ios' ? Theme.colors.primary : Theme.colors.backgroundAccent,
     },
     description: {
-      height: 30,
+      height: 40,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
