@@ -8,6 +8,7 @@ import ImageCaptureScreen from '../screens/imageCapture/ImageCaptureScreen';
 import ImageCaptureConfirmationScreen from '../screens/imageCapture/ImageCaptureConfirmationScreen';
 import ButterflySelectionScreen from '../screens/imageCapture/ButterflySelectionScreen';
 import Theme from '../theme';
+import withOrientation from '../HOC/withOrientation';
 
 const Stack = createStackNavigator();
 
@@ -36,17 +37,17 @@ const ImageCaptureStackNavigator = props => {
     >
       <Stack.Screen
         name='ImageCapture'
-        component={ImageCaptureScreen}
+        component={withOrientation(ImageCaptureScreen)}
         options={{ title: 'Image Capture' }}
       />
       <Stack.Screen
         name='ImageConfirm'
-        component={ImageCaptureConfirmationScreen}
+        component={withOrientation(ImageCaptureConfirmationScreen)}
         options={{ title: 'Upload' }}
       />
       <Stack.Screen
         name='ButterflySelection'
-        component={ButterflySelectionScreen}
+        component={withOrientation(ButterflySelectionScreen)}
         options={{
           title: 'Results',
           
