@@ -24,7 +24,7 @@ const Header = ({ onCancel, onCropImage, processing, btnTexts }) => {
         justifyContent: 'space-between',
       }}
     >
-      <StatusBar hidden />
+      <StatusBar hidden barStyle='light-content' />
       <ScrollView
         scrollEnabled={false}
         horizontal
