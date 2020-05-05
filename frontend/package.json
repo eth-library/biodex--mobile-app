@@ -9,6 +9,7 @@
     },
     "dependencies": {
         "@react-native-community/masked-view": "^0.1.5",
+        "@react-native-community/netinfo": "4.6.0",
         "@react-navigation/drawer": "^5.1.1",
         "@react-navigation/native": "^5.0.9",
         "@react-navigation/stack": "^5.1.1",
@@ -40,8 +41,7 @@
         "redux": "^4.0.5",
         "redux-devtools-extension": "^2.13.8",
         "redux-thunk": "^2.3.0",
-        "sentry-expo": "^2.0.3",
-        "@react-native-community/netinfo": "4.6.0"
+        "sentry-expo": "^2.0.3"
     },
     "devDependencies": {
         "@babel/core": "^7.0.0",
