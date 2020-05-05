@@ -48,7 +48,6 @@ export const clearImagesState = () => {
 };
 
 export const storeImageTakingMethod = (method) => {
-  console.log('STORE', method)
   return {
     type: STORE_IMAGE_TAKING_METHOD,
     payload: method

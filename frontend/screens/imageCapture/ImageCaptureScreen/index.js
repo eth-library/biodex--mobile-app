@@ -80,7 +80,6 @@ const ImageCaptureScreen = ({ navigation, route }) => {
   };
 
   const retakeImageHandler = (method) => {
-    console.log('METHOD', method)
     if (method === 'camera') {
       takeCameraImageHandler();
     } else if (method === 'gallery') {
