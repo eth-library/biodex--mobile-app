@@ -82,7 +82,7 @@ const ButterflySelectionScreen = ({ navigation }) => {
     } catch (e) {
       console.log('ERROR IN confirmationHandler', e.message);
     }
-    setIsLoading(false);
+    setTimeout(() => startNewCase(), 1000);
   };
 
   const startNewCase = () => {
