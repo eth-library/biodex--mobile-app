@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, ActivityIndicator, StatusBar } from 'react-nati
 
 import Theme from '../../theme';
 
-const LoadingScreen = () => {
+const LoadingScreen = ({ statusBarHidden }) => {
   return (
     <View style={styles.container}>
-      <StatusBar barStyle='light-content' />
+      <StatusBar barStyle='light-content' hidden={statusBarHidden}/>
       <ActivityIndicator size='large' color={Theme.colors.primary} />
       <Text style={styles.text}>Loading...</Text>
     </View>

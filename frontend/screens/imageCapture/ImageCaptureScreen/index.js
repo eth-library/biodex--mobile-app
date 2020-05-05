@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { View, Text, StatusBar, Image, Dimensions } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import * as Location from 'expo-location';
 import * as ExpoImagePicker from 'expo-image-picker';
@@ -101,6 +100,7 @@ const ImageCaptureScreen = ({ navigation, route }) => {
       setIsLoading(false);
     } else {
       setUri(image.uri);
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
       setCropModalVisible(true);
     }
   };
@@ -119,11 +119,13 @@ const ImageCaptureScreen = ({ navigation, route }) => {
       setIsLoading(false);
     } else {
       setUri(image.uri);
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
       setCropModalVisible(true);
     }
   };
 
   const storeCroppedImageHandler = async (uri) => {
+    await ScreenOrientation.unlockAsync();
     try {
       const response = await dispatch(getPredictionsAsyncAction(uri));
       if (response && response.ok) {
@@ -145,13 +147,19 @@ const ImageCaptureScreen = ({ navigation, route }) => {
     setIsLoading(false);
   };
 
+  const cancelHandler = async () => {
+    setCropModalVisible(!cropModalVisible)
+    await ScreenOrientation.unlockAsync();
+    setIsLoading(false)
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       {isLoading ? (
-        <LoadingScreen />
+        <LoadingScreen statusBarHidden={cropModalVisible}/>
       ) : (
         <Fragment>
-          <StatusBar barStyle='light-content' />
+          <StatusBar barStyle='light-content' hidden={cropModalVisible}/>
           <Image style={styles.imagePreview} source={butterfly} />
           <View style={styles.bottomContainer}>
             <View style={styles.infoContainer}>
@@ -182,10 +190,7 @@ const ImageCaptureScreen = ({ navigation, route }) => {
           isVisible={cropModalVisible}
           chosenPicture={(data) => storeCroppedImageHandler(data.uri)}
           onToggleModal={() => setCropModalVisible(!cropModalVisible)}
-          onCancel={() => {
-            setCropModalVisible(!cropModalVisible)
-            setIsLoading(false)
-          }}
+          onCancel={cancelHandler}
           saveOptions={{
             compress: 1,
             format: 'jpeg',
