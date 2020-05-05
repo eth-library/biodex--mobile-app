@@ -32,7 +32,7 @@ const Guide = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar hidden={hidden} />
+      <StatusBar hidden={hidden} barStyle='light-content' />
       <SwiperFlatList index={0} showPagination navigation={navigation}>
         <HomeScreen style={styles.child} />
         <ImageCaptureScreen style={styles.child} />
