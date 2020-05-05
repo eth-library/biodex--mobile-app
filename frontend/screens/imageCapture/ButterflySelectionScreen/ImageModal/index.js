@@ -8,7 +8,9 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import Theme from '../../../../../theme';
+import Theme from '../../../../theme';
+import imgPlaceholder from '../../../../assets/imgNotFound.png';
+
 
 const ImageModal = ({ visible, hideModalHandler, imageUri }) => {
   return (
@@ -20,7 +22,7 @@ const ImageModal = ({ visible, hideModalHandler, imageUri }) => {
     >
 
         <View style={styles.container}>
-          <ImageBackground style={styles.image} source={{ uri: imageUri }}>
+          <ImageBackground style={styles.image} source={imageUri ? { uri: imageUri } : imgPlaceholder}>
             <Ionicons
               name={Platform.OS === 'ios' ? 'ios-close' : 'md-close'}
               size={40}

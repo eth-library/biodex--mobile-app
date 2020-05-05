@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
+  TouchableOpacity
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenOrientation } from 'expo';
@@ -16,6 +17,7 @@ import Theme from '../../../theme';
 import HeaderTitle from './HeaderTitle';
 import ButterflyChoice from './ButterflyChoice';
 import Titles from './Titles';
+import ImageModal from './ImageModal';
 import NewButton from './NewButton';
 import DeveloperInfo from './DeveloperInfo';
 import { confirmPredictionAsyncAction, clearImagesState } from '../../../store/actions/images';
@@ -23,6 +25,7 @@ import imgPlaceholder from '../../../assets/imgNotFound.png';
 
 
 const ButterflySelectionScreen = ({ navigation }) => {
+  const [showUserImageModal, setShowUserImageModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [portrait, setPortrait] = useState(
     Dimensions.get('window').height > Dimensions.get('window').width
@@ -96,16 +99,23 @@ const ButterflySelectionScreen = ({ navigation }) => {
         visible={showDeveloperInfo}
         hideModalHandler={() => setShowDeveloperInfo(false)}
       />
+      <ImageModal
+        visible={showUserImageModal}
+        hideModalHandler={() => setShowUserImageModal(false)}
+        imageUri={uploadedImage}
+      />
 
       <View style={styles.container}>
         <View style={styles.imagePreview}>
-          <ImageBackground
-            source={uploadedImage ? { uri: uploadedImage } : imgPlaceholder}
-            style={styles.imageContainer}
-            imageStyle={styles.image}
-          >
-            <Text style={styles.imageDescription}>User's image</Text>
-          </ImageBackground>
+          <TouchableOpacity onPress={() => setShowUserImageModal(true)}>
+            <ImageBackground
+              source={uploadedImage ? { uri: uploadedImage } : imgPlaceholder}
+              style={styles.imageContainer}
+              imageStyle={styles.image}
+            >
+              <Text style={styles.imageDescription}>User's image</Text>
+            </ImageBackground>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.choicesContainer}>

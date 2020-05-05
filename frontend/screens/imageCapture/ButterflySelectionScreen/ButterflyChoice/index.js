@@ -5,7 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  ImageBackground,
+  Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { ScreenOrientation } from 'expo';
@@ -14,7 +14,7 @@ import Theme from '../../../../theme';
 import Button from '../../../../components/Button';
 import Title from './Title';
 import Description from './Description';
-import ImageModal from './ImageModal';
+import ImageModal from '../ImageModal';
 
 const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase, isLoading }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -31,7 +31,7 @@ const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase,
   };
   let listener = null;
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
-  
+
   // On mount
   useEffect(() => {
     listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
@@ -75,15 +75,9 @@ const ButterflyChoice = ({ navigation, data, confirmationHandler, confirmedCase,
               : styles.imageContainer
           }
         >
-          <ImageBackground style={styles.image} source={{ uri: data.image_url }}>
-            <TouchableOpacity onPress={() => setModalVisible(true)}>
-              <Ionicons
-                name={Platform.OS === 'ios' ? 'ios-expand' : 'md-expand'}
-                size={20}
-                color={Theme.colors.primary}
-              />
-            </TouchableOpacity>
-          </ImageBackground>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <Image style={styles.image} source={{ uri: data.image_url }} />
+          </TouchableOpacity>
           <View style={styles.buttons}>
             {!confirmedCase && (
               <Button
@@ -215,7 +209,7 @@ const landscapeStyles = (deviceWidth, deviceHeight) =>
     },
     imageContainerNoButton: {
       width: '98%',
-      height: deviceHeight * 0.50 - 50 - 40,
+      height: deviceHeight * 0.5 - 50 - 40,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
