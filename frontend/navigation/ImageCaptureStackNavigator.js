@@ -21,6 +21,7 @@ const ImageCaptureStackNavigator = props => {
         headerStyle: { backgroundColor: Theme.colors.accent },
         headerTintColor: Theme.colors.white,
         headerTitleStyle: { fontWeight: 'bold' },
+        headerTitleAlign: 'center',
         headerLeft: () => (
           <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
             <Item
@@ -43,7 +44,6 @@ const ImageCaptureStackNavigator = props => {
         component={ButterflySelectionScreen}
         options={{
           title: 'Results',
-          
         }}
       />
     </Stack.Navigator>
