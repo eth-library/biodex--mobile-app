@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 
 import Theme from '../../theme';
 
 const LoadingScreen = () => {
   return (
     <View style={styles.container}>
+      <ActivityIndicator size='large' color={Theme.colors.primary} />
       <Text style={styles.text}>Loading...</Text>
     </View>
   );
@@ -14,6 +15,7 @@ const LoadingScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingBottom: '10%'
