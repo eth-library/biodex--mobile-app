@@ -5,7 +5,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
 
 import ImageCaptureScreen from '../screens/imageCapture/ImageCaptureScreen';
-import ImageCaptureConfirmationScreen from '../screens/imageCapture/ImageCaptureConfirmationScreen';
 import ButterflySelectionScreen from '../screens/imageCapture/ButterflySelectionScreen';
 import Theme from '../theme';
 
@@ -38,11 +37,6 @@ const ImageCaptureStackNavigator = props => {
         name='ImageCapture'
         component={ImageCaptureScreen}
         options={{ title: 'Image Capture' }}
-      />
-      <Stack.Screen
-        name='ImageConfirm'
-        component={ImageCaptureConfirmationScreen}
-        options={{ title: 'Upload' }}
       />
       <Stack.Screen
         name='ButterflySelection'

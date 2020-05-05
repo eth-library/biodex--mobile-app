@@ -1,27 +1,25 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import {
-  View,
-  Text,
-  StatusBar,
-  Image,
-  Dimensions,
-  Alert,
-} from 'react-native';
+import { View, Text, StatusBar, Image, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux';
-import * as ExpoImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
+import * as ExpoImagePicker from 'expo-image-picker';
+
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenOrientation } from 'expo';
 
-import Theme from '../../theme';
-import butterfly from '../../assets/butterfly.jpg';
-import LoadingScreen from '../../components/LoadingScreen';
-import { storeSelectedImageAction, storeLocation } from '../../store/actions/images';
+import Theme from '../../../theme';
+import butterfly from '../../../assets/butterfly.jpg';
+import LoadingScreen from '../../../components/LoadingScreen';
+import ImageCropper from '../../../components/ImageCropper';
+import { getPredictionsAsyncAction, storeLocation, newCaseAsyncAction } from '../../../store/actions/images';
+import { networkErrorAsyncAction } from '../../../store/actions/network';
 import { portraitStyles, landscapeStyles } from './styles';
+import { verifyCameraPermissions, verifyCameraRollPermissions, verifyLocationPermissions } from './permissions';
 
 const ImageCaptureScreen = ({ navigation }) => {
+  const [cropModalVisible, setCropModalVisible] = useState(false);
+  const [uri, setUri] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [portrait, setPortrait] = useState(
     Dimensions.get('window').height > Dimensions.get('window').width
@@ -56,93 +54,74 @@ const ImageCaptureScreen = ({ navigation }) => {
   }, []);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
   const dispatch = useDispatch();
+  
   useEffect(() => {
-    verifyLocationPermissions();
+    getLocation();
   }, []);
 
-  // Android is asking for camera permissions on it's own. For IOS we have to ask for it at runtime.
-  // This function will run once and IOS will store the result automatically.
-  // Subsequent calls will return true or false based on that stored value, the user won't get asked again.
-  // If the user declined permissions the first time, he will have to grant access through system settings.
-  const verifyCameraPermissions = async () => {
-    // Camera roll is also required on Android and ios 10 and bigger
-    const result = await Permissions.askAsync(Permissions.CAMERA, Permissions.CAMERA_ROLL);
-    if (result.status !== 'granted') {
-      Alert.alert(
-        'Insufficient permissions!',
-        'You need to grant camera and camera roll permissions to use this option.',
-        [{ text: 'Okay' }]
-      );
-      return false;
-    }
-    return true;
-  };
-
-  const verifyCameraRollPermissions = async () => {
-    const result = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    if (result.status !== 'granted') {
-      Alert.alert(
-        'Insufficient permissions!',
-        'You need to grant gallery permissions to use this option.',
-        [{ text: 'Okay' }]
-      );
-      return false;
-    }
-    return true;
-  };
-
-  const verifyLocationPermissions = async () => {
-    const result = await Permissions.askAsync(Permissions.LOCATION);
-    if (result.status !== 'granted') return false;
+  const getLocation = async () => {
+    const hasPermission = await verifyLocationPermissions();
+    if (!hasPermission) return
     Location.getLastKnownPositionAsync()
-      .then((position) => {
-        dispatch(storeLocation(position));
-      })
-      .catch(console.log);
-    return true;
+    .then((position) => {
+      dispatch(storeLocation(position));
+    })
+    .catch(console.log);
   };
 
   const takeImageHandler = async () => {
     const hasPermission = await verifyCameraPermissions();
-    if (!hasPermission) {
-      return;
-    }
+    if (!hasPermission) return;
     setIsLoading(true);
     const image = await ExpoImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [1, 1],
       quality: 0.4,
     });
 
     if (image.cancelled) {
       setIsLoading(false);
     } else {
-      setTimeout(() => setIsLoading(false), 500);
-      dispatch(storeSelectedImageAction(image.uri));
-      navigation.navigate('ImageConfirm');
+      setUri(image.uri);
+      setCropModalVisible(true);
     }
   };
 
   const selectGalleryImageHandler = async () => {
     const hasPermission = await verifyCameraRollPermissions();
-    if (!hasPermission) {
-      return;
-    }
+    if (!hasPermission) return;
 
     setIsLoading(true);
     const image = await ExpoImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [1, 1],
       quality: 0.4,
     });
 
     if (image.cancelled) {
       setIsLoading(false);
     } else {
-      setTimeout(() => setIsLoading(false), 500);
-      dispatch(storeSelectedImageAction(image.uri));
-      navigation.navigate('ImageConfirm');
+      setUri(image.uri);
+      setCropModalVisible(true);
     }
+  };
+
+  const storeCroppedImageHandler = async (uri) => {
+    try {
+      const response = await dispatch(getPredictionsAsyncAction(uri));
+      if (response && response.ok) {
+        try {
+          const db_response = await dispatch(newCaseAsyncAction(response.data, uri));
+          if (db_response.ok) navigation.navigate('ButterflySelection');
+        } catch (e) {
+          dispatch(networkErrorAsyncAction())
+          console.log('ERROR IN storeCroppedImageHandler', e.message);
+        }
+      } else {
+        dispatch(networkErrorAsyncAction())
+        console.log('ERROR IN storeCroppedImageHandler - second', JSON.stringify(response));
+      }
+    } catch (e) {
+      dispatch(networkErrorAsyncAction())
+      console.log('ERROR IN storeCroppedImageHandler - third', e.message);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -161,20 +140,37 @@ const ImageCaptureScreen = ({ navigation }) => {
             </View>
             <View style={styles.buttonsContainer}>
               <Ionicons
-                name='md-camera'
+                name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'}
                 size={55}
                 color={Theme.colors.accent}
                 onPress={takeImageHandler}
               />
               <Ionicons
-                name='md-images'
-                size={55}
+                name={Platform.OS === 'ios' ? 'ios-images' : 'md-images'}
+                size={Platform.OS === 'ios' ? 50 : 55}
                 color={Theme.colors.accent}
                 onPress={selectGalleryImageHandler}
               />
             </View>
           </View>
         </Fragment>
+      )}
+      {cropModalVisible && (
+        <ImageCropper
+          photo={{ uri }}
+          isVisible={cropModalVisible}
+          chosenPicture={(data) => storeCroppedImageHandler(data.uri)}
+          onToggleModal={() => setCropModalVisible(!cropModalVisible)}
+          onCancel={() => {
+            setCropModalVisible(!cropModalVisible)
+            setIsLoading(false)
+          }}
+          saveOptions={{
+            compress: 1,
+            format: 'jpeg',
+            base64: true,
+          }}
+        />
       )}
     </SafeAreaView>
   );
