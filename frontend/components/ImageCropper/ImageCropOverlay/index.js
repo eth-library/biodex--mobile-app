@@ -52,7 +52,6 @@ class ImageCropOverlay extends React.Component {
 
     // this.props.initialLeft = left border of image
     // this.props.initialTop = top border of image
-    // this.props.overlaySize = could be max size of overlay
     return (
       <View
         {...this.state.panResponder.panHandlers}
@@ -157,6 +156,7 @@ class ImageCropOverlay extends React.Component {
       draggingBL,
       draggingBR,
       initialTop,
+      initialLeft,
       currentTop,
       currentLeft,
       currentWidth,
@@ -200,7 +200,7 @@ class ImageCropOverlay extends React.Component {
       originalHeight = Dimensions.get('window').height - 122;
     }
     const maxHeight = originalHeight - initialTop
-    let maxWidth = Dimensions.get('window').width;
+    let maxWidth = initialLeft + this.props.maxCropWidth;
 
     // # If movement is from the middle square
     if (draggingMM) {
@@ -217,12 +217,12 @@ class ImageCropOverlay extends React.Component {
         }
       }
       // Check that next position is between left and right of the image
-      if (this.props.overlayPos.left + x >= 0 && this.props.overlayPos.left + currentWidth + x <= maxWidth) {
+      if (this.props.overlayPos.left + x >= initialLeft && this.props.overlayPos.left + currentWidth + x <= maxWidth) {
           state.currentLeft = this.props.overlayPos.left + x
       } else {
         // If overlay would be out of the left of the image, set the overlay left to left of the image
-        if (this.props.overlayPos.left + x <= 0) {
-          state.currentLeft = 0
+        if (this.props.overlayPos.left + x <= initialLeft) {
+          state.currentLeft = initialLeft
           // If overlay would be out of the right of the image, set the overlay left to the right side of the image minus the current cropoverlay width
         } else if (this.props.overlayPos.left + currentWidth + x >= maxWidth) {
           state.currentLeft = maxWidth - currentWidth
@@ -272,9 +272,9 @@ class ImageCropOverlay extends React.Component {
     // # If movement is from the top left square
     if (draggingTL) {
       const willOverlapTop = this.props.overlayPos.top + biggestMove < initialTop;
-      const willOverlapLeft = this.props.overlayPos.left + biggestMove < 0;
+      const willOverlapLeft = this.props.overlayPos.left + biggestMove < initialLeft;
       const maxUpMovement = this.props.overlayPos.top - initialTop;
-      const maxLeftMovement = this.props.overlayPos.left;
+      const maxLeftMovement = this.props.overlayPos.left - initialLeft;
       const respectsMinSize = this.props.overlaySize.width - biggestMove >= this.props.minSize;
 
       if (gestureTopLeftToBottomRight) {
@@ -323,8 +323,8 @@ class ImageCropOverlay extends React.Component {
       const respectsMinSize = this.props.overlaySize.width - biggestMoveX >= this.props.minSize && this.props.overlaySize.height + biggestMoveY >= this.props.minSize;
       if (gestureTopRightToBottomLeft && respectsSquare) {
         const willOverlapBottom = this.props.overlayPos.top + this.props.overlaySize.height + biggestMoveY > maxHeight;
-        const willOverlapLeft = this.props.overlayPos.left + biggestMoveX < 0;
-        const maxPossibleLeft = this.props.overlayPos.left;
+        const willOverlapLeft = this.props.overlayPos.left + biggestMoveX < initialLeft;
+        const maxPossibleLeft = this.props.overlayPos.left - initialLeft;
         const maxPossibleDown = maxHeight - this.props.overlayPos.top - this.props.overlaySize.height;
         if (!willOverlapBottom && !willOverlapLeft && respectsMinSize) {
           state.currentLeft = this.props.overlayPos.left + biggestMoveX;
@@ -350,8 +350,8 @@ class ImageCropOverlay extends React.Component {
       }
       
       if (gestureBottomLeftToTopRight && respectsSquare && respectsMinSize) {
-        const willOverlapBottom = currentTop + currentHeight + biggestMove > maxHeight;
-        const willOverlapLeft = currentLeft === 0 && currentLeft - biggestMoveY < 0;
+        const willOverlapBottom = currentTop + currentHeight + Math.abs(biggestMove) > maxHeight;
+        const willOverlapLeft = currentLeft >= initialLeft && currentLeft - biggestMoveY < initialLeft;
         const respectsMinSize = this.props.overlaySize.width - biggestMove >= this.props.minSize;
         if (!willOverlapBottom && !willOverlapLeft && respectsMinSize) {
           state.currentLeft = this.props.overlayPos.left + biggestMoveX;

@@ -219,6 +219,8 @@ class ImageCropper extends Component {
       overlayPos.left = cropInitialLeft;
     }
 
+    const maxCropWidth = Math.min(cropWidth, cropHeight);
+
     return (
       <Modal
         animationType='slide'
@@ -271,6 +273,7 @@ class ImageCropper extends Component {
                 borderColor={borderColor}
                 overlaySize={this.state.overlaySize}
                 overlayPos={this.state.overlayPos}
+                maxCropWidth={maxCropWidth}
               />
             )}
             <CropButton onCropImage={this.onCropImage} processing={processing} btnTexts={btnTexts} style={{ alignItems: 'center' }} />
@@ -286,10 +289,10 @@ export default ImageCropper;
 ImageCropper.defaultProps = {
   borderColor: '#a4a4a4',
   btnTexts: {
-    crop: 'Crop',
+    crop: 'CROP',
     rotate: 'Rotate',
     done: 'Done',
-    processing: 'Processing',
+    processing: 'PROCESSING',
   },
   saveOptions: {
     compress: 1,
