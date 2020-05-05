@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, StatusBar } from 'react-native';
 
 import Theme from '../../theme';
 
 const LoadingScreen = () => {
   return (
     <View style={styles.container}>
+      <StatusBar barStyle='light-content' />
       <ActivityIndicator size='large' color={Theme.colors.primary} />
       <Text style={styles.text}>Loading...</Text>
     </View>
