@@ -11,20 +11,16 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenOrientation } from 'expo';
-import { Ionicons } from '@expo/vector-icons';
-import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
 
 import Theme from '../../../theme';
 import HeaderTitle from './HeaderTitle';
 import ButterflyChoice from './ButterflyChoice';
 import Titles from './Titles';
+import NewButton from './NewButton';
 import DeveloperInfo from './DeveloperInfo';
 import { confirmPredictionAsyncAction, clearImagesState } from '../../../store/actions/images';
 import imgPlaceholder from '../../../assets/imgNotFound.png';
 
-const IoniconsHeaderButton = (props) => (
-  <HeaderButton {...props} IconComponent={Ionicons} iconSize={23} color={Theme.colors.white} />
-);
 
 const ButterflySelectionScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -44,20 +40,18 @@ const ButterflySelectionScreen = ({ navigation }) => {
   const uploadedImage = useSelector((state) => state.images.uploadedImage);
   const predictions = useSelector((state) => state.images.predictions);
   const confirmedCase = useSelector((state) => Boolean(state.images.confirmedImage));
+  const picMethod = useSelector((state) => state.images.picMethod);
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: props => <HeaderTitle showDeveloperInfo={showDeveloperInfo} setShowDeveloperInfo={setShowDeveloperInfo} />,
-      headerRight: () => (
-        <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
-          <Item
-            title='home'
-            iconName={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
-            onPress={() => navigation.popToTop()}
-          />
-        </HeaderButtons>
+      headerTitle: () => (
+        <HeaderTitle
+          showDeveloperInfo={showDeveloperInfo}
+          setShowDeveloperInfo={setShowDeveloperInfo}
+        />
       ),
+      headerRight: () => <NewButton onPress={startNewCase} />,
     });
   }, [navigation, setShowDeveloperInfo]);
 
@@ -88,7 +82,11 @@ const ButterflySelectionScreen = ({ navigation }) => {
     } catch (e) {
       console.log('ERROR IN confirmationHandler', e.message);
     }
-    setIsLoading(false);
+    setTimeout(() => startNewCase(), 1000);
+  };
+
+  const startNewCase = () => {
+    navigation.navigate('ImageCapture', { method: picMethod })
   };
 
   return (
