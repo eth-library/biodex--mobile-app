@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { View, Text, StatusBar, Image, Dimensions } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import * as Location from 'expo-location';
 import * as ExpoImagePicker from 'expo-image-picker';
@@ -12,12 +13,12 @@ import Theme from '../../../theme';
 import butterfly from '../../../assets/butterfly.jpg';
 import LoadingScreen from '../../../components/LoadingScreen';
 import ImageCropper from '../../../components/ImageCropper';
-import { getPredictionsAsyncAction, storeLocation, newCaseAsyncAction } from '../../../store/actions/images';
+import { getPredictionsAsyncAction, storeLocation, newCaseAsyncAction, storeImageTakingMethod } from '../../../store/actions/images';
 import { networkErrorAsyncAction } from '../../../store/actions/network';
 import { portraitStyles, landscapeStyles } from './styles';
 import { verifyCameraPermissions, verifyCameraRollPermissions, verifyLocationPermissions } from './permissions';
 
-const ImageCaptureScreen = ({ navigation }) => {
+const ImageCaptureScreen = ({ navigation, route }) => {
   const [cropModalVisible, setCropModalVisible] = useState(false);
   const [uri, setUri] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -52,6 +53,15 @@ const ImageCaptureScreen = ({ navigation }) => {
     };
     return cleanup;
   }, []);
+  
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      const method = route.params && route.params.method ? route.params.method : null;
+      retakeImageHandler(method);
+    });
+    return unsubscribe;
+  }, [navigation, route]);
+
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
   const dispatch = useDispatch();
   
@@ -69,9 +79,20 @@ const ImageCaptureScreen = ({ navigation }) => {
     .catch(console.log);
   };
 
-  const takeImageHandler = async () => {
+  const retakeImageHandler = (method) => {
+    console.log('METHOD', method)
+    if (method === 'camera') {
+      takeCameraImageHandler();
+    } else if (method === 'gallery') {
+      selectGalleryImageHandler();
+    }
+  };
+
+  const takeCameraImageHandler = async () => {
     const hasPermission = await verifyCameraPermissions();
     if (!hasPermission) return;
+
+    dispatch(storeImageTakingMethod('camera'))
     setIsLoading(true);
     const image = await ExpoImagePicker.launchCameraAsync({
       quality: 0.4,
@@ -89,6 +110,7 @@ const ImageCaptureScreen = ({ navigation }) => {
     const hasPermission = await verifyCameraRollPermissions();
     if (!hasPermission) return;
 
+    dispatch(storeImageTakingMethod('gallery'))
     setIsLoading(true);
     const image = await ExpoImagePicker.launchImageLibraryAsync({
       quality: 0.4,
@@ -143,7 +165,7 @@ const ImageCaptureScreen = ({ navigation }) => {
                 name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'}
                 size={55}
                 color={Theme.colors.accent}
-                onPress={takeImageHandler}
+                onPress={takeCameraImageHandler}
               />
               <Ionicons
                 name={Platform.OS === 'ios' ? 'ios-images' : 'md-images'}
