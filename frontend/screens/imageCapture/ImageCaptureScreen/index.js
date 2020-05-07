@@ -22,12 +22,11 @@ const ImageCaptureScreen = ({ navigation, route }) => {
   const [cropModalVisible, setCropModalVisible] = useState(false);
   const [uri, setUri] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [portrait, setPortrait] = useState(
-    Dimensions.get('window').height > Dimensions.get('window').width
-  );
+  const [portrait, setPortrait] = useState(Dimensions.get('window').height > Dimensions.get('window').width);
   const [width, setWidth] = useState(Dimensions.get('window').width);
   const [height, setHeight] = useState(Dimensions.get('window').height);
   const hideStatusBar = useSelector((state) => state.statusBar.hidden);
+  const picMethod = useSelector((state) => state.images.picMethod)
   const screenOrientationHandler = () => {
     setPortrait(Dimensions.get('window').height > Dimensions.get('window').width);
     setWidth(Dimensions.get('window').width);
@@ -158,11 +157,11 @@ const ImageCaptureScreen = ({ navigation, route }) => {
   };
 
   const cancelHandler = async () => {
+    setIsLoading(true);
     setCropModalVisible(!cropModalVisible);
-    dispatch(showStatusBarAction());
     await ScreenOrientation.unlockAsync();
-    setIsLoading(false);
-  }
+    retakeImageHandler(picMethod);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
