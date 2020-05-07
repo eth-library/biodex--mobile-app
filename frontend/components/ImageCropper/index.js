@@ -229,6 +229,7 @@ class ImageCropper extends Component {
         transparent
         visible={isVisible}
         hardwareAccelerated
+        onRequestClose={this.props.onCancel}
       >
         <StatusBar hidden={this.props.statusBarHidden} />
         <Header onCropImage={this.onCropImage} onCancel={this.props.onCancel} processing={processing} btnTexts={btnTexts} />
