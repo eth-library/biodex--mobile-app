@@ -71,20 +71,15 @@ const Logo = ({ style }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 150,
+    width: 130,
     height: 50,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: Theme.colors.grey,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 1,
   },
   subContainer: {
     width: 200,
-    height: 50,
-    backgroundColor: Theme.colors.white,
+    height: 60,
   },
 });
 
