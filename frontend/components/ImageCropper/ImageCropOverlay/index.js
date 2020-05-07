@@ -89,9 +89,12 @@ class ImageCropOverlay extends React.Component {
   getTappedItem(x, y) {
     const { currentWidth, currentHeight } = this.state;
     const xPos = parseInt((x - this.props.overlayPos.left) / (currentWidth / 3));
-    const yPos = parseInt((y - this.props.overlayPos.top - 64) / (currentHeight / 3));
-
+    let yPos = parseInt((y - this.props.overlayPos.top - 35) / (currentHeight / 3)); // 35 is the height of the header
+    if (isIphoneX()) {
+      yPos = parseInt((y - this.props.overlayPos.top - 80) / (currentHeight / 3));
+    }
     const index = yPos * 3 + xPos;
+    
     if (index == 0) {
       return 'tl';
     }
