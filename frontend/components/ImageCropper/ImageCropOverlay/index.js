@@ -351,7 +351,7 @@ class ImageCropOverlay extends React.Component {
       }
       
       if (gestureBottomLeftToTopRight && respectsSquare && respectsMinSize) {
-        const willOverlapBottom = currentTop + currentHeight + Math.abs(biggestMove) > maxHeight;
+        const willOverlapBottom = currentTop + currentHeight + biggestMoveY > maxHeight;
         const willOverlapLeft = currentLeft >= initialLeft && currentLeft - biggestMoveY < initialLeft;
         const respectsMinSize = this.props.overlaySize.width - biggestMove >= this.props.minSize;
         if (!willOverlapBottom && !willOverlapLeft && respectsMinSize) {
