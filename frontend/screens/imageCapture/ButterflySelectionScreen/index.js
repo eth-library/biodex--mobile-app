@@ -25,6 +25,7 @@ import imgPlaceholder from '../../../assets/imgNotFound.png';
 
 
 const ButterflySelectionScreen = ({ navigation }) => {
+  const hideStatusBar = useSelector((state) => state.statusBar.hidden);
   const [showUserImageModal, setShowUserImageModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [portrait, setPortrait] = useState(
@@ -94,7 +95,7 @@ const ButterflySelectionScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar barStyle='light-content' />
+      <StatusBar barStyle='light-content' hidden={hideStatusBar}/>
       <DeveloperInfo
         visible={showDeveloperInfo}
         hideModalHandler={() => setShowDeveloperInfo(false)}

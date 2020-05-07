@@ -1,12 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, StatusBar } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import Theme from '../../theme';
 
 const LoadingScreen = () => {
+  const hideStatusBar = useSelector((state) => state.statusBar.hidden);
+
   return (
     <View style={styles.container}>
-      <StatusBar barStyle='light-content' />
+      <StatusBar barStyle='light-content' hidden={hideStatusBar}/>
       <ActivityIndicator size='large' color={Theme.colors.primary} />
       <Text style={styles.text}>Loading...</Text>
     </View>

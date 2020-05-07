@@ -5,8 +5,9 @@ import { View, Text, AsyncStorage, StyleSheet } from 'react-native';
 import { SET_NOT_FIRST_TIME_USER } from '../../store/types';
 import Button from '../../components/Button';
 import Theme from '../../theme';
+import { showStatusBarAction } from '../../store/actions/statusBar';
 
-const StartScreen = ({ style, navigation, setHidden }) => {
+const StartScreen = ({ style, navigation }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
 
@@ -18,7 +19,7 @@ const StartScreen = ({ style, navigation, setHidden }) => {
   };
 
   const navigationHandler = () => {
-    setHidden(false);
+    dispatch(showStatusBarAction());
     navigation.navigate('Image Capture');
   };
 
