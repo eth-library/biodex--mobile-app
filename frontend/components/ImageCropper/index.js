@@ -217,11 +217,11 @@ class ImageCropper extends Component {
     if (overlaySize.width === 0 && cropMode) {
       overlaySize.width = Math.min(cropWidth, cropHeight);
       overlaySize.height = Math.min(cropWidth, cropHeight);
-      overlayPos.top = cropInitialTop;
-      overlayPos.left = cropInitialLeft;
+      // If cropInitialTop is 0, it means it's a portrait image. Then the overlay is centered vertically
+      overlayPos.top = cropInitialTop === 0 ? (cropHeight / 2) - (Math.min(cropWidth, cropHeight) / 2) : cropInitialTop;
+      // If cropInitialTop is 0, it means it's a portrait image. Then the overlay covers the whole width. Else it is centered horizontally
+      overlayPos.left = cropInitialTop === 0 ? cropInitialLeft : (cropWidth / 2) - (Math.min(cropWidth, cropHeight) / 2);
     }
-
-    const maxCropWidth = Math.min(cropWidth, cropHeight);
 
     return (
       <Modal
@@ -276,7 +276,7 @@ class ImageCropper extends Component {
                 borderColor={borderColor}
                 overlaySize={this.state.overlaySize}
                 overlayPos={this.state.overlayPos}
-                maxCropWidth={maxCropWidth}
+                maxCropWidth={cropWidth}
               />
             )}
             <CropButton onCropImage={this.onCropImage} processing={processing} btnTexts={btnTexts} style={{ alignItems: 'center' }} />
