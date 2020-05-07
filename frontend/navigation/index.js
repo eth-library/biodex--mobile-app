@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { AsyncStorage } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector, useDispatch } from 'react-redux';
+import * as Sentry from 'sentry-expo';
 
 import DrawerNavigator from './DrawerNavigator';
 import AuthStackNavigator from './AuthStackNavigator';

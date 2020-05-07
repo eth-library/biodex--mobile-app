@@ -50,8 +50,6 @@ class ImageCropOverlay extends React.Component {
       currentLeft,
     } = this.state;
 
-    // this.props.initialLeft = left border of image
-    // this.props.initialTop = top border of image
     return (
       <View
         {...this.state.panResponder.panHandlers}

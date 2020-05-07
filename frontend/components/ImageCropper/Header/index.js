@@ -16,7 +16,7 @@ const Header = ({ onCancel, onCropImage, processing, btnTexts }) => {
       style={{
         width: Dimensions.get('window').width,
         flexDirection: 'row',
-        backgroundColor: 'orange',
+        backgroundColor: 'black',
         justifyContent: 'space-between',
       }}
     >

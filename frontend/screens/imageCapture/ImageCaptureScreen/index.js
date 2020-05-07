@@ -101,11 +101,9 @@ const ImageCaptureScreen = ({ navigation, route }) => {
     });
 
     if (image.cancelled) {
-      console.log('canceled')
       setIsLoading(false);
       dispatch(showStatusBarAction());
     } else {
-      console.log('got image')
       setUri(image.uri);
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
       dispatch(hideStatusBarAction());
