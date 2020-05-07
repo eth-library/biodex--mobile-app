@@ -16,7 +16,7 @@ const Titles = () => {
         <Text style={styles.titleText}>Genus</Text>
       </View>
       <View style={styles.title}>
-        <Text style={styles.titleText}>Epithet</Text>
+        <Text style={styles.titleText}>Species</Text>
       </View>
     </View>
   );
