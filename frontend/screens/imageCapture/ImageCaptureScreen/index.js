@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { View, Text, StatusBar, Image, Dimensions } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Location from 'expo-location';
 import * as ExpoImagePicker from 'expo-image-picker';
 
@@ -14,6 +14,7 @@ import LoadingScreen from '../../../components/LoadingScreen';
 import ImageCropper from '../../../components/ImageCropper';
 import { getPredictionsAsyncAction, storeLocation, newCaseAsyncAction, storeImageTakingMethod } from '../../../store/actions/images';
 import { networkErrorAsyncAction } from '../../../store/actions/network';
+import { hideStatusBarAction, showStatusBarAction } from '../../../store/actions/statusBar';
 import { portraitStyles, landscapeStyles } from './styles';
 import { verifyCameraPermissions, verifyCameraRollPermissions, verifyLocationPermissions } from './permissions';
 
@@ -26,6 +27,7 @@ const ImageCaptureScreen = ({ navigation, route }) => {
   );
   const [width, setWidth] = useState(Dimensions.get('window').width);
   const [height, setHeight] = useState(Dimensions.get('window').height);
+  const hideStatusBar = useSelector((state) => state.statusBar.hidden);
   const screenOrientationHandler = () => {
     setPortrait(Dimensions.get('window').height > Dimensions.get('window').width);
     setWidth(Dimensions.get('window').width);
@@ -90,17 +92,23 @@ const ImageCaptureScreen = ({ navigation, route }) => {
     const hasPermission = await verifyCameraPermissions();
     if (!hasPermission) return;
 
-    dispatch(storeImageTakingMethod('camera'))
+    dispatch(storeImageTakingMethod('camera'));
     setIsLoading(true);
+    dispatch(hideStatusBarAction());
+
     const image = await ExpoImagePicker.launchCameraAsync({
       quality: 0.4,
     });
 
     if (image.cancelled) {
+      console.log('canceled')
       setIsLoading(false);
+      dispatch(showStatusBarAction());
     } else {
+      console.log('got image')
       setUri(image.uri);
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+      dispatch(hideStatusBarAction());
       setCropModalVisible(true);
     }
   };
@@ -109,14 +117,17 @@ const ImageCaptureScreen = ({ navigation, route }) => {
     const hasPermission = await verifyCameraRollPermissions();
     if (!hasPermission) return;
 
-    dispatch(storeImageTakingMethod('gallery'))
+    dispatch(storeImageTakingMethod('gallery'));
     setIsLoading(true);
+    dispatch(hideStatusBarAction());
+
     const image = await ExpoImagePicker.launchImageLibraryAsync({
       quality: 0.4,
     });
 
     if (image.cancelled) {
       setIsLoading(false);
+      dispatch(showStatusBarAction());
     } else {
       setUri(image.uri);
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
@@ -126,6 +137,7 @@ const ImageCaptureScreen = ({ navigation, route }) => {
 
   const storeCroppedImageHandler = async (uri) => {
     await ScreenOrientation.unlockAsync();
+    dispatch(showStatusBarAction());
     try {
       const response = await dispatch(getPredictionsAsyncAction(uri));
       if (response && response.ok) {
@@ -148,18 +160,19 @@ const ImageCaptureScreen = ({ navigation, route }) => {
   };
 
   const cancelHandler = async () => {
-    setCropModalVisible(!cropModalVisible)
+    setCropModalVisible(!cropModalVisible);
+    dispatch(showStatusBarAction());
     await ScreenOrientation.unlockAsync();
-    setIsLoading(false)
+    setIsLoading(false);
   }
 
   return (
     <SafeAreaView style={styles.container}>
       {isLoading ? (
-        <LoadingScreen statusBarHidden={cropModalVisible}/>
+        <LoadingScreen statusBarHidden={hideStatusBar}/>
       ) : (
         <Fragment>
-          <StatusBar barStyle='light-content' hidden={cropModalVisible}/>
+          <StatusBar barStyle='light-content' hidden={hideStatusBar}/>
           <Image style={styles.imagePreview} source={butterfly} />
           <View style={styles.bottomContainer}>
             <View style={styles.infoContainer}>

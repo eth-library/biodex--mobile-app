@@ -5,10 +5,12 @@ import {
   ScrollView,
   Modal,
   View,
+  StatusBar
 } from 'react-native';
 import * as ExpoImageManipulator from 'expo-image-manipulator';
 import PropTypes from 'prop-types';
 import { isIphoneX } from 'react-native-iphone-x-helper';
+import { connect } from 'react-redux';
 
 import ImageCropOverlay from './ImageCropOverlay';
 import Header from './Header';
@@ -228,11 +230,12 @@ class ImageCropper extends Component {
         visible={isVisible}
         hardwareAccelerated
       >
+        <StatusBar hidden={this.props.statusBarHidden} />
         <Header onCropImage={this.onCropImage} onCancel={this.props.onCancel} processing={processing} btnTexts={btnTexts} />
         <View style={{ flex: 1, backgroundColor: 'black', width: Dimensions.get('window').width }}>
           <ScrollView
             style={{ position: 'relative', flex: 1 }}
-            contentContainerStyle={{ backgroundColor: 'green' }}
+            contentContainerStyle={{ backgroundColor: 'black' }}
             maximumZoomScale={5}
             minimumZoomScale={0.5}
             onScroll={this.onHandleScroll}
@@ -247,7 +250,7 @@ class ImageCropper extends Component {
             pinchGestureEnabled={false}
           >
             <Image
-              style={{ backgroundColor: 'red' }}
+              style={{ backgroundColor: 'black' }}
               source={{ uri }}
               resizeMode={imageRatio >= 1 ? 'contain' : 'contain'}
               width={Dimensions.get('window').width}
@@ -284,7 +287,13 @@ class ImageCropper extends Component {
   }
 }
 
-export default ImageCropper;
+const mapStateToProps = (state) => {
+  return {
+    statusBarHidden: state.statusBar.hidden
+  };
+};
+
+export default connect(mapStateToProps)(ImageCropper);
 
 ImageCropper.defaultProps = {
   borderColor: '#a4a4a4',
