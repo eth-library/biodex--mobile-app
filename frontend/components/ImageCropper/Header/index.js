@@ -4,7 +4,8 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Dimensions,
-  ScrollView
+  ScrollView,
+  StyleSheet
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -42,11 +43,17 @@ const Header = ({ onCancel, onCropImage, processing, btnTexts }) => {
           >
             <Icon size={24} name='arrow-left' color='white' />
           </TouchableOpacity>
-          <CropButton onCropImage={onCropImage} processing={processing} btnTexts={btnTexts} />
+          <CropButton onCropImage={onCropImage} processing={processing} btnTexts={btnTexts} style={styles}/>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    alignItems: 'flex-end',
+  }
+});
 
 export default Header;

@@ -279,7 +279,7 @@ class ImageCropper extends Component {
                 maxCropWidth={cropWidth}
               />
             )}
-            <CropButton onCropImage={this.onCropImage} processing={processing} btnTexts={btnTexts} style={{ alignItems: 'center' }} />
+            <CropButton onCropImage={this.onCropImage} processing={processing} btnTexts={btnTexts} style={{ container: { alignItems: 'center' }, button: { alignItems: 'center' }}} />
           </ScrollView>
         </View>
       </Modal>
