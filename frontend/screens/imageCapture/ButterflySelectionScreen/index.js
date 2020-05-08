@@ -14,12 +14,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenOrientation } from 'expo';
 
 import Theme from '../../../theme';
-import HeaderTitle from './HeaderTitle';
 import ButterflyChoice from './ButterflyChoice';
 import Titles from './Titles';
 import ImageModal from './ImageModal';
 import NewButton from './NewButton';
-import DeveloperInfo from './DeveloperInfo';
 import { confirmPredictionAsyncAction, clearImagesState } from '../../../store/actions/images';
 import imgPlaceholder from '../../../assets/imgNotFound.png';
 
@@ -33,7 +31,6 @@ const ButterflySelectionScreen = ({ navigation }) => {
   );
   const [width, setWidth] = useState(Dimensions.get('window').width);
   const [height, setHeight] = useState(Dimensions.get('window').height);
-  const [showDeveloperInfo, setShowDeveloperInfo] = useState(false);
   const screenOrientationHandler = () => {
     setPortrait(Dimensions.get('window').height > Dimensions.get('window').width);
     setWidth(Dimensions.get('window').width);
@@ -49,15 +46,9 @@ const ButterflySelectionScreen = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: () => (
-        <HeaderTitle
-          showDeveloperInfo={showDeveloperInfo}
-          setShowDeveloperInfo={setShowDeveloperInfo}
-        />
-      ),
       headerRight: () => <NewButton onPress={startNewCase} />,
     });
-  }, [navigation, setShowDeveloperInfo]);
+  }, [navigation]);
 
   // On mount
   useEffect(() => {
@@ -96,10 +87,6 @@ const ButterflySelectionScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle='light-content' hidden={hideStatusBar}/>
-      <DeveloperInfo
-        visible={showDeveloperInfo}
-        hideModalHandler={() => setShowDeveloperInfo(false)}
-      />
       <ImageModal
         visible={showUserImageModal}
         hideModalHandler={() => setShowUserImageModal(false)}
