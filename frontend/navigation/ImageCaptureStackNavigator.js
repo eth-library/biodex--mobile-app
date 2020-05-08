@@ -7,6 +7,7 @@ import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-butto
 import ImageCaptureScreen from '../screens/imageCapture/ImageCaptureScreen';
 import ButterflySelectionScreen from '../screens/imageCapture/ButterflySelectionScreen';
 import Theme from '../theme';
+import withOrientation from '../HOC/withOrientation';
 
 const Stack = createStackNavigator();
 
@@ -36,12 +37,12 @@ const ImageCaptureStackNavigator = props => {
     >
       <Stack.Screen
         name='ImageCapture'
-        component={ImageCaptureScreen}
+        component={withOrientation(ImageCaptureScreen)}
         options={{ title: 'Image Capture' }}
       />
       <Stack.Screen
         name='ButterflySelection'
-        component={ButterflySelectionScreen}
+        component={withOrientation(ButterflySelectionScreen)}
         options={{
           title: 'Results',
         }}

@@ -123,7 +123,8 @@ const styles = StyleSheet.create({
   container: {
     minHeight: '100%',
     justifyContent: 'space-evenly',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: Theme.space.vertical.xSmall
   },
   logo: {
     width: 100,

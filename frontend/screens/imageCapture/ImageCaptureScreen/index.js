@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { View, Text, StatusBar, Image, Dimensions } from 'react-native';
+import { View, Text, StatusBar, Image, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Location from 'expo-location';
 import * as ExpoImagePicker from 'expo-image-picker';
@@ -18,41 +18,12 @@ import { hideStatusBarAction, showStatusBarAction } from '../../../store/action
 import { portraitStyles, landscapeStyles } from './styles';
 import { verifyCameraPermissions, verifyCameraRollPermissions, verifyLocationPermissions } from './permissions';
 
-const ImageCaptureScreen = ({ navigation, route }) => {
+const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
   const [cropModalVisible, setCropModalVisible] = useState(false);
   const [uri, setUri] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [portrait, setPortrait] = useState(Dimensions.get('window').height > Dimensions.get('window').width);
-  const [width, setWidth] = useState(Dimensions.get('window').width);
-  const [height, setHeight] = useState(Dimensions.get('window').height);
   const hideStatusBar = useSelector((state) => state.statusBar.hidden);
   const picMethod = useSelector((state) => state.images.picMethod)
-  const screenOrientationHandler = () => {
-    setPortrait(Dimensions.get('window').height > Dimensions.get('window').width);
-    setWidth(Dimensions.get('window').width);
-    setHeight(Dimensions.get('window').height);
-  };
-  let listener = null;
-  // On mount
-  useEffect(() => {
-    listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
-  }, []);
-  // Cleanup function on navigation
-  useEffect(() => {
-    const cleanup = () => {
-      navigation.addListener('blur', () => {
-        ScreenOrientation.removeOrientationChangeListener(listener);
-      });
-    };
-    return cleanup;
-  }, [navigation]);
-  // Cleanup function on unmount
-  useEffect(() => {
-    const cleanup = () => {
-      ScreenOrientation.removeOrientationChangeListener(listener);
-    };
-    return cleanup;
-  }, []);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -117,7 +88,6 @@ const ImageCaptureScreen = ({ navigation, route }) => {
     dispatch(storeImageTakingMethod('gallery'));
     setIsLoading(true);
     dispatch(hideStatusBarAction());
-
     const image = await ExpoImagePicker.launchImageLibraryAsync({
       quality: 0.4,
     });
@@ -133,6 +103,7 @@ const ImageCaptureScreen = ({ navigation, route }) => {
   };
 
   const storeCroppedImageHandler = async (uri) => {
+    setCropModalVisible(!cropModalVisible)
     await ScreenOrientation.unlockAsync();
     dispatch(showStatusBarAction());
     try {
@@ -153,14 +124,22 @@ const ImageCaptureScreen = ({ navigation, route }) => {
       dispatch(networkErrorAsyncAction())
       console.log('ERROR IN storeCroppedImageHandler - third', e.message);
     }
-    setIsLoading(false);
   };
 
+  // For some reason reopening the image picker doesn't work for ios here. I have reproduced the issue and created a bug report to expo: https://github.com/expo/expo/issues/8213
+  // For now, on ios, the back button will just close the modal and not reopen the camera or gallery
   const cancelHandler = async () => {
-    setIsLoading(true);
-    setCropModalVisible(!cropModalVisible);
-    await ScreenOrientation.unlockAsync();
-    retakeImageHandler(picMethod);
+    if (Platform.OS === 'ios') {
+      dispatch(showStatusBarAction());
+      setIsLoading(false);
+      setCropModalVisible(false);
+      await ScreenOrientation.unlockAsync();
+    } else {
+      setIsLoading(true);
+      setCropModalVisible(false);
+      await ScreenOrientation.unlockAsync();
+      retakeImageHandler(picMethod);
+    }
   };
 
   return (
