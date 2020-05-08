@@ -101,7 +101,6 @@ class ImageCropper extends Component {
         this.state.imageEditableSize.height = croppedHeight;
 
         this.props.chosenPicture({ uri: uriCroped, base64 });
-        this.props.onToggleModal();
       } else {
         this.setState({ cropMode: false, processing: false });
       }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { View, Text, StatusBar, Image } from 'react-native';
+import { View, Text, StatusBar, Image, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Location from 'expo-location';
 import * as ExpoImagePicker from 'expo-image-picker';
@@ -51,7 +51,6 @@ const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
   };
 
   const retakeImageHandler = (method) => {
-    console.log('RETAKE', method)
     if (method === 'camera') {
       takeCameraImageHandler();
     } else if (method === 'gallery') {
@@ -89,11 +88,9 @@ const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
     dispatch(storeImageTakingMethod('gallery'));
     setIsLoading(true);
     dispatch(hideStatusBarAction());
-    console.log('LAUNCH')
     const image = await ExpoImagePicker.launchImageLibraryAsync({
       quality: 0.4,
     });
-    console.log('image', image)
 
     if (image.cancelled) {
       setIsLoading(false);
@@ -129,11 +126,20 @@ const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
     }
   };
 
+  // For some reason reopening the image picker doesn't work for ios here. I have reproduced the issue and created a bug report to expo: https://github.com/expo/expo/issues/8213
+  // For now, on ios, the back button will just close the modal and not reopen the camera or gallery
   const cancelHandler = async () => {
-    setIsLoading(true);
-    setCropModalVisible(!cropModalVisible);
-    await ScreenOrientation.unlockAsync();
-    retakeImageHandler(picMethod);
+    if (Platform.OS === 'ios') {
+      dispatch(showStatusBarAction());
+      setIsLoading(false);
+      setCropModalVisible(false);
+      await ScreenOrientation.unlockAsync();
+    } else {
+      setIsLoading(true);
+      setCropModalVisible(false);
+      await ScreenOrientation.unlockAsync();
+      retakeImageHandler(picMethod);
+    }
   };
 
   return (

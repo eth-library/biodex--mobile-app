@@ -29,7 +29,6 @@ const ButterflySelectionScreen = ({ navigation, portrait, width, height }) => {
   const confirmedCase = useSelector((state) => Boolean(state.images.confirmedImage));
   const picMethod = useSelector((state) => state.images.picMethod);
   const dispatch = useDispatch();
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => <NewButton onPress={startNewCase} />,
