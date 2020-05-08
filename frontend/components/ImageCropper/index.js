@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import ImageCropOverlay from './ImageCropOverlay';
 import Header from './Header';
 import CropButton from './CropButton';
+import Theme from '../../theme';
 
 class ImageCropper extends Component {
   constructor(props) {
@@ -231,7 +232,7 @@ class ImageCropper extends Component {
         hardwareAccelerated
         onRequestClose={this.props.onCancel}
       >
-        <StatusBar hidden={this.props.statusBarHidden} />
+        <StatusBar barStyle='light-content' hidden={this.props.statusBarHidden} backgroundColor={Theme.colors.accent} />
         <Header onCropImage={this.onCropImage} onCancel={this.props.onCancel} processing={processing} btnTexts={btnTexts} />
         <View style={{ flex: 1, backgroundColor: 'black', width: Dimensions.get('window').width }}>
           <ScrollView

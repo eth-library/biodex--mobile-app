@@ -9,7 +9,7 @@ const LoadingScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle='light-content' hidden={hideStatusBar}/>
+      <StatusBar barStyle='light-content' hidden={hideStatusBar} backgroundColor={Theme.colors.accent} />
       <ActivityIndicator size='large' color={Theme.colors.primary} />
       <Text style={styles.text}>Loading...</Text>
     </View>

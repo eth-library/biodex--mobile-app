@@ -169,7 +169,7 @@ const ImageCaptureScreen = ({ navigation, route }) => {
         <LoadingScreen statusBarHidden={hideStatusBar}/>
       ) : (
         <Fragment>
-          <StatusBar barStyle='light-content' hidden={hideStatusBar}/>
+          <StatusBar barStyle='light-content' hidden={hideStatusBar} backgroundColor={Theme.colors.accent} />
           <Image style={styles.imagePreview} source={butterfly} />
           <View style={styles.bottomContainer}>
             <View style={styles.infoContainer}>
