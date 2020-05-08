@@ -41,11 +41,6 @@ const ImageCaptureStackNavigator = props => {
         options={{ title: 'Image Capture' }}
       />
       <Stack.Screen
-        name='ImageConfirm'
-        component={withOrientation(ImageCaptureConfirmationScreen)}
-        options={{ title: 'Upload' }}
-      />
-      <Stack.Screen
         name='ButterflySelection'
         component={withOrientation(ButterflySelectionScreen)}
         options={{
