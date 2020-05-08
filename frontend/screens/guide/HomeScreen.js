@@ -9,9 +9,9 @@ const HomeScreen = ({ style }) => {
   return (
     <IntroContainer style={style}>
       <View style={styles.titleContainer}>
-        <Text style={styles.titleBold}>Welcome</Text>
-        <Text style={styles.title}>to the</Text>
-        <Text style={styles.titleBold}>ETH Lepidoptera Classifier</Text>
+        <Text style={styles.titleBold}>Welcome to the</Text>
+        <Text style={styles.title}>ETH Zurich</Text>
+        <Text style={styles.titleBold}>Insect Classifier</Text>
       </View>
       <Image style={styles.img} source={ExamplePic} />
     </IntroContainer>
