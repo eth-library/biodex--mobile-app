@@ -56,6 +56,7 @@ export const landscapeStyles = (deviceWidth, deviceHeight) =>
     },
     infoContainer: {
       height: deviceHeight * 0.3,
+      width: deviceWidth * 0.5,
     },
     infoTitle: {
       fontFamily: Theme.fonts.primaryBold,
@@ -63,7 +64,7 @@ export const landscapeStyles = (deviceWidth, deviceHeight) =>
       color: Theme.colors.primary,
     },
     infoText: {
-      fontFamily: Theme.fonts.primaryBold,
+      fontFamily: Theme.fonts.primary,
       fontSize: Theme.fonts.sizeXS,
       color: Theme.colors.primary,
     },
