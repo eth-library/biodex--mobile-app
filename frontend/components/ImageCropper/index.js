@@ -5,15 +5,17 @@ import {
   ScrollView,
   Modal,
   View,
+  StatusBar
 } from 'react-native';
 import * as ExpoImageManipulator from 'expo-image-manipulator';
 import PropTypes from 'prop-types';
 import { isIphoneX } from 'react-native-iphone-x-helper';
+import { connect } from 'react-redux';
 
 import ImageCropOverlay from './ImageCropOverlay';
 import Header from './Header';
-
-const { width } = Dimensions.get('window');
+import CropButton from './CropButton';
+import Theme from '../../theme';
 
 class ImageCropper extends Component {
   constructor(props) {
@@ -23,18 +25,15 @@ class ImageCropper extends Component {
       cropMode: false,
       processing: false,
       zoomScale: 1,
-      // position of the cropoverlay
-      currentPos: {
+      overlayPos: {
         left: null,
         top: null,
       },
-      // size of the cropoverlay
-      currentSize: {
+      overlaySize: {
         width: 0,
         height: 0,
       },
-      // image editable size
-      actualSize: {
+      imageEditableSize: {
         width: 0,
         height: 0,
       },
@@ -51,11 +50,11 @@ class ImageCropper extends Component {
   onGetCorrectSizes = (w, h) => {
     const sizes = {
       convertedWidth: w,
-      convertedheight: h,
+      convertedHeight: h,
     };
     const ratio = Math.min(1920 / w, 1080 / h);
     sizes.convertedWidth = Math.round(w * ratio);
-    sizes.convertedheight = Math.round(h * ratio);
+    sizes.convertedHeight = Math.round(h * ratio);
     return sizes;
   };
 
@@ -64,20 +63,20 @@ class ImageCropper extends Component {
       photo: { uri: rawUri },
     } = this.props;
     Image.getSize(rawUri, async (imgW, imgH) => {
-      const { convertedWidth, convertedheight } = this.onGetCorrectSizes(imgW, imgH);
-      const { uri, width: w, height } = await ExpoImageManipulator.manipulateAsync(rawUri, [
+      const { convertedWidth, convertedHeight } = this.onGetCorrectSizes(imgW, imgH);
+      const { uri, width, height } = await ExpoImageManipulator.manipulateAsync(rawUri, [
         {
           resize: {
             width: convertedWidth,
-            height: convertedheight,
+            height: convertedHeight,
           },
         },
       ]);
       this.setState({
         uri,
-        actualSize: {
-          width: w,
-          height: height,
+        imageEditableSize: {
+          width,
+          height,
         },
         cropMode: true,
       });
@@ -98,8 +97,8 @@ class ImageCropper extends Component {
           height: croppedHeight,
         } = await this.crop(cropObj, uriToCrop);
 
-        this.state.actualSize.width = croppedWidth;
-        this.state.actualSize.height = croppedHeight;
+        this.state.imageEditableSize.width = croppedWidth;
+        this.state.imageEditableSize.height = croppedHeight;
 
         this.props.chosenPicture({ uri: uriCroped, base64 });
         this.props.onToggleModal();
@@ -120,12 +119,12 @@ class ImageCropper extends Component {
       originalHeight = Dimensions.get('window').height - 122;
     }
     const renderedImageWidth =
-      imageRatio < originalHeight / width ? width : originalHeight / imageRatio;
+      imageRatio < originalHeight / Dimensions.get('window').width ? Dimensions.get('window').width : originalHeight / imageRatio;
     const renderedImageHeight =
-      imageRatio < originalHeight / width ? width * imageRatio : originalHeight;
+      imageRatio < originalHeight / Dimensions.get('window').width ? Dimensions.get('window').width * imageRatio : originalHeight;
 
     const renderedImageY = (originalHeight - renderedImageHeight) / 2.0;
-    const renderedImageX = (width - renderedImageWidth) / 2.0;
+    const renderedImageX = (Dimensions.get('window').width - renderedImageWidth) / 2.0;
 
     const renderImageObj = {
       left: renderedImageX,
@@ -135,10 +134,10 @@ class ImageCropper extends Component {
     };
 
     const cropOverlayObj = {
-      left: this.state.currentPos.left,
-      top: this.state.currentPos.top,
-      width: this.state.currentSize.width,
-      height: this.state.currentSize.height,
+      left: this.state.overlayPos.left,
+      top: this.state.overlayPos.top,
+      width: this.state.overlaySize.width,
+      height: this.state.overlaySize.height,
     };
 
     let intersectAreaObj = {};
@@ -198,31 +197,31 @@ class ImageCropper extends Component {
       cropMode,
       mounted,
       processing,
-      currentSize,
-      currentPos,
-      actualSize,
+      overlaySize,
+      overlayPos,
+      imageEditableSize,
     } = this.state;
 
-    const imageRatio =
-      actualSize.height / actualSize.width ? actualSize.height / actualSize.width : 0;
+    const imageRatio = imageEditableSize.height / imageEditableSize.width ? imageEditableSize.height / imageEditableSize.width : 0;
 
     let originalHeight = Dimensions.get('window').height - 64;
     if (isIphoneX()) {
       originalHeight = Dimensions.get('window').height - 122;
     }
 
-    const cropRatio = originalHeight / width;
-
-    const cropWidth = imageRatio < cropRatio ? width : originalHeight / imageRatio;
-    const cropHeight = imageRatio < cropRatio ? width * imageRatio : originalHeight;
+    const cropRatio = originalHeight / Dimensions.get('window').width;
+    const cropWidth = imageRatio < cropRatio ? Dimensions.get('window').width : originalHeight / imageRatio;
+    const cropHeight = imageRatio < cropRatio ? Dimensions.get('window').width * imageRatio : originalHeight;
     const cropInitialTop = (originalHeight - cropHeight) / 2.0;
-    const cropInitialLeft = (width - cropWidth) / 2.0;
+    const cropInitialLeft = (Dimensions.get('window').width - cropWidth) / 2.0;
 
-    if (currentSize.width === 0 && cropMode) {
-      currentSize.width = Math.min(cropWidth, cropHeight);
-      currentSize.height = Math.min(cropWidth, cropHeight);
-      currentPos.top = cropInitialTop;
-      currentPos.left = cropInitialLeft;
+    if (overlaySize.width === 0 && cropMode) {
+      overlaySize.width = Math.min(cropWidth, cropHeight);
+      overlaySize.height = Math.min(cropWidth, cropHeight);
+      // If cropInitialTop is 0, it means it's a portrait image. Then the overlay is centered vertically
+      overlayPos.top = cropInitialTop === 0 ? (cropHeight / 2) - (Math.min(cropWidth, cropHeight) / 2) : cropInitialTop;
+      // If cropInitialTop is 0, it means it's a portrait image. Then the overlay covers the whole width. Else it is centered horizontally
+      overlayPos.left = cropInitialTop === 0 ? cropInitialLeft : (cropWidth / 2) - (Math.min(cropWidth, cropHeight) / 2);
     }
 
     return (
@@ -231,7 +230,9 @@ class ImageCropper extends Component {
         transparent
         visible={isVisible}
         hardwareAccelerated
+        onRequestClose={this.props.onCancel}
       >
+        <StatusBar barStyle='light-content' hidden={this.props.statusBarHidden} backgroundColor={Theme.colors.accent} />
         <Header onCropImage={this.onCropImage} onCancel={this.props.onCancel} processing={processing} btnTexts={btnTexts} />
         <View style={{ flex: 1, backgroundColor: 'black', width: Dimensions.get('window').width }}>
           <ScrollView
@@ -254,18 +255,18 @@ class ImageCropper extends Component {
               style={{ backgroundColor: 'black' }}
               source={{ uri }}
               resizeMode={imageRatio >= 1 ? 'contain' : 'contain'}
-              width={width}
+              width={Dimensions.get('window').width}
               height={originalHeight}
             />
             {mounted && cropMode && (
               <ImageCropOverlay
                 onLayoutChanged={(top, left, w, height) => {
                   this.setState({
-                    currentSize: {
+                    overlaySize: {
                       width: w,
                       height: height,
                     },
-                    currentPos: {
+                    overlayPos: {
                       top: top,
                       left: left,
                     },
@@ -275,10 +276,12 @@ class ImageCropper extends Component {
                 initialLeft={cropInitialLeft}
                 minSize={150}
                 borderColor={borderColor}
-                currentSize={this.state.currentSize}
-                currentPos={this.state.currentPos}
+                overlaySize={this.state.overlaySize}
+                overlayPos={this.state.overlayPos}
+                maxCropWidth={cropWidth}
               />
             )}
+            <CropButton onCropImage={this.onCropImage} processing={processing} btnTexts={btnTexts} style={{ container: { alignItems: 'center' }, button: { alignItems: 'center' }}} />
           </ScrollView>
         </View>
       </Modal>
@@ -286,15 +289,21 @@ class ImageCropper extends Component {
   }
 }
 
-export default ImageCropper;
+const mapStateToProps = (state) => {
+  return {
+    statusBarHidden: state.statusBar.hidden
+  };
+};
+
+export default connect(mapStateToProps)(ImageCropper);
 
 ImageCropper.defaultProps = {
   borderColor: '#a4a4a4',
   btnTexts: {
-    crop: 'Crop',
+    crop: 'CROP',
     rotate: 'Rotate',
     done: 'Done',
-    processing: 'Processing',
+    processing: 'PROCESSING',
   },
   saveOptions: {
     compress: 1,

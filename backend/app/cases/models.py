@@ -49,4 +49,4 @@ class Case(models.Model):
     # predictions defined as foreignKey on Prediction
 
     def __str__(self):
-        return f'Case id {self.pk} from {self.user.email}'
+        return f'Case id {self.pk} from {self.user}'

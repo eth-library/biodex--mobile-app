@@ -20,8 +20,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   logo: {
-    marginTop: Dimensions.get('window').height > 700 ? Theme.space.vertical.xLarge : Theme.space.vertical.medium,
-    marginBottom: Theme.space.vertical.xSmall
+    marginTop: Dimensions.get('window').height > 700 ? Theme.space.vertical.large : Theme.space.vertical.small,
+    marginBottom: Theme.space.vertical.xSmall,
+    alignSelf: 'flex-start',
+    marginHorizontal: Theme.space.vertical.small,
   },
   contentContainer: {
     justifyContent: 'center',

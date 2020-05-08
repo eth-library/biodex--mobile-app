@@ -8,32 +8,29 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
+  TouchableOpacity
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenOrientation } from 'expo';
-import { Ionicons } from '@expo/vector-icons';
-import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
 
 import Theme from '../../../theme';
-import HeaderTitle from './HeaderTitle';
 import ButterflyChoice from './ButterflyChoice';
 import Titles from './Titles';
-import DeveloperInfo from './DeveloperInfo';
+import ImageModal from './ImageModal';
+import NewButton from './NewButton';
 import { confirmPredictionAsyncAction, clearImagesState } from '../../../store/actions/images';
 import imgPlaceholder from '../../../assets/imgNotFound.png';
 
-const IoniconsHeaderButton = (props) => (
-  <HeaderButton {...props} IconComponent={Ionicons} iconSize={23} color={Theme.colors.white} />
-);
 
 const ButterflySelectionScreen = ({ navigation }) => {
+  const hideStatusBar = useSelector((state) => state.statusBar.hidden);
+  const [showUserImageModal, setShowUserImageModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [portrait, setPortrait] = useState(
     Dimensions.get('window').height > Dimensions.get('window').width
   );
   const [width, setWidth] = useState(Dimensions.get('window').width);
   const [height, setHeight] = useState(Dimensions.get('window').height);
-  const [showDeveloperInfo, setShowDeveloperInfo] = useState(false);
   const screenOrientationHandler = () => {
     setPortrait(Dimensions.get('window').height > Dimensions.get('window').width);
     setWidth(Dimensions.get('window').width);
@@ -44,22 +41,14 @@ const ButterflySelectionScreen = ({ navigation }) => {
   const uploadedImage = useSelector((state) => state.images.uploadedImage);
   const predictions = useSelector((state) => state.images.predictions);
   const confirmedCase = useSelector((state) => Boolean(state.images.confirmedImage));
+  const picMethod = useSelector((state) => state.images.picMethod);
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: props => <HeaderTitle showDeveloperInfo={showDeveloperInfo} setShowDeveloperInfo={setShowDeveloperInfo} />,
-      headerRight: () => (
-        <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
-          <Item
-            title='home'
-            iconName={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
-            onPress={() => navigation.popToTop()}
-          />
-        </HeaderButtons>
-      ),
+      headerRight: () => <NewButton onPress={startNewCase} />,
     });
-  }, [navigation, setShowDeveloperInfo]);
+  }, [navigation]);
 
   // On mount
   useEffect(() => {
@@ -88,26 +77,33 @@ const ButterflySelectionScreen = ({ navigation }) => {
     } catch (e) {
       console.log('ERROR IN confirmationHandler', e.message);
     }
-    setIsLoading(false);
+    setTimeout(() => startNewCase(), 1000);
+  };
+
+  const startNewCase = () => {
+    navigation.navigate('ImageCapture', { method: picMethod })
   };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar barStyle='light-content' />
-      <DeveloperInfo
-        visible={showDeveloperInfo}
-        hideModalHandler={() => setShowDeveloperInfo(false)}
+      <StatusBar barStyle='light-content' hidden={hideStatusBar} backgroundColor={Theme.colors.accent} />
+      <ImageModal
+        visible={showUserImageModal}
+        hideModalHandler={() => setShowUserImageModal(false)}
+        imageUri={uploadedImage}
       />
 
       <View style={styles.container}>
         <View style={styles.imagePreview}>
-          <ImageBackground
-            source={uploadedImage ? { uri: uploadedImage } : imgPlaceholder}
-            style={styles.imageContainer}
-            imageStyle={styles.image}
-          >
-            <Text style={styles.imageDescription}>User's image</Text>
-          </ImageBackground>
+          <TouchableOpacity onPress={() => setShowUserImageModal(true)}>
+            <ImageBackground
+              source={uploadedImage ? { uri: uploadedImage } : imgPlaceholder}
+              style={styles.imageContainer}
+              imageStyle={styles.image}
+            >
+              <Text style={styles.imageDescription}>User's image</Text>
+            </ImageBackground>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.choicesContainer}>

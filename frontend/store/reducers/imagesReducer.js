@@ -3,6 +3,7 @@ import {
   STORE_UPLOAD_AND_PREDICTIONS,
   STORE_LOCATION,
   STORE_PREDICTION_CONFIRMATION,
+  STORE_IMAGE_TAKING_METHOD,
   CLEAR_IMAGES_STATE,
 } from '../types';
 
@@ -12,6 +13,7 @@ const initialState = {
   confirmedImage: null,
   predictions: [],
   location: null,
+  picMethod: null,
   devInfo: {
     execTime: '',
     model: '',
@@ -48,7 +50,13 @@ export const imagesReducer = (state = initialState, action) => {
         predictions: action.payload.predictions,
         confirmedImage: action.payload.confirmed_image,
       };
+    case STORE_IMAGE_TAKING_METHOD:
+      return {
+        ...state,
+        picMethod: action.payload
+      };
     case CLEAR_IMAGES_STATE:
+      // picMethod is not reset on purpose. Else the 'new' picture functionality wouldn't work
       return {
         ...state,
         uploadedImage: null,

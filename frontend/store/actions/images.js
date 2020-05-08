@@ -7,6 +7,7 @@ import {
   STORE_LOCATION,
   STORE_UPLOAD_AND_PREDICTIONS,
   STORE_PREDICTION_CONFIRMATION,
+  STORE_IMAGE_TAKING_METHOD,
   CLEAR_IMAGES_STATE,
 } from '../types';
 import { rootEndpoint } from '../../constants/index';
@@ -43,6 +44,13 @@ const storePredictionsConfirmationAction = (data) => {
 export const clearImagesState = () => {
   return {
     type: CLEAR_IMAGES_STATE,
+  };
+};
+
+export const storeImageTakingMethod = (method) => {
+  return {
+    type: STORE_IMAGE_TAKING_METHOD,
+    payload: method
   };
 };
 

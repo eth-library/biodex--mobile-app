@@ -5,7 +5,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
 
 import ImageCaptureScreen from '../screens/imageCapture/ImageCaptureScreen';
-import ImageCaptureConfirmationScreen from '../screens/imageCapture/ImageCaptureConfirmationScreen';
 import ButterflySelectionScreen from '../screens/imageCapture/ButterflySelectionScreen';
 import Theme from '../theme';
 import withOrientation from '../HOC/withOrientation';
@@ -23,6 +22,7 @@ const ImageCaptureStackNavigator = props => {
         headerStyle: { backgroundColor: Theme.colors.accent },
         headerTintColor: Theme.colors.white,
         headerTitleStyle: { fontWeight: 'bold' },
+        headerTitleAlign: 'center',
         headerLeft: () => (
           <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
             <Item
@@ -50,7 +50,6 @@ const ImageCaptureStackNavigator = props => {
         component={withOrientation(ButterflySelectionScreen)}
         options={{
           title: 'Results',
-          
         }}
       />
     </Stack.Navigator>
