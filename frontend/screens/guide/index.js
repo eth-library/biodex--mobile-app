@@ -35,7 +35,7 @@ const Guide = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar hidden={hideStatusBar} barStyle='light-content' />
+      <StatusBar hidden={hideStatusBar} barStyle='light-content' backgroundColor={Theme.colors.accent} />
       <SwiperFlatList index={0} showPagination navigation={navigation}>
         <HomeScreen style={styles.child} />
         <ImageCaptureScreen style={styles.child} />

@@ -86,7 +86,7 @@ const ButterflySelectionScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar barStyle='light-content' hidden={hideStatusBar}/>
+      <StatusBar barStyle='light-content' hidden={hideStatusBar} backgroundColor={Theme.colors.accent} />
       <ImageModal
         visible={showUserImageModal}
         hideModalHandler={() => setShowUserImageModal(false)}
