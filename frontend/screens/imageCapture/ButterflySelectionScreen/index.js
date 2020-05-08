@@ -6,12 +6,10 @@ import {
   Text,
   StatusBar,
   StyleSheet,
-  Dimensions,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScreenOrientation } from 'expo';
 
 import Theme from '../../../theme';
 import ButterflyChoice from './ButterflyChoice';
@@ -21,22 +19,10 @@ import NewButton from './NewButton';
 import { confirmPredictionAsyncAction, clearImagesState } from '../../../store/actions/images';
 import imgPlaceholder from '../../../assets/imgNotFound.png';
 
-
-const ButterflySelectionScreen = ({ navigation }) => {
+const ButterflySelectionScreen = ({ navigation, portrait, width, height }) => {
   const hideStatusBar = useSelector((state) => state.statusBar.hidden);
   const [showUserImageModal, setShowUserImageModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [portrait, setPortrait] = useState(
-    Dimensions.get('window').height > Dimensions.get('window').width
-  );
-  const [width, setWidth] = useState(Dimensions.get('window').width);
-  const [height, setHeight] = useState(Dimensions.get('window').height);
-  const screenOrientationHandler = () => {
-    setPortrait(Dimensions.get('window').height > Dimensions.get('window').width);
-    setWidth(Dimensions.get('window').width);
-    setHeight(Dimensions.get('window').height);
-  };
-  let listener = null;
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
   const uploadedImage = useSelector((state) => state.images.uploadedImage);
   const predictions = useSelector((state) => state.images.predictions);
@@ -50,21 +36,9 @@ const ButterflySelectionScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
-  // On mount
-  useEffect(() => {
-    listener = ScreenOrientation.addOrientationChangeListener(screenOrientationHandler);
-  }, []);
-  // Cleanup function on navigation
-  useEffect(() => {
-    const cleanup = navigation.addListener('blur', () => {
-      ScreenOrientation.removeOrientationChangeListener(listener);
-    });
-    return cleanup;
-  }, [navigation]);
   // Cleanup function on unmount
   useEffect(() => {
     const cleanup = () => {
-      ScreenOrientation.removeOrientationChangeListener(listener);
       dispatch(clearImagesState());
     };
     return cleanup;
@@ -81,12 +55,16 @@ const ButterflySelectionScreen = ({ navigation }) => {
   };
 
   const startNewCase = () => {
-    navigation.navigate('ImageCapture', { method: picMethod })
+    navigation.navigate('ImageCapture', { method: picMethod });
   };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar barStyle='light-content' hidden={hideStatusBar} backgroundColor={Theme.colors.accent} />
+      <StatusBar
+        barStyle='light-content'
+        hidden={hideStatusBar}
+        backgroundColor={Theme.colors.accent}
+      />
       <ImageModal
         visible={showUserImageModal}
         hideModalHandler={() => setShowUserImageModal(false)}
