@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, AsyncStorage, StyleSheet } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 
 import { SET_NOT_FIRST_TIME_USER } from '../../store/types';
 import Button from '../../components/Button';
@@ -20,7 +21,12 @@ const StartScreen = ({ style, navigation }) => {
 
   const navigationHandler = () => {
     dispatch(showStatusBarAction());
-    navigation.navigate('Image Capture');
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'Home' }],
+      })
+    );
   };
 
   return (
@@ -28,10 +34,7 @@ const StartScreen = ({ style, navigation }) => {
       <Text style={styles.text}>You're ready to go!</Text>
       <View style={styles.buttonContainer}>
         {isAuthenticated ? (
-          <Button
-            title='Capture Your First Image'
-            onPress={navigationHandler}
-          />
+          <Button title='Capture Your First Image' onPress={navigationHandler} />
         ) : (
           <Button title='Go to Login' onPress={firstTimeUseHandler} />
         )}

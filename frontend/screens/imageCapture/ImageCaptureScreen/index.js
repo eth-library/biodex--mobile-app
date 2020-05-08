@@ -53,7 +53,7 @@ const ImageCaptureScreen = ({ navigation, route }) => {
     };
     return cleanup;
   }, []);
-  
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       const method = route.params && route.params.method ? route.params.method : null;
