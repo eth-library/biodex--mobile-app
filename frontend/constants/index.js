@@ -4,4 +4,4 @@
 const devRoot = 'https://b71ef480.ngrok.io/backend/api';
 const prodRoot = 'https://api.lepi.propulsion-home.ch/backend/api';
 
-export const rootEndpoint = __DEV__ ? devRoot : prodRoot;
+export const rootEndpoint = 'https://b71ef480.ngrok.io/backend/api';
