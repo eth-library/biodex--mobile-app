@@ -37,6 +37,7 @@ The application is built with React-Native and the Expo framework.
 
 > The previous steps are to make the mobile app run on your device or emulator. To connect it to the REST API, following steps are needed.
 
+- Run the backend application locally. Check the README.md in /backend
 - Android doesn't allow http connections. For this reasons, ngrok can be used for tunnelling your localhost through a https connection. https://ngrok.com/
 - After having installed ngrok, run `./ngrok http 8000` from your terminal
 - Copy the forwarding https url which displays in your terminal and update the devRoot in /frontend/constants/index.js
