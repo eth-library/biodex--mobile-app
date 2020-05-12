@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 
 import Button from '../../components/Button';
-import Logo from '../../assets/logo.jpg';
+import Logo from '../../components/Logo';
 import Theme from '../../theme';
 import { sendInvitationAsyncAction, removeErrorAction } from '../../store/actions/invitation';
 
@@ -84,7 +84,7 @@ const Invitation = ({ navigation }) => {
         enableOnAndroid={true}
       >
         <View style={styles.titleContainer}>
-          <Image style={styles.logo} source={Logo} />
+          <Logo style={styles.logo} />
           <Text style={styles.title}>ETH Entomological Collection</Text>
           <Text style={styles.title}>Lepi Classification App</Text>
         </View>
@@ -127,15 +127,14 @@ const styles = StyleSheet.create({
     marginTop: Theme.space.vertical.xSmall
   },
   logo: {
-    width: 100,
-    height: 20,
     resizeMode: 'center',
     marginBottom: Theme.space.vertical.xSmall
   },
   titleContainer: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 55
+    height: 55,
+    marginBottom: Theme.space.vertical.large
   },
   title: {
     fontFamily: Theme.fonts.primaryBold,
