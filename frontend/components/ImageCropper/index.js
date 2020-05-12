@@ -225,7 +225,8 @@ class ImageCropper extends Component {
 
     return (
       <Modal
-        animationType='slide'
+        // anmiationType should stay none, else on ios the camera or gallery won't reopen if we click on cancel: https://github.com/expo/expo/issues/8213
+        animationType='none'
         transparent
         visible={isVisible}
         hardwareAccelerated
