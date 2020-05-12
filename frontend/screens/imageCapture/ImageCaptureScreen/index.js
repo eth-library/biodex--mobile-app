@@ -88,6 +88,7 @@ const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
     dispatch(storeImageTakingMethod('gallery'));
     setIsLoading(true);
     dispatch(hideStatusBarAction());
+
     const image = await ExpoImagePicker.launchImageLibraryAsync({
       quality: 0.4,
     });
@@ -126,20 +127,11 @@ const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
     }
   };
 
-  // For some reason reopening the image picker doesn't work for ios here. I have reproduced the issue and created a bug report to expo: https://github.com/expo/expo/issues/8213
-  // For now, on ios, the back button will just close the modal and not reopen the camera or gallery
   const cancelHandler = async () => {
-    if (Platform.OS === 'ios') {
-      dispatch(showStatusBarAction());
-      setIsLoading(false);
-      setCropModalVisible(false);
-      await ScreenOrientation.unlockAsync();
-    } else {
-      setIsLoading(true);
-      setCropModalVisible(false);
-      await ScreenOrientation.unlockAsync();
-      retakeImageHandler(picMethod);
-    }
+    setIsLoading(true);
+    setCropModalVisible(false);
+    await ScreenOrientation.unlockAsync();
+    retakeImageHandler(picMethod);
   };
 
   return (
