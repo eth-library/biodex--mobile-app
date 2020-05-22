@@ -35,3 +35,4 @@ export const CLEAR_NETWORK_SUCCESS = 'CLEAR_NETWORK_SUCCESS';
 // Status bar
 export const SHOW_STATUS_BAR = 'SHOW_STATUS_BAR';
 export const HIDE_STATUS_BAR = 'HIDE_STATUS_BAR';
+export const SET_COLOR = 'SET_COLOR';

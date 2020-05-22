@@ -5,6 +5,7 @@ import { rootEndpoint } from '../../constants';
 import { SIGN_IN, SIGN_OUT, STORE_AUTH_ERROR } from '../types';
 import formatDjangoErrors from '../helpers/formatDjangoErrors';
 import { networkErrorAsyncAction } from './network';
+import { setStatusBarColorAction } from './statusBar';
 
 // store JWT's and user, after a user has logged in manually
 const storeTokenAction = data => {
@@ -29,6 +30,7 @@ const storeErrorAction = error => {
 
 export const logoutAsyncAction = () => async (dispatch, getState) => {
   await AsyncStorage.removeItem('refreshToken');
+  dispatch(setStatusBarColorAction('dark-content'));
   dispatch(logoutAction());
 };
 
@@ -43,6 +45,7 @@ export const userLoginAsyncAction = (credentials, stayLoggedIn) => async (dispat
     if (response.ok) {
       const data = await response.json();
       if (stayLoggedIn) await AsyncStorage.setItem('refreshToken', data.refresh);
+      dispatch(setStatusBarColorAction('light-content'));
       dispatch(storeTokenAction({ access: data.access, refresh: data.refresh, user: data.user }));
     } else {
       const errors = await response.json();

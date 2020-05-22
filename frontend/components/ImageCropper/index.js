@@ -232,7 +232,7 @@ class ImageCropper extends Component {
         hardwareAccelerated
         onRequestClose={this.props.onCancel}
       >
-        <StatusBar barStyle='light-content' hidden={this.props.statusBarHidden} backgroundColor={Theme.colors.accent} />
+        <StatusBar barStyle={this.props.statusBarColor} hidden={this.props.statusBarHidden} backgroundColor={Theme.colors.accent} />
         <Header onCropImage={this.onCropImage} onCancel={this.props.onCancel} processing={processing} btnTexts={btnTexts} />
         <View style={{ flex: 1, backgroundColor: 'black', width: Dimensions.get('window').width }}>
           <ScrollView
@@ -291,7 +291,8 @@ class ImageCropper extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    statusBarHidden: state.statusBar.hidden
+    statusBarHidden: state.statusBar.hidden,
+    statusBarColor: state.statusBar.color
   };
 };
 
