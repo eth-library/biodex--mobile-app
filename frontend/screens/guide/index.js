@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, Dimensions, StatusBar } from 'react-native';
 import { ScreenOrientation } from 'expo';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import SwiperFlatList from '../../components/SwiperFlatList';
 import HomeScreen from './HomeScreen';
@@ -10,7 +10,7 @@ import CroppingScreen from './CroppingScreen';
 import ButterflySelectionScreen from './ButterflySelectionScreen';
 import StartScreen from './StartScreen';
 import Theme from '../../theme';
-import { hideStatusBarAction } from '../../store/actions/statusBar';
+import { hideStatusBarAction, showStatusBarAction } from '../../store/actions/statusBar';
 
 const Guide = ({ navigation }) => {
   const hideStatusBar = useSelector((state) => state.statusBar.hidden);
@@ -19,7 +19,14 @@ const Guide = ({ navigation }) => {
 
   // Cleanup function on navigation
   useEffect(() => {
-    const cleanup = navigation.addListener('blur', () => ScreenOrientation.unlockAsync());
+    dispatch(hideStatusBarAction());
+    const cleanup = () => {
+      dispatch(showStatusBarAction());
+      navigation.addListener('blur', () => {
+        dispatch(showStatusBarAction());
+        ScreenOrientation.unlockAsync();
+      });
+    };
     return cleanup;
   }, [navigation]);
 
@@ -35,7 +42,11 @@ const Guide = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar hidden={hideStatusBar} barStyle='light-content' backgroundColor={Theme.colors.accent} />
+      <StatusBar
+        hidden={hideStatusBar}
+        barStyle='light-content'
+        backgroundColor={Theme.colors.accent}
+      />
       <SwiperFlatList index={0} showPagination navigation={navigation}>
         <HomeScreen style={styles.child} />
         <ImageCaptureScreen style={styles.child} />
@@ -53,7 +64,7 @@ const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   child: {
     width: width,
