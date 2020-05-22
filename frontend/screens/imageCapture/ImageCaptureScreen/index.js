@@ -12,20 +12,32 @@ import Theme from '../../../theme';
 import butterfly from '../../../assets/butterfly.jpg';
 import LoadingScreen from '../../../components/LoadingScreen';
 import ImageCropper from '../../../components/ImageCropper';
-import { getPredictionsAsyncAction, storeLocation, newCaseAsyncAction, storeImageTakingMethod } from '../../../store/actions/images';
-import { networkErrorAsyncAction } from '../../../store/actions/network';
-import { hideStatusBarAction, showStatusBarAction } from '../../../store/actions/statusBar';
+import {
+  getPredictionsAsyncAction,
+  storeLocation,
+  newCaseAsyncAction,
+  storeImageTakingMethod,
+} from '../../../store/actions/images';
+import { networkErrorAsyncAction } from '../../../store/actions/network';
+import { hideStatusBarAction, showStatusBarAction } from '../../../store/actions/statusBar';
 import { portraitStyles, landscapeStyles } from './styles';
-import { verifyCameraPermissions, verifyCameraRollPermissions, verifyLocationPermissions } from './permissions';
+import {
+  verifyCameraPermissions,
+  verifyCameraRollPermissions,
+  verifyLocationPermissions,
+} from './permissions';
 
 const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
   const [cropModalVisible, setCropModalVisible] = useState(false);
   const [uri, setUri] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const hideStatusBar = useSelector((state) => state.statusBar.hidden);
-  const picMethod = useSelector((state) => state.images.picMethod)
+  const picMethod = useSelector((state) => state.images.picMethod);
+  const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(showStatusBarAction());
     const unsubscribe = navigation.addListener('focus', () => {
       const method = route.params && route.params.method ? route.params.method : null;
       retakeImageHandler(method);
@@ -33,21 +45,18 @@ const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
     return unsubscribe;
   }, [navigation, route]);
 
-  const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
-  const dispatch = useDispatch();
-  
   useEffect(() => {
     getLocation();
   }, []);
 
   const getLocation = async () => {
     const hasPermission = await verifyLocationPermissions();
-    if (!hasPermission) return
+    if (!hasPermission) return;
     Location.getLastKnownPositionAsync()
-    .then((position) => {
-      dispatch(storeLocation(position));
-    })
-    .catch(console.log);
+      .then((position) => {
+        dispatch(storeLocation(position));
+      })
+      .catch(console.log);
   };
 
   const retakeImageHandler = (method) => {
@@ -104,7 +113,7 @@ const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
   };
 
   const storeCroppedImageHandler = async (uri) => {
-    setCropModalVisible(!cropModalVisible)
+    setCropModalVisible(!cropModalVisible);
     await ScreenOrientation.unlockAsync();
     dispatch(showStatusBarAction());
     try {
@@ -114,15 +123,15 @@ const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
           const db_response = await dispatch(newCaseAsyncAction(response.data, uri));
           if (db_response.ok) navigation.navigate('ButterflySelection');
         } catch (e) {
-          dispatch(networkErrorAsyncAction())
+          dispatch(networkErrorAsyncAction());
           console.log('ERROR IN storeCroppedImageHandler', e.message);
         }
       } else {
-        dispatch(networkErrorAsyncAction())
+        dispatch(networkErrorAsyncAction());
         console.log('ERROR IN storeCroppedImageHandler - second', JSON.stringify(response));
       }
     } catch (e) {
-      dispatch(networkErrorAsyncAction())
+      dispatch(networkErrorAsyncAction());
       console.log('ERROR IN storeCroppedImageHandler - third', e.message);
     }
   };
@@ -137,15 +146,21 @@ const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
   return (
     <SafeAreaView style={styles.container}>
       {isLoading ? (
-        <LoadingScreen statusBarHidden={hideStatusBar}/>
+        <LoadingScreen statusBarHidden={hideStatusBar} />
       ) : (
         <Fragment>
-          <StatusBar barStyle='light-content' hidden={hideStatusBar} backgroundColor={Theme.colors.accent} />
+          <StatusBar
+            barStyle='light-content'
+            hidden={hideStatusBar}
+            backgroundColor={Theme.colors.accent}
+          />
           <Image style={styles.imagePreview} source={butterfly} />
           <View style={styles.bottomContainer}>
             <View style={styles.infoContainer}>
               <Text style={styles.infoTitle}>Tips</Text>
-              <Text style={styles.infoText}>- capture all of the insect inside the square frame</Text>
+              <Text style={styles.infoText}>
+                - capture all of the insect inside the square frame
+              </Text>
               <Text style={styles.infoText}>- keep parts of other specimens out of the frame</Text>
             </View>
             <View style={styles.buttonsContainer}>
