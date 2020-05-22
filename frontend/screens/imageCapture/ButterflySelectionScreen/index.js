@@ -20,7 +20,7 @@ import { confirmPredictionAsyncAction, clearImagesState } from '../../../store/a
 import imgPlaceholder from '../../../assets/imgNotFound.png';
 
 const ButterflySelectionScreen = ({ navigation, portrait, width, height }) => {
-  const hideStatusBar = useSelector((state) => state.statusBar.hidden);
+  const statusBar = useSelector((state) => state.statusBar);
   const [showUserImageModal, setShowUserImageModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const styles = portrait ? portraitStyles(width, height) : landscapeStyles(width, height);
@@ -59,11 +59,7 @@ const ButterflySelectionScreen = ({ navigation, portrait, width, height }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <StatusBar
-        barStyle='light-content'
-        hidden={hideStatusBar}
-        backgroundColor={Theme.colors.accent}
-      />
+      <StatusBar barStyle={statusBar.color} hidden={statusBar.hidden} backgroundColor={Theme.colors.accent} />
       <ImageModal
         visible={showUserImageModal}
         hideModalHandler={() => setShowUserImageModal(false)}

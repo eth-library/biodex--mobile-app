@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet, Dimensions, StatusBar } from 'react-native';
 import { ScreenOrientation } from 'expo';
 import { useSelector, useDispatch } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 
 import SwiperFlatList from '../../components/SwiperFlatList';
 import HomeScreen from './HomeScreen';
@@ -13,13 +14,16 @@ import Theme from '../../theme';
 import { hideStatusBarAction, showStatusBarAction } from '../../store/actions/statusBar';
 
 const Guide = ({ navigation }) => {
-  const hideStatusBar = useSelector((state) => state.statusBar.hidden);
+  const statusBar = useSelector((state) => state.statusBar);
+  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
 
   // Cleanup function on navigation
   useEffect(() => {
-    dispatch(hideStatusBarAction());
+    // When clicking on home, it resets the image capture stack and remounts the guide stack. 
+    // If the guide stack is not focused, it should not hide the statusbar
+    if (isFocused) dispatch(hideStatusBarAction());
     const cleanup = () => {
       dispatch(showStatusBarAction());
       navigation.addListener('blur', () => {
@@ -42,11 +46,7 @@ const Guide = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        hidden={hideStatusBar}
-        barStyle='light-content'
-        backgroundColor={Theme.colors.accent}
-      />
+      <StatusBar barStyle={statusBar.color} hidden={statusBar.hidden} backgroundColor={Theme.colors.accent} />
       <SwiperFlatList index={0} showPagination navigation={navigation}>
         <HomeScreen style={styles.child} />
         <ImageCaptureScreen style={styles.child} />

@@ -8,6 +8,7 @@ import DrawerNavigator from './DrawerNavigator';
 import AuthStackNavigator from './AuthStackNavigator';
 import LoadingScreen from '../components/LoadingScreen';
 import { rootEndpoint } from '../constants';
+import { setStatusBarColorAction } from '../store/actions/statusBar';
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,7 @@ const MainNavigator = () => {
           Sentry.captureException(e);
         }
       }
+      if (isAuthenticated) dispatch(setStatusBarColorAction('light-content'));
       dispatch({
         type: 'RESTORE_TOKEN',
         payload: { access: accessToken, refresh: refreshToken, isAuthenticated, user }
