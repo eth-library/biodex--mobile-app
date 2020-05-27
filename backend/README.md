@@ -17,6 +17,7 @@ The data is stored in a Postgres database.
 - [Email Models](#email-models)
 - [Models](#models)
 - [Run the project locally](#run-the-project-locally)
+- [Environment variables in development mode](#environment-variables-in-development-mode)
 
 ## Endpoints
 
