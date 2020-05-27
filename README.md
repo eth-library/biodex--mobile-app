@@ -15,7 +15,7 @@ will allow the non-expert staff to correctly sort the majority of specimens whic
 ## Mobile App
 - Built for iOS and Android
 - Tech Stack
-    - React-Native with Expo framework
+    - React-Native with [Expo framework](https://docs.expo.io/)
 
 [Frontend README](./frontend/README.md)
 

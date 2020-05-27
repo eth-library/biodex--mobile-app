@@ -1,5 +1,5 @@
 # Mobile App for Lepi
-The application is built with React-Native and the Expo framework.
+The application is built with React-Native and the [Expo framework](https://docs.expo.io/).
 
 - [Intro  Guide](#intro--guide)
 - [Authentication](#authentication)
