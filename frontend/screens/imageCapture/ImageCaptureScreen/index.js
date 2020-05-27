@@ -73,7 +73,6 @@ const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
 
     dispatch(storeImageTakingMethod('camera'));
     setIsLoading(true);
-    console.log('hiding from takecameraimagehandler');
     dispatch(hideStatusBarAction());
 
     const image = await ExpoImagePicker.launchCameraAsync({
@@ -86,7 +85,6 @@ const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
     } else {
       setUri(image.uri);
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-      console.log('hiding from takecameraimagehandler 2');
       dispatch(hideStatusBarAction());
       setCropModalVisible(true);
     }
@@ -98,7 +96,6 @@ const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
 
     dispatch(storeImageTakingMethod('gallery'));
     setIsLoading(true);
-    console.log('hiding from selectgalleryimagehandler')
     dispatch(hideStatusBarAction());
 
     const image = await ExpoImagePicker.launchImageLibraryAsync({
