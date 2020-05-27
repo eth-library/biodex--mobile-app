@@ -76,3 +76,10 @@ background / asynchronously with redis and celery.
 - Run `python manage.py runserver 0:8000` and visit http://0.0.0.0:8000/ - you should get a 404 served by Django, means it is running! We just do not serve anything on `/`.
 - Run `python manage.py migrate` to create the tables in your database (this needs only to be done the first time or if you update the models)
 - Run `python manage.py createsuperuser` to create a superuser. Visit http://0.0.0.0:8000/backend/lepi-admin and use the credentials to log in
+
+## Environment variables in development mode
+
+- To have emails being sent automatically for registration and password resetting, you will have to add a gmail address and password in /envs/dev.env
+- For emails to be sent out during development mode, you will also have to add your email through Django admin under DevEmails
+
+- If you would like to add Sentry, which can help monitoring and debugging, you will also have to add your Sentry DSN
