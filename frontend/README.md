@@ -42,3 +42,9 @@ The application is built with React-Native and the Expo framework.
 - Android doesn't allow http connections. For this reasons, ngrok can be used for tunnelling your localhost through a https connection. https://ngrok.com/
 - After having installed ngrok, run `./ngrok http 8000` from your terminal
 - Copy the forwarding https url which displays in your terminal and update the devRoot in /frontend/constants/index.js
+
+## Building Standalone Apps
+
+How to create standalone binaries of this Expo app for iOS and Android, which can be submitted to the Apple App Store and Google Play Store:
+
+https://docs.expo.io/distribution/building-standalone-apps/
