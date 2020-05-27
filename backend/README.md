@@ -23,6 +23,7 @@ The data is stored in a Postgres database.
 Detailed documentation about the API endpoints can be found at https://api.lepi.propulsion-home.ch/backend/api/docs/
 
 For convenience, you can import the Lepi.postman_collection.json into postman and test the endpoints there. https://www.postman.com/
+The collection can be found in /backend
 
 ## Admin
 
@@ -34,8 +35,10 @@ mentioned above. All login requests to /admin/ will land in a honeypot and be vi
 
 ## Users
 
-Users can be created via the admin panel or via App. As logged in user, you can invite other users. They will receive an
-email with a registration code and they can sign up with it.
+Users can be created via the admin panel or via App. Creating a user via admin is a 2-step process. After having set the email, username and password, another form opens. 
+Make sure to also fill the required information there. Otherwise, the related registration profile will be missing and the user won't be able to reset his password.
+
+As logged in user, you can invite other users. They will receive an email with a registration code and they can sign up with it.
 
 There is currently no way to register without knowing an admin or getting invited by an existing user.
 
@@ -44,6 +47,8 @@ There is currently no way to register without knowing an admin or getting invite
 Cases hold the information about which user uploaded an image, if and which image he confirmed as well as information about
 the model, other prediction choices etc.
 
+This data is currently not being used.
+
 ## Emails
 
 Emails are automatically sent when a user is invited or a reset password code has been requested. This is handled in the 
@@ -51,7 +56,7 @@ background / asynchronously with redis and celery.
 
 ### Email Models
 
-- Email: Is the effective data bout an email content and if it has been sent. It also includes the base html template.
+- Email: Is the effective html code being sent by email. We use Django templates with html, to be able to style the content as we want.
 - EmailType: Defines the dynamic content based on what email type it is and the html extension. For example registration or password reset.
 - DevEmail: Email addresses need to be registered as dev emails if you want to receive emails in development mode.
 
@@ -66,8 +71,8 @@ background / asynchronously with redis and celery.
 - Run `docker build -t lepi .` to create the Docker image on your machine. You can replace 'lepi' with any name you want
 - Replace the image name of the backend container in 'docker-compose.yml', with the name you used to build the image in previous step
 
-- Run `docker-compose up -d` in your terminal, to start up all containers. This will also pull the Docker images if you don't already have them on your machine.
+- Run `docker-compose up -d` in your terminal, to start up all containers. This will also pull the needed Docker images such as Postgres, Redis etc. if you don't already have them on your machine.
 - Run `docker exec -ti lepi_backend_1 bash` in your terminal. This is to log into the container, which is running the REST API. Make sure 'lepi_backend_1' is the name of the running container. Else replace it with the correct name or with the container ID.
-- Run `python manage.py runserver 0:8000` and visit http://0.0.0.0:8000/ - you should get a 404 served by Django, means it is running!
+- Run `python manage.py runserver 0:8000` and visit http://0.0.0.0:8000/ - you should get a 404 served by Django, means it is running! We just do not serve anything on `/`.
 - Run `python manage.py migrate` to create the tables in your database (this needs only to be done the first time or if you update the models)
 - Run `python manage.py createsuperuser` to create a superuser. Visit http://0.0.0.0:8000/backend/lepi-admin and use the credentials to log in

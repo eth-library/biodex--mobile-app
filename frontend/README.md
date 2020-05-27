@@ -21,13 +21,14 @@ The application is built with React-Native and the Expo framework.
 ## Predictions
 
 - An image can be taken with the camera or be selected via gallery. The image needs to be cropped to a square image, containing only the butterfly.
-- If the preview looks ok, the image can be uploaded. This will send it to the predictions API and get the predictions in return.
+- By clicking on crop, it will send the image to the predictions API and get the predictions in return.
 - The user will be redirected to the results screen, where he can select the prediction that matches the uploaded image.
 
-## Run the project locally
+## Run the project locally
 
 - After having cloned the project, through the terminal, navigate inside the frontend folder where the package.json is located
 
+- Run `npm install`
 - Run `npm start`
   - In case you use Firefox and it hangs at "Opening DevTools in the browser", run `env BROWSER=firefox expo start`
 
