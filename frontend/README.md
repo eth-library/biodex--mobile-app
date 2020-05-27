@@ -5,6 +5,7 @@ The application is built with React-Native and the [Expo framework](https://docs
 - [Authentication](#authentication)
 - [Predictions](#predictions)
 - [Run the project locally](#run-the-project-locally)
+- [Building Standalone Apps for App Store](#building-standalone-apps-for-app-store)
 
 ## Intro / Guide
 
@@ -43,7 +44,7 @@ The application is built with React-Native and the [Expo framework](https://docs
 - After having installed ngrok, run `./ngrok http 8000` from your terminal
 - Copy the forwarding https url which displays in your terminal and update the devRoot in /frontend/constants/index.js
 
-## Building Standalone Apps
+## Building Standalone Apps for App Store
 
 How to create standalone binaries of this Expo app for iOS and Android, which can be submitted to the Apple App Store and Google Play Store:
 
