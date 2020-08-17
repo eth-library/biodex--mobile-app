@@ -9,6 +9,9 @@ static-files
 /app/.coverage
 /app/htmlcov
 /prediction_api
-
+/envs
+*.env
+dev.env
+prod.env
 TODO.md
 TODO_ETH.md

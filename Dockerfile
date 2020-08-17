@@ -6,7 +6,7 @@ RUN apt-get update && apt-get upgrade -y
 
 RUN mkdir -p /backend
 COPY ./backend/requirements.yml /backend/requirements.yml
-RUN /opt/conda/bin/conda env create -f /backend/requirements.yml
+RUN conda env create -f /backend/requirements.yml
 ENV PATH /opt/conda/envs/backend/bin:$PATH
 
 ENV PYTHONDONTWRITEBYTECODE 1

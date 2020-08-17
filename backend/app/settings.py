@@ -28,9 +28,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost 127.0.0.1').split(" ")
 
-DEBUG = ast.literal_eval(os.environ.get('DJANGO_DEBUG', None))
+DEBUG = int(os.environ.get('DJANGO_DEBUG', default=0))
 
 INSTALLED_APPS = [
     'app',
@@ -187,7 +187,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 #############################################################
 # Task Queue
-CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_BROKER_URL = 'http://localhost:6379'
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
@@ -214,4 +214,4 @@ if not DEBUG:
     )
 
 USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
