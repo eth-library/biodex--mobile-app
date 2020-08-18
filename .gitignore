@@ -15,3 +15,4 @@ dev.env
 prod.env
 TODO.md
 TODO_ETH.md
+nginx.conf
