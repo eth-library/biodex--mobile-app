@@ -4,7 +4,7 @@
 POD_NAME=biodex_mob
 
 #create directories if not already existing
-VOL_DIR=~/biodex/volumes/mob
+VOL_DIR=~/volumes/mob
 VOL_MEDIA=$VOL_DIR/mediafiles
 VOL_STATIC=$VOL_DIR/staticfiles
 VOL_DB=$VOL_DIR/postgres
@@ -16,6 +16,8 @@ mkdir -p -v $VOL_STATIC
 mkdir -p -v $VOL_DB
 mkdir -p -v $VOL_REDIS
 mkdir -p -v $VOL_NGINX
+
+cp -i ./nginx.conf $VOL_NGINX/nginx.conf
 
 # get these from environment variables when finished debugging
 # define host ports for services
@@ -56,7 +58,7 @@ podman run \
     --volume $VOL_STATIC:/static-files \
     --volume $VOL_MEDIA:/media-files \
     --env-file ./.env.prod \
-    localhost/biodex/mob-prod-img:latest \
+    biodex/mob-prod-img:latest \
     sh /scripts/run.sh
 
 #REDIS
@@ -82,7 +84,7 @@ podman run \
     --volume $VOL_MEDIA:/media-files \
     --env-file ./.env.prod \
     --restart always \
-    biodex/mobapi-prod:latest \
+    biodex/mob-prod-img:latest \
     celery -A app worker -l info
 
 #REVERSE PROXY
@@ -98,13 +100,5 @@ podman run \
     nginx:1
 
 
-# podman exec -d biodex_mob_api-prod-ctr sh /scripts/run.sh
-# gunicorn --workers=4 --bind=127.0.0.1:8000 app.wsgi:application --reload
-# python -c "import time; time.sleep(3)" # Wait for postgres to start up
-# python manage.py migrate
-# python manage.py collectstatic --no-input
 # need to manually create a superuser
 # podman exec -it $CTR_NAME_MOB python manage.py createsuperuser
-
-# # #'loading fixtures'
-# podman exec $CTR_NAME_WEB sh load_fixtures.sh
