@@ -8,14 +8,13 @@ api_patterns = [
     path('users/', include('app.users.urls')),
     path('auth/', include('app.registration.urls')),
     path('cases/', include('app.cases.urls')),
-
     path('docs/', include_docs_urls(title='Lepi', permission_classes=[])),
 ]
 
 urlpatterns = [
-    path('backend/lepi-admin/', admin.site.urls),
-    path('backend/admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
-    path('backend/api/', include(api_patterns)),
+    path('mob-api/lepi-admin/', admin.site.urls),
+    path('mob-api/admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
+    path('mob-api/', include(api_patterns)),
 ]
 
 if settings.DEBUG:
