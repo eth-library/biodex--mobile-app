@@ -30,7 +30,13 @@
     },
     "android": {
       "package": "com.propulsion.lepitest",
-      "versionCode": 1
+      "versionCode": 1,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE"
+      ]
     },
     "hooks": {
       "postPublish": [
