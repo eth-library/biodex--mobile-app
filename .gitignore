@@ -10,7 +10,7 @@ static-files
 /app/htmlcov
 /prediction_api
 /envs
-*.env
+*.env*
 dev.env
 prod.env
 TODO.md
