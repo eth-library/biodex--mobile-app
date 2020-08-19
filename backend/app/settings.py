@@ -144,8 +144,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 FILE_UPLOAD_PERMISSIONS = 0o644
-STATIC_URL = '/static-files/'
-MEDIA_URL = '/media-files/'
+STATIC_URL = '/mob-api/static-files/'
+MEDIA_URL = '/mob-api/media-files/'
 MEDIA_ROOT = '/media-files/'
 STATIC_ROOT = '/static-files/'
 
@@ -187,7 +187,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 #############################################################
 # Task Queue
-CELERY_BROKER_URL = 'http://localhost:6379'
+CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
