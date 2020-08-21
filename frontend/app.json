@@ -13,7 +13,7 @@
     "orientation": "default",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/BioDex_logo_name_whitebackground.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
