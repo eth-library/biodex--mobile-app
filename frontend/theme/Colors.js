@@ -1,6 +1,6 @@
 export default {
-  primary: '#1387C3',
-  accent: '#1F407A',
+  primary: '#222',
+  accent: '#222',
   link: '#1387C3',
   confirm: '#6FCB4B',
   red: 'red',
