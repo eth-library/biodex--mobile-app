@@ -31,7 +31,7 @@ const ButterflyChoice = ({ data, confirmationHandler, confirmedCase, isLoading, 
         <View style={styles.titles}>
           <Title text={data.family} prob={data.family_prob} />
           <Title text={data.subfamily} prob={data.subfamily_prob} />
-          <Title text={data.species} prob={data.species_prob} style={styles.italicTitle} />
+          <Title text={data.genus} prob={data.genus_prob} style={styles.italicTitle} />
           <Title text={data.species} prob={data.species_prob} style={styles.italicTitle} />
         </View>
 

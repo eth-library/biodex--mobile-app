@@ -58,7 +58,7 @@ podman run \
     --volume $VOL_STATIC:/static-files \
     --volume $VOL_MEDIA:/media-files \
     --env-file ./.env.prod \
-    biodex/mob-prod-img:latest \
+    biodex/mob-prod-img:20200819 \
     sh /scripts/run.sh
 
 #REDIS
@@ -84,7 +84,7 @@ podman run \
     --volume $VOL_MEDIA:/media-files \
     --env-file ./.env.prod \
     --restart always \
-    biodex/mob-prod-img:latest \
+    biodex/mob-prod-img:20200819 \
     celery -A app worker -l info
 
 #REVERSE PROXY

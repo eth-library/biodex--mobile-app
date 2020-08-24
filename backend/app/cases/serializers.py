@@ -25,10 +25,23 @@ class CaseCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Case
-        fields = ['id', 'uploaded_image', 'confirmed_image', 'location', 'longitude', 'latitude', 'created', 'prediction_exec_time', 'prediction_model', 'prediction_status', 'user', 'predictions']
+        fields = ['id', 
+                  'uploaded_image',
+                  'confirmed_image',
+                  'location',
+                  'longitude',
+                  'latitude',
+                  'created',
+                  'prediction_exec_time',
+                  'prediction_model',
+                  'prediction_status',
+                  'user',
+                  'predictions']
 
     def create(self, validated_data):
+        
         predictions_relationship = validated_data.pop('predictions')
+
         if validated_data.get('latitude') and validated_data.get('longitude'):
             coordinates = (validated_data.get('latitude'), validated_data.get('longitude')),
             location = reverse_geocode.search(coordinates)

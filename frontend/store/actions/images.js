@@ -10,7 +10,7 @@ import {
   STORE_IMAGE_TAKING_METHOD,
   CLEAR_IMAGES_STATE,
 } from '../types';
-import { rootEndpoint } from '../../constants/index';
+import { rootEndpoint, predictEndpoint, predApiToken } from '../../constants/index';
 import { networkSuccessAsyncAction, networkErrorAsyncAction } from './network';
 
 export const storeSelectedImageAction = (imageUri) => {
@@ -79,13 +79,31 @@ export const getPredictionsAsyncAction = (imageUri) => async (dispatch, getState
   const body = formData;
   const config = { headers, method, body };
 
+  // prediction form data
+  const formDataPred = new FormData()
+  formDataPred.append('image', {
+    uri: img.uri,
+    type: `image/${fileType}`,
+    name: `uploaded_user_image_${datetime}.${fileType}`,
+  });
+  
+  const configPred = {
+    headers: {
+      Authorization: predApiToken,
+      Accept: 'application/json',
+      'Content-Type': 'multipart/form-data',
+    },
+    method: 'POST',
+    body: formDataPred
+    }
+  
   try {
     const response = await fetch(
-      `https://europe-west1-ethec-auto-insect-recognition.cloudfunctions.net/lepidoptera_clfr_objdet`,
-      config
-    );
+      `${predictEndpoint}`,
+      configPred)
     if (response.ok) {
       const data = await response.json();
+      // console.log('MODEL RESPONSE OK predictions: ', data.predictions, '\n\n')
       return { ...response, data };
     } else {
       console.log(
@@ -113,6 +131,8 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
       family_prob: el.family_prob,
       subfamily: el.subfamily,
       subfamily_prob: el.subfamily_prob,
+      genus: el.genus,
+      genus_prob: el.genus_prob,
       species: el.species,
       species_prob: el.species_prob,
       image_url: el.example_image_0,
@@ -125,29 +145,39 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
     formData.append('longitude', location.coords.longitude);
     formData.append('latitude', location.coords.latitude);
   }
-  formData.append('predictions', JSON.stringify(predictions));
+  formData.append('predictions', JSON.stringify(predictions)); 
   formData.append('prediction_exec_time', data.exec_time);
-  formData.append('prediction_model', data.model);
-  formData.append('prediction_status', data.status);
+  formData.append('prediction_model', '2019');
+  formData.append('prediction_status', 'ok');
   formData.append('uploaded_image', {
     uri: imageUri,
     type: 'image/jpeg',
     name: `uploaded_user_image_${datetime}.jpg`,
   });
-
+  console.log('\n\nformData.uploaded_image: ', formData['uploaded_image'], '\n\n' )
   const headers = new Headers({
     Authorization: `Bearer ${getState().auth.access}`,
   });
   const method = 'POST';
   const body = formData;
   const config = { headers, method, body };
-
+  
   try {
+    // Display the key/value pairs
+    console.log('posting case: ')
+    for (var part of formData.getParts()) {
+      console.log(part.fieldName, ' : ', part.string);
+    };
     const response = await fetch(`${rootEndpoint}/cases/create/`, config);
     if (response.ok) {
+      console.log('create case status: ', response.status)
       const res_data = await response.json();
+      // console.log(res_data)
       dispatch(storePredictionsAction(res_data));
     } else {
+      console.log('ERROR IN newCaseAsyncAction:\n',
+          'status:', response.status,
+          'statusText:', response.statusText)
       dispatch(networkErrorAsyncAction());
       Sentry.captureMessage(`${response.status} - ${response.statusText}`);
     }
