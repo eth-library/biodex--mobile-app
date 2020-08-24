@@ -1,15 +1,14 @@
 {
   "expo": {
-    "name": "Lepi",
-    "slug": "Lepi-App",
-    "privacy": "unlisted",
+    "name": "BioDex",
+    "slug": "BioDex",
+    "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
-    "version": "1.0.7",
+    "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "splash": {
@@ -24,30 +23,18 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.propulsion.lepitest",
+      "bundleIdentifier": "ch.ethz.biodex",
       "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
-      "package": "com.propulsion.lepitest",
+      "package": "ch.ethz.biodex",
       "versionCode": 1,
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "CAMERA",
         "WRITE_EXTERNAL_STORAGE",
         "READ_EXTERNAL_STORAGE"
-      ]
-    },
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "propulsion-academy-ag",
-            "project": "lepi-app",
-            "authToken": "396a8085d58e42cc9ce4d1189228c5cc2ffc74d1e8b34fd79e616c365e16edd7"
-          }
-        }
       ]
     }
   }

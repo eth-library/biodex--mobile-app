@@ -125,6 +125,7 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
   const location = getState().images.location;
 
   const predictions = Object.values(data.predictions).map((el) => {
+    console.log('\n api response', el)
     return {
       index: el.index,
       family: el.family,
@@ -164,7 +165,7 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
   
   try {
     // Display the key/value pairs
-    console.log('posting case: ')
+    // console.log('posting case: ')
     for (var part of formData.getParts()) {
       console.log(part.fieldName, ' : ', part.string);
     };

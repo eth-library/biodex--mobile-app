@@ -29,6 +29,12 @@ class Prediction(models.Model):
     subfamily_prob = models.FloatField(
         verbose_name='subfamily probability',
     )
+    genus = models.CharField(
+        max_length=100
+    )
+    genus_prob = models.FloatField(
+        verbose_name='genus probability',
+    )
     species = models.CharField(
         max_length=100
     )

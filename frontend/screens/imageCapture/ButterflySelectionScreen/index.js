@@ -83,6 +83,7 @@ const ButterflySelectionScreen = ({ navigation, portrait, width, height }) => {
           <Titles />
           <ScrollView>
             {predictions.map((el, index) => {
+              console.log(el)
               return (
                 <ButterflyChoice
                   data={el}
