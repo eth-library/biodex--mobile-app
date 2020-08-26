@@ -103,7 +103,6 @@ export const getPredictionsAsyncAction = (imageUri) => async (dispatch, getState
       configPred)
     if (response.ok) {
       const data = await response.json();
-      // console.log('MODEL RESPONSE OK predictions: ', data.predictions, '\n\n')
       return { ...response, data };
     } else {
       console.log(
@@ -125,7 +124,7 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
   const location = getState().images.location;
 
   const predictions = Object.values(data.predictions).map((el) => {
-    console.log('\n api response', el)
+    
     return {
       index: el.index,
       family: el.family,
@@ -155,7 +154,7 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
     type: 'image/jpeg',
     name: `uploaded_user_image_${datetime}.jpg`,
   });
-  console.log('\n\nformData.uploaded_image: ', formData['uploaded_image'], '\n\n' )
+  
   const headers = new Headers({
     Authorization: `Bearer ${getState().auth.access}`,
   });
@@ -164,16 +163,11 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
   const config = { headers, method, body };
   
   try {
-    // Display the key/value pairs
-    // console.log('posting case: ')
-    for (var part of formData.getParts()) {
-      console.log(part.fieldName, ' : ', part.string);
-    };
+
     const response = await fetch(`${rootEndpoint}/cases/create/`, config);
     if (response.ok) {
-      console.log('create case status: ', response.status)
       const res_data = await response.json();
-      // console.log(res_data)
+
       dispatch(storePredictionsAction(res_data));
     } else {
       console.log('ERROR IN newCaseAsyncAction:\n',
