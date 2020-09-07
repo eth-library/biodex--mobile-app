@@ -58,7 +58,7 @@ podman run \
     --volume $VOL_STATIC:/static-files \
     --volume $VOL_MEDIA:/media-files \
     --env-file ./.env.prod \
-    biodex/mob-prod-img:20200819 \
+    biodex/mob-prod-img:20200824 \
     sh /scripts/run.sh
 
 #REDIS
