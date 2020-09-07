@@ -124,7 +124,7 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
   const location = getState().images.location;
 
   const predictions = Object.values(data.predictions).map((el) => {
-    
+
     return {
       index: el.index,
       family: el.family,
@@ -147,7 +147,11 @@ export const newCaseAsyncAction = (data, imageUri) => async (dispatch, getState)
   }
   formData.append('predictions', JSON.stringify(predictions)); 
   formData.append('prediction_exec_time', data.exec_time);
-  formData.append('prediction_model', '2019');
+  const pred_model = 'NaN'
+  if (data.prediction_model!=null) {
+    pred_model = data.prediction_model;
+  };
+  formData.append('prediction_model', pred_model);
   formData.append('prediction_status', 'ok');
   formData.append('uploaded_image', {
     uri: imageUri,
