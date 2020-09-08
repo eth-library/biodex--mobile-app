@@ -9,7 +9,7 @@ api_patterns = [
     path('users/', include('app.users.urls')),
     path('auth/', include('app.registration.urls')),
     path('cases/', include('app.cases.urls')),
-    path('docs/', include_docs_urls(title='Lepi', permission_classes=[IsAuthenticated])),
+    path('docs/', include_docs_urls(title='BioDex - Mobile API', permission_classes=[IsAuthenticated])),
 ]
 
 urlpatterns = [
