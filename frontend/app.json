@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "BioDex",
-    "slug": "BioDex",
-    "privacy": "public",
+    "name": "Lepi",
+    "slug": "Lepi-App",
+    "privacy": "unlisted",
     "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android"
     ],
-    "version": "1.0.0",
+    "version": "1.0.8",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "splash": {
@@ -23,7 +23,7 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "ch.ethz.biodex",
+      "bundleIdentifier": "com.propulsion.lepitest",
       "buildNumber": "1.0.0",
       "supportsTablet": true
     },
