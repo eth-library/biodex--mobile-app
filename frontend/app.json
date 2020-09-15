@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "Lepi",
-    "slug": "Lepi-App",
-    "privacy": "unlisted",
-    "sdkVersion": "36.0.0",
+    "name": "ETH BioDex",
+    "slug": "ETH-Biodex",
+    "privacy": "public",
+    "sdkVersion": "38.0.0",
     "platforms": [
       "ios",
       "android"
@@ -23,8 +23,8 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.propulsion.lepitest",
-      "buildNumber": "1.0.0",
+      "bundleIdentifier": "ch.ethz.biodex",
+      "buildNumber": "1.0.8",
       "supportsTablet": true
     },
     "android": {
