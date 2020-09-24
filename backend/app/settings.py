@@ -145,7 +145,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 FILE_UPLOAD_PERMISSIONS = 0o644
 STATIC_URL = '/mob-api/static-files/'
-MEDIA_URL = '/mob-api/media-files/'
+MEDIA_URL = os.environ.get('HOST_URL', "localhost:8000") + '/mob-api/media-files/'
 MEDIA_ROOT = '/media-files/'
 STATIC_ROOT = '/static-files/'
 
