@@ -86,11 +86,11 @@ const Login = ({ navigation }) => {
         >
           <Logo style={styles.logo} />
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>ETH Entomological Collection</Text>
-            <Text style={styles.title}>Lepi Classification App</Text>
+            <Text style={styles.title}>ETH Library & Entomological Collection</Text> 
+            <Text style={styles.title}>BioDex Classification App</Text>
           </View>
           <View style={authStyles.form}>
-            <Text style={authStyles.formTitle}>Login</Text>
+            <Text style={authStyles.formTitle}></Text>
             <Input
               name='email'
               placeholder={'Email'}

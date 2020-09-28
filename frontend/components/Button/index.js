@@ -12,7 +12,7 @@ const CustomButton = ({ isLoading, title, onPress, error, style, color, disabled
         <View style={styles.buttonContainer}>
           <Button
             title={title}
-            color={color || Theme.colors.primary}
+            color={color || Theme.colors.primaryButton}
             onPress={onPress}
             style={styles.button}
             disabled={disabled || false}
