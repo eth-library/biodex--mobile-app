@@ -138,7 +138,7 @@ const Login = ({ navigation }) => {
               error={error && error.general}
             />
             <View style={authStyles.center}>
-              <Text style={authStyles.text}>Don't have an account?</Text>
+              <Text style={authStyles.text}>Received an invite code?</Text>
               <Text style={authStyles.link} onPress={() => navigation.navigate('Registration')}>
                 Sign up here
               </Text>
