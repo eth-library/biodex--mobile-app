@@ -7,10 +7,11 @@ butterflies and moths. This will allow the workload for subject experts to be si
 A publicly available mobile application for non-expert entomological collection workers, which suggests the most likely species for each specimen of butterfly or moth photographed. This 
 will allow the non-expert staff to correctly sort the majority of specimens which can later be quickly checked by an expert.
 
-- [Mobile App](#mobile-app)
-- [REST API](#rest-api)
-- [REST API Deployment](#rest-api-deployment)
-- [Predictions API - not in this codebase!](#predictions-api---not-in-this-codebase!)
+- [Project description](#project-description)
+  - [Mobile App](#mobile-app)
+  - [REST API](#rest-api)
+  - [REST API Deployment](#rest-api-deployment)
+  - [Predictions API - not in this codebase!](#predictions-api---not-in-this-codebase)
 
 ## Mobile App
 - Built for iOS and Android

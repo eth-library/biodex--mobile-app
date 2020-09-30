@@ -3,7 +3,6 @@
     "name": "ETH BioDex",
     "slug": "ETH-Biodex",
     "privacy": "public",
-    "sdkVersion": "38.0.0",
     "platforms": [
       "ios",
       "android"
