@@ -36,12 +36,13 @@
     "react-native-status-bar-height": "^2.4.0",
     "react-native-svg": "12.1.0",
     "react-native-web": "~0.13.7",
-    "react-navigation-header-buttons": "^3.0.5",
+    "react-navigation-header-buttons": "^5.0.2",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
-    "sentry-expo": "^2.0.3"
+    "sentry-expo": "^2.0.3",
+    "expo-screen-orientation": "~2.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

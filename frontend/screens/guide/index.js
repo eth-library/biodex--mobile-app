@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, Dimensions, StatusBar } from 'react-native';
-import { ScreenOrientation } from 'expo';
-import { useSelector, useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
-
+import * as ScreenOrientation from 'expo-screen-orientation';
+import React, { useEffect } from 'react';
+import { Dimensions, StatusBar, StyleSheet, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import SwiperFlatList from '../../components/SwiperFlatList';
+import { hideStatusBarAction, showStatusBarAction } from '../../store/actions/statusBar';
+import Theme from '../../theme';
+import ButterflySelectionScreen from './ButterflySelectionScreen';
+import CroppingScreen from './CroppingScreen';
 import HomeScreen from './HomeScreen';
 import ImageCaptureScreen from './ImageCaptureScreen';
-import CroppingScreen from './CroppingScreen';
-import ButterflySelectionScreen from './ButterflySelectionScreen';
 import StartScreen from './StartScreen';
-import Theme from '../../theme';
-import { hideStatusBarAction, showStatusBarAction } from '../../store/actions/statusBar';
+
 
 const Guide = ({ navigation }) => {
   const statusBar = useSelector((state) => state.statusBar);
