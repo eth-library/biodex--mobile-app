@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "1.0.0",
+    "version": "1.0.9",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "splash": {
@@ -23,13 +23,13 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "ch.ethz.biodex",
-      "buildNumber": "1.0.0",
+      "bundleIdentifier": "com.barrysunderland.biodex",
+      "buildNumber": "1.0.9",
       "supportsTablet": true
     },
     "android": {
       "package": "ch.ethz.biodex",
-      "versionCode": 1,
+      "versionCode": 1.9,
       "permissions": [
         "ACCESS_FINE_LOCATION",
         "CAMERA",
