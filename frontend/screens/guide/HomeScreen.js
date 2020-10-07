@@ -9,9 +9,10 @@ const HomeScreen = ({ style }) => {
   return (
     <IntroContainer style={style}>
       <View style={styles.titleContainer}>
-        <Text style={styles.titleBold}>Welcome to the</Text>
-        <Text style={styles.title}>ETH Zurich</Text>
-        <Text style={styles.titleBold}>Insect Classifier</Text>
+        <Text style={styles.title}>Welcome to</Text>
+        <Text style={styles.titleBold}>BioDex</Text>
+        <Text style={styles.subtitle}>the automated species identifier from</Text>
+        <Text style={styles.subtitle}>ETH Library and Entomological Collection</Text>
       </View>
       <Image style={styles.img} source={ExamplePic} />
     </IntroContainer>
@@ -28,10 +29,16 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fonts.primaryBold,
     fontSize: Theme.fonts.sizeL,
     color: Theme.colors.black,
+    lineHeight: 40,
   },
   title: {
     fontFamily: Theme.fonts.primary,
     fontSize: Theme.fonts.sizeL,
+    color: Theme.colors.black,
+  },
+  subtitle: {
+    fontFamily: Theme.fonts.primary,
+    fontSize: Theme.fonts.sizeM,
     color: Theme.colors.black,
   },
   img: {
