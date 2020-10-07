@@ -11,7 +11,7 @@ import CroppingScreen from './CroppingScreen';
 import HomeScreen from './HomeScreen';
 import ImageCaptureScreen from './ImageCaptureScreen';
 import StartScreen from './StartScreen';
-
+import InviteUsersScreen from './InviteUsersScreen'
 
 const Guide = ({ navigation }) => {
   const statusBar = useSelector((state) => state.statusBar);
@@ -52,6 +52,7 @@ const Guide = ({ navigation }) => {
         <ImageCaptureScreen style={styles.child} />
         <CroppingScreen style={styles.child} />
         <ButterflySelectionScreen style={styles.child} />
+        <InviteUsersScreen style={styles.child} />
         <StartScreen style={styles.child} navigation={navigation} />
       </SwiperFlatList>
     </View>
