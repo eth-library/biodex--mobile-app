@@ -64,8 +64,8 @@ const ResetPassword = ({ navigation }) => {
       >
         <Logo style={styles.logo} />
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>ETH Entomological Collection</Text>
-          <Text style={styles.title}>Lepi Classification App</Text>
+          <Text style={styles.title}>BioDex</Text>
+          <Text style={styles.subtitle}>ETH Library & Entomological Collection</Text>
         </View>
         <View style={authStyles.form}>
           <Text style={authStyles.formTitle}>Reset Password</Text>
@@ -93,7 +93,7 @@ const ResetPassword = ({ navigation }) => {
             <Text style={authStyles.link} onPress={() => navigation.navigate('Login')}>
               Go back to login
             </Text>
-            <Text style={authStyles.text}>Already have a token?</Text>
+            <Text style={authStyles.text}>Already have an invite code?</Text>
             <Text
               style={authStyles.link}
               onPress={() => navigation.navigate('ResetPasswordValidation')}
@@ -120,6 +120,11 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Theme.fonts.primaryBold,
     fontSize: Theme.fonts.sizeL,
+    color: Theme.colors.black,
+  },
+  subtitle: {
+    fontFamily: Theme.fonts.primary,
+    fontSize: Theme.fonts.sizeM,
     color: Theme.colors.black,
   },
   link: {

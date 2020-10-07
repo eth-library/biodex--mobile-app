@@ -85,8 +85,8 @@ const Invitation = ({ navigation }) => {
       >
         <View style={styles.titleContainer}>
           <Logo style={styles.logo} />
-          <Text style={styles.title}>ETH Entomological Collection</Text>
-          <Text style={styles.title}>Lepi Classification App</Text>
+          <Text style={styles.title}>BioDex</Text>
+          <Text style={styles.subtitle}>ETH Library & Entomological Collection</Text>
         </View>
         <View style={styles.form}>
           <Text style={styles.formTitle}>Send invitation to new user</Text>
@@ -140,6 +140,11 @@ const styles = StyleSheet.create({
     fontFamily: Theme.fonts.primaryBold,
     fontSize: Theme.fonts.sizeL,
     color: Theme.colors.black
+  },
+  subtitle: {
+    fontFamily: Theme.fonts.primary,
+    fontSize: Theme.fonts.sizeM,
+    color: Theme.colors.black,
   },
   form: {
     height: 225,
