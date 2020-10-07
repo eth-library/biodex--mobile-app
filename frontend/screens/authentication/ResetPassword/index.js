@@ -1,18 +1,18 @@
-import React, { useState, useReducer, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { View, Text, StyleSheet, Alert, Keyboard } from 'react-native';
-import { ScreenOrientation } from 'expo';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import React, { useCallback, useReducer, useState } from 'react';
+import { Alert, Keyboard, StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
-
-import formReducer from '../formReducer';
-import Theme from '../../../theme';
-import { authStyles } from '../styles';
-import Logo from '../../../components/Logo';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input/index.js';
+import Logo from '../../../components/Logo';
 import TermsAndConditions from '../../../components/TermsAndConditions';
 import { resetPasswordAsyncAction } from '../../../store/actions/resetPassword';
+import Theme from '../../../theme';
+import formReducer from '../formReducer';
+import { authStyles } from '../styles';
+
 
 const ResetPassword = ({ navigation }) => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);

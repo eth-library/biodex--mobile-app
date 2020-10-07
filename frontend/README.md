@@ -1,11 +1,14 @@
-# Mobile App for Lepi
+# BioDex - Mobile App
 The application is built with React-Native and the [Expo framework](https://docs.expo.io/).
 
 - [Intro  Guide](#intro--guide)
 - [Authentication](#authentication)
 - [Predictions](#predictions)
 - [Run the project locally](#run-the-project-locally)
-- [Building Standalone Apps for App Store](#building-standalone-apps-for-app-store)
+- [Submission to the App Store](#Submission-to-the-App-Store)
+  - [App Files Types](#App-File-Types)
+  - [Approval Process](#Approval-Process)
+  - [Building files with Expo](#building-standalone-apps-for-app-store)
 
 ## Intro / Guide
 
@@ -42,7 +45,13 @@ The application is built with React-Native and the [Expo framework](https://docs
 - Run the backend application locally. Check the README.md in /backend
 - Android doesn't allow http connections. For this reasons, ngrok can be used for tunnelling your localhost through a https connection. https://ngrok.com/
 - After having installed ngrok, run `./ngrok http 8000` from your terminal
-- Copy the forwarding https url which displays in your terminal and update the devRoot in /frontend/constants/index.js
+- Copy the forwarding https url which displays in your terminal and update the devRoot in /frontend/constants/index.Building for 
+
+# Submission to the App Store
+
+## App File Types
+
+## Approval Process
 
 ## Building Standalone Apps for App Store
 

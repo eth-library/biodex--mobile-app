@@ -8,9 +8,9 @@ def populate_db(apps, schema_editor):
     email_types = [
         {
             "key": "registration_email",
-            "subject": "You have been invited to join Lepi!",
-            "title": "You have been invited to join Lepi!",
-            "template": "{{ value|linebreaks }}Welcome to Lepi{{ value|linebreaks }}If you don't have the app yet, download it via App store and create a new account. You will need following validation code to register: {{code}}"
+            "subject": "You have been invited to join BioDex!",
+            "title": "You have been invited to join BioDex!",
+            "template": "{{ value|linebreaks }}Welcome to BioDex The species identification tool for Taxonomists and Natural History Collections. See {{ 'biodex.ethz.ch'|urlize }} for more info or to get in contact.{{ value|linebreaks }}If you don't have the app yet, download it via App store and create a new account. You will need following validation code to register: {{code}}"
         },
         {
             "key": "password_reset_email",

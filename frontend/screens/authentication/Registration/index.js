@@ -1,19 +1,19 @@
-import React, { useReducer, useState, useCallback, Fragment } from 'react';
-import { Text, View, Platform, Picker, StyleSheet, Alert, TouchableOpacity, Keyboard } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { ScreenOrientation } from 'expo';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import React, { Fragment, useCallback, useReducer, useState } from 'react';
+import { Alert, Keyboard, Picker, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
-
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import TermsAndConditions from '../../../components/TermsAndConditions';
-import { authStyles } from '../styles';
+import { userRegistrationValidationAsyncAction } from '../../../store/actions/registration';
 import Theme from '../../../theme';
 import formReducer from '../formReducer';
-import { userRegistrationValidationAsyncAction } from '../../../store/actions/registration';
+import { authStyles } from '../styles';
 
-const Registration = ({ navigation }) => {
+
+const Registration = ({ navigation }) => {
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
   const [formState, dispatchFormState] = useReducer(formReducer, {
     values: {
@@ -150,7 +150,7 @@ const Registration = ({ navigation }) => {
                     placeholder={formState.values.userType}
                     placeholderTextColor={Theme.colors.grey}
                     value={formState.values.userType}
-                    onInputChange={() => {}}
+                    onInputChange={() => { }}
                   />
                 </TouchableOpacity>
               )}
