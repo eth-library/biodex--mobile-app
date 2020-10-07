@@ -1,5 +1,8 @@
+import { Platform } from 'react-native';
+
 export default {
   primary: '#222222',
+  primaryButton: Platform.OS === 'ios' ? '#007AFF' : '#222222',
   accent: '#222222',
   link: '#1387C3',
   confirm: '#6FCB4B',

@@ -87,11 +87,11 @@ const Login = ({ navigation }) => {
         >
           <Logo style={styles.logo} />
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>ETH Entomological Collection</Text>
-            <Text style={styles.title}>Lepi Classification App</Text>
+            <Text style={styles.title}>ETH Library & Entomological Collection</Text> 
+            <Text style={styles.title}>BioDex Classification App</Text>
           </View>
           <View style={authStyles.form}>
-            <Text style={authStyles.formTitle}>Login</Text>
+            <Text style={authStyles.formTitle}></Text>
             <Input
               name='email'
               placeholder={'Email'}
@@ -139,7 +139,7 @@ const Login = ({ navigation }) => {
               error={error && error.general}
             />
             <View style={authStyles.center}>
-              <Text style={authStyles.text}>Don't have an account?</Text>
+              <Text style={authStyles.text}>Received an invite code?</Text>
               <Text style={authStyles.link} onPress={() => navigation.navigate('Registration')}>
                 Sign up here
               </Text>
