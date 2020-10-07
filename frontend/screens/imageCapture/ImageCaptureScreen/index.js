@@ -1,31 +1,31 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { View, Text, StatusBar, Image, Platform } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import * as Location from 'expo-location';
-import * as ExpoImagePicker from 'expo-image-picker';
-
 import { Ionicons } from '@expo/vector-icons';
+import * as ExpoImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Image, Platform, StatusBar, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScreenOrientation } from 'expo';
-
-import Theme from '../../../theme';
+import { useDispatch, useSelector } from 'react-redux';
 import butterfly from '../../../assets/butterfly.jpg';
-import LoadingScreen from '../../../components/LoadingScreen';
 import ImageCropper from '../../../components/ImageCropper';
+import LoadingScreen from '../../../components/LoadingScreen';
 import {
   getPredictionsAsyncAction,
-  storeLocation,
+
   newCaseAsyncAction,
-  storeImageTakingMethod,
+  storeImageTakingMethod, storeLocation
 } from '../../../store/actions/images';
 import { networkErrorAsyncAction } from '../../../store/actions/network';
 import { hideStatusBarAction, showStatusBarAction } from '../../../store/actions/statusBar';
-import { portraitStyles, landscapeStyles } from './styles';
+import Theme from '../../../theme';
 import {
   verifyCameraPermissions,
   verifyCameraRollPermissions,
-  verifyLocationPermissions,
+  verifyLocationPermissions
 } from './permissions';
+import { landscapeStyles, portraitStyles } from './styles';
+
+
 
 const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
   const [cropModalVisible, setCropModalVisible] = useState(false);
@@ -148,38 +148,38 @@ const ImageCaptureScreen = ({ navigation, route, portrait, width, height }) => {
       {isLoading ? (
         <LoadingScreen statusBarHidden={statusBar.hidden} />
       ) : (
-        <Fragment>
-          <StatusBar
-            barStyle={statusBar.color}
-            hidden={statusBar.hidden}
-            backgroundColor={Theme.colors.accent}
-          />
-          <Image style={styles.imagePreview} source={butterfly} />
-          <View style={styles.bottomContainer}>
-            <View style={styles.infoContainer}>
-              <Text style={styles.infoTitle}>Tips</Text>
-              <Text style={styles.infoText}>
-                - capture all of the insect inside the square frame
+          <Fragment>
+            <StatusBar
+              barStyle={statusBar.color}
+              hidden={statusBar.hidden}
+              backgroundColor={Theme.colors.accent}
+            />
+            <Image style={styles.imagePreview} source={butterfly} />
+            <View style={styles.bottomContainer}>
+              <View style={styles.infoContainer}>
+                <Text style={styles.infoTitle}>Tips</Text>
+                <Text style={styles.infoText}>
+                  - capture all of the insect inside the square frame
               </Text>
-              <Text style={styles.infoText}>- keep parts of other specimens out of the frame</Text>
+                <Text style={styles.infoText}>- keep parts of other specimens out of the frame</Text>
+              </View>
+              <View style={styles.buttonsContainer}>
+                <Ionicons
+                  name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'}
+                  size={55}
+                  color={Theme.colors.accent}
+                  onPress={takeCameraImageHandler}
+                />
+                <Ionicons
+                  name={Platform.OS === 'ios' ? 'ios-images' : 'md-images'}
+                  size={Platform.OS === 'ios' ? 50 : 55}
+                  color={Theme.colors.accent}
+                  onPress={selectGalleryImageHandler}
+                />
+              </View>
             </View>
-            <View style={styles.buttonsContainer}>
-              <Ionicons
-                name={Platform.OS === 'ios' ? 'ios-camera' : 'md-camera'}
-                size={55}
-                color={Theme.colors.accent}
-                onPress={takeCameraImageHandler}
-              />
-              <Ionicons
-                name={Platform.OS === 'ios' ? 'ios-images' : 'md-images'}
-                size={Platform.OS === 'ios' ? 50 : 55}
-                color={Theme.colors.accent}
-                onPress={selectGalleryImageHandler}
-              />
-            </View>
-          </View>
-        </Fragment>
-      )}
+          </Fragment>
+        )}
       {cropModalVisible && (
         <ImageCropper
           photo={{ uri }}

@@ -1,27 +1,28 @@
-import React, { useState, useReducer, useCallback, useEffect } from 'react';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  Switch,
-  Platform,
   Alert,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import { ScreenOrientation } from 'expo';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
-import { useSelector, useDispatch } from 'react-redux';
+  Keyboard, Platform, StyleSheet,
+  Switch, Text,
 
-import formReducer from '../formReducer';
-import Theme from '../../../theme';
-import { authStyles } from '../styles';
-import Logo from '../../../components/Logo';
+
+
+
+
+  TouchableWithoutFeedback, View
+} from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
+import Logo from '../../../components/Logo';
 import TermsAndConditions from '../../../components/TermsAndConditions';
 import { userLoginAsyncAction } from '../../../store/actions/auth';
+import Theme from '../../../theme';
+import formReducer from '../formReducer';
+import { authStyles } from '../styles';
+
 
 const initialState = {
   values: {

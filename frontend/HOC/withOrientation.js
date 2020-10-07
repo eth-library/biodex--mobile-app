@@ -1,6 +1,6 @@
+import * as ScreenOrientation from 'expo-screen-orientation';
 import React from 'react';
 import { Dimensions } from 'react-native';
-import { ScreenOrientation } from 'expo';
 
 function withOrientation(WrappedComponent) {
   return class extends React.Component {
